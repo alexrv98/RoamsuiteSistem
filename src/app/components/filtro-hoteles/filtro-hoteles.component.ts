@@ -7,32 +7,46 @@ import { HotelService } from '../../services/hotel.service';
 @Component({
   selector: 'app-filtro-hoteles',
   templateUrl: './filtro-hoteles.component.html',
-  styleUrls: ['./filtro-hoteles.component.css'],
+  imports: [CommonModule, FormsModule],
+  styleUrls: ['./filtro-hoteles.component.css']
 })
-export class FiltroHotelesComponent {
-  destino: string = ''; 
-  fechaInicio: string = '';
-  fechaFin: string = '';
-  huespedes: number = 1;
-  lugares: any[] = []; 
+export class FiltroHotelesComponent implements OnInit {
+  destinos: any[] = [];
+  filtros = {
+    destino: '',
+    fechaInicio: '',
+    fechaFin: '',
+    huespedes: 1,
+  };
 
   constructor(private hotelService: HotelService, private router: Router) {}
 
-  ngOnInit(): void {
-    this.hotelService.obtenerDestinos().subscribe((res) => {
-      if (res.status === 'success') {
-        this.lugares = res.data;
-      }
+  ngOnInit() {
+    this.cargarDestinos();
+  }
+
+  cargarDestinos() {
+    this.hotelService.obtenerDestinos().subscribe({
+      next: (response) => {
+        if (response.status === 'success') {
+          this.destinos = response.data;
+        } else {
+          console.error('Error al obtener destinos:', response.message);
+        }
+      },
+      error: (error) => {
+        console.error('Error en la API:', error);
+      },
     });
   }
 
-  aplicarFiltros() {
-    const filtros = {
-      destino: this.destino, 
-      fechaInicio: this.fechaInicio,
-      fechaFin: this.fechaFin,
-      huespedes: this.huespedes
-    };
-    this.filtrosAplicados.emit(filtros);
+  buscarHoteles() {
+    const { destino, fechaInicio, fechaFin, huespedes } = this.filtros;
+    if (!destino || !fechaInicio || !fechaFin || huespedes < 1) {
+      alert('Por favor, completa todos los campos.');
+      return;
+    }
+    
+    this.router.navigate(['/buscar', destino, fechaInicio, fechaFin, huespedes]);
   }
 }
