@@ -7,8 +7,8 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-lista-hoteles',
   templateUrl: './lista-hoteles.component.html',
-  imports: [CommonModule, FormsModule],
-  styleUrls: ['./lista-hoteles.component.scss']
+  imports: [CommonModule],
+  styleUrls: ['./lista-hoteles.component.css'],
 })
 export class ListaHotelesComponent implements OnInit {
   hoteles: any[] = [];
