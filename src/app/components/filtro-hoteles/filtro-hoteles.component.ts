@@ -1,41 +1,52 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { HotelService } from '../../services/hotel.service';
-import { compileNgModule } from '@angular/compiler';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { HotelService } from '../../services/hotel.service';
 
 @Component({
   selector: 'app-filtro-hoteles',
-  imports: [CommonModule, FormsModule],
   templateUrl: './filtro-hoteles.component.html',
+  imports: [CommonModule, FormsModule],
   styleUrls: ['./filtro-hoteles.component.scss']
 })
-export class FiltroHotelesComponent {
-  destino: string = ''; 
-  fechaInicio: string = '';
-  fechaFin: string = '';
-  huespedes: number = 1;
-  lugares: any[] = []; 
+export class FiltroHotelesComponent implements OnInit {
+  destinos: any[] = [];
+  filtros = {
+    destino: '',
+    fechaInicio: '',
+    fechaFin: '',
+    huespedes: 1,
+  };
 
-  @Output() filtrosAplicados = new EventEmitter<any>();
+  constructor(private hotelService: HotelService, private router: Router) {}
 
-  constructor(private hotelService: HotelService) {}
+  ngOnInit() {
+    this.cargarDestinos();
+  }
 
-  ngOnInit(): void {
-    this.hotelService.obtenerDestinos().subscribe((res) => {
-      if (res.status === 'success') {
-        this.lugares = res.data;
-      }
+  cargarDestinos() {
+    this.hotelService.obtenerDestinos().subscribe({
+      next: (response) => {
+        if (response.status === 'success') {
+          this.destinos = response.data;
+        } else {
+          console.error('Error al obtener destinos:', response.message);
+        }
+      },
+      error: (error) => {
+        console.error('Error en la API:', error);
+      },
     });
   }
 
-  aplicarFiltros() {
-    const filtros = {
-      destino: this.destino, 
-      fechaInicio: this.fechaInicio,
-      fechaFin: this.fechaFin,
-      huespedes: this.huespedes
-    };
-    this.filtrosAplicados.emit(filtros);
+  buscarHoteles() {
+    const { destino, fechaInicio, fechaFin, huespedes } = this.filtros;
+    if (!destino || !fechaInicio || !fechaFin || huespedes < 1) {
+      alert('Por favor, completa todos los campos.');
+      return;
+    }
+    
+    this.router.navigate(['/buscar', destino, fechaInicio, fechaFin, huespedes]);
   }
 }

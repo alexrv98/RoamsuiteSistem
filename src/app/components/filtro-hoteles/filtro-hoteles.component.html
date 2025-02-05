@@ -1,20 +1,19 @@
-<form (ngSubmit)="aplicarFiltros()">
-  <label>Destino:</label>
-  <select [(ngModel)]="destino" name="destino">
-    <option value="">Selecciona un lugar</option>
-    <option *ngFor="let lugar of lugares" [value]="lugar.id">
-      {{ lugar.nombre }}
+<div>
+  <label>Destino</label>
+  <select [(ngModel)]="filtros.destino">
+    <option *ngFor="let destino of destinos" [value]="destino.id">
+      {{ destino.nombre }}
     </option>
   </select>
 
-  <label>Fecha inicio:</label>
-  <input type="date" [(ngModel)]="fechaInicio" name="fechaInicio">
+  <label>Fecha de inicio</label>
+  <input type="date" [(ngModel)]="filtros.fechaInicio" />
 
-  <label>Fecha fin:</label>
-  <input type="date" [(ngModel)]="fechaFin" name="fechaFin">
+  <label>Fecha de fin</label>
+  <input type="date" [(ngModel)]="filtros.fechaFin" />
 
-  <label>Huéspedes:</label>
-  <input type="number" [(ngModel)]="huespedes" name="huespedes" min="1">
+  <label>Huéspedes</label>
+  <input type="number" [(ngModel)]="filtros.huespedes" min="1" />
 
-  <button type="submit">Buscar</button>
-</form>
+  <button (click)="buscarHoteles()">Buscar</button>
+</div>
