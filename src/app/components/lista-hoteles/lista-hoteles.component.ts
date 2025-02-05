@@ -5,7 +5,7 @@ import { Component, Input } from '@angular/core';
   selector: 'app-lista-hoteles',
   templateUrl: './lista-hoteles.component.html',
   imports: [CommonModule],
-  styleUrls: ['./lista-hoteles.component.scss']
+  styleUrls: ['./lista-hoteles.component.css'],
 })
 export class ListaHotelesComponent {
   @Input() hoteles: any[] = [];

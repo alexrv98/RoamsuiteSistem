@@ -8,14 +8,14 @@ import { CommonModule } from '@angular/common';
   selector: 'app-filtro-hoteles',
   imports: [CommonModule, FormsModule],
   templateUrl: './filtro-hoteles.component.html',
-  styleUrls: ['./filtro-hoteles.component.scss']
+  styleUrls: ['./filtro-hoteles.component.css'],
 })
 export class FiltroHotelesComponent {
-  destino: string = ''; 
+  destino: string = '';
   fechaInicio: string = '';
   fechaFin: string = '';
   huespedes: number = 1;
-  lugares: any[] = []; 
+  lugares: any[] = [];
 
   @Output() filtrosAplicados = new EventEmitter<any>();
 
@@ -31,10 +31,10 @@ export class FiltroHotelesComponent {
 
   aplicarFiltros() {
     const filtros = {
-      destino: this.destino, 
+      destino: this.destino,
       fechaInicio: this.fechaInicio,
       fechaFin: this.fechaFin,
-      huespedes: this.huespedes
+      huespedes: this.huespedes,
     };
     this.filtrosAplicados.emit(filtros);
   }
