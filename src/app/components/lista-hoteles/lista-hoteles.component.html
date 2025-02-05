@@ -1,0 +1,11 @@
+<div *ngIf="hoteles.length > 0; else noHoteles">
+  <div *ngFor="let hotel of hoteles">
+    <h2>{{ hotel.nombre }}</h2>
+    <p>{{ hotel.descripcion }}</p>
+    <p>Ubicación: {{ hotel.lugar }}</p>
+    <p>Teléfono: {{ hotel.telefono }}</p>
+  </div>
+</div>
+<ng-template #noHoteles>
+  <p>No hay hoteles disponibles.</p>
+</ng-template>
