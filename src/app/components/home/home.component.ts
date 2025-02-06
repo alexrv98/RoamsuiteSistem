@@ -12,7 +12,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
 })
 export class HomeComponent {
   hoteles: any[] = [];
-
+//
   constructor(private hotelService: HotelService) {}
 
   onFiltrosAplicados(filtros: any) {
