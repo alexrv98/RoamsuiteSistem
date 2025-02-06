@@ -27,7 +27,6 @@ export class FiltroHotelesComponent implements OnInit {
   ngOnInit() {
     this.cargarDestinos();
     
-    // Verificar si ya hay filtros antes de suscribirse
     if (!this.filtros.destino || !this.filtros.fechaInicio || !this.filtros.fechaFin || this.filtros.huespedes < 1) {
       this.route.params.subscribe((params) => {
         this.filtros = {
@@ -39,8 +38,6 @@ export class FiltroHotelesComponent implements OnInit {
       });
     }
   }
-  
-
 
   cargarDestinos() {
     this.hotelService.obtenerDestinos().subscribe({
