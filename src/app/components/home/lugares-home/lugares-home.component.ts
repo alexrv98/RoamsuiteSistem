@@ -40,8 +40,6 @@ export class LugaresHomeComponent {
 
     this.obtenerCategorias();  // Llamar al método para obtener categorías
     this.obtenerLugares();      // Llamar al método para obtener lugares
-    const token = localStorage.getItem('authToken');
-
   }
 
   obtenerCategorias(): void {
@@ -64,7 +62,8 @@ export class LugaresHomeComponent {
       next: (response) => {
         if (response.status === 'success') {
           this.lugares = response.data;
-          this.lugaresFiltrados = this.lugares;  // Mostrar todos los lugares inicialmente
+          this.lugaresFiltrados = this.lugares;
+          console.log("Lugares recibidos del backend:", this.lugares); // 👀 Verifica estructura
         } else {
           console.error('Error al obtener lugares:', response.message);
         }
@@ -75,14 +74,22 @@ export class LugaresHomeComponent {
     });
   }
 
+
   // Filtrar lugares por categoría al seleccionar una opción
   filtrarPorCategoria(): void {
-    if (this.filtros.categoria) {
-      this.lugaresFiltrados = this.lugares.filter(lugar => lugar.categoria_id === this.filtros.categoria);
+    console.log("Categoría seleccionada:", this.filtros.categoria);
+
+    if (this.filtros.categoria !== null && this.filtros.categoria !== undefined) {
+      const categoriaSeleccionada = Number(this.filtros.categoria);
+
+      this.lugaresFiltrados = this.lugares.filter(lugar => Number(lugar.categoria_id) === categoriaSeleccionada);
+
+      console.log("Lugares filtrados:", this.lugaresFiltrados);
     } else {
-      this.lugaresFiltrados = this.lugares; // Mostrar todos si no hay filtro
+      this.lugaresFiltrados = [...this.lugares]; // Copia completa de los lugares originales
     }
   }
+
 
   actualizarUbicacion(): void {
     const lugarSeleccionado = this.lugares.find(lugar => lugar.id === this.filtros.destino);

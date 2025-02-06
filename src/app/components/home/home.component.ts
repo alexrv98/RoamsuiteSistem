@@ -8,10 +8,11 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
-  imports: [FiltroHotelesComponent, ListaHotelesComponent, NavbarComponent, LugaresHomeComponent],
+  imports: [FiltroHotelesComponent, ListaHotelesComponent, NavbarComponent, LugaresHomeComponent, CommonModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
+
 export class HomeComponent {
   hoteles: any[] = [];  // La lista de hoteles se guarda aquí.
   filtros: any = {
