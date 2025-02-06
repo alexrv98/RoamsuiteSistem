@@ -1,19 +1,66 @@
-<div>
-  <label>Destino</label>
-  <select [(ngModel)]="filtros.destino">
-    <option *ngFor="let destino of destinos" [value]="destino.id">
-      {{ destino.nombre }}
-    </option>
-  </select>
-
-  <label>Fecha de inicio</label>
-  <input type="date" [(ngModel)]="filtros.fechaInicio" />
-
-  <label>Fecha de fin</label>
-  <input type="date" [(ngModel)]="filtros.fechaFin" />
-
-  <label>Huéspedes</label>
-  <input type="number" [(ngModel)]="filtros.huespedes" min="1" />
-
-  <button (click)="buscarHoteles()">Buscar</button>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card p-3 mb-4 shadow-lg rounded">
+        <div class="row g-3">
+          <div class="col-md-5">
+            <div class="form-floating">
+              <select
+                class="form-control form-control-lg rounded-0"
+                [(ngModel)]="filtros.destino"
+              >
+                <option
+                  placeholder="Destino"
+                  *ngFor="let destino of destinos"
+                  [value]="destino.id"
+                >
+                  {{ destino.nombre }}
+                </option>
+              </select>
+              <label class="form-label">Destino</label>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-floating">
+              <input
+                class="form-control form-control-lg rounded-0"
+                type="date"
+                [(ngModel)]="filtros.fechaInicio"
+                placeholder="Fecha de inicio"
+              />
+              <label class="form-label">Fecha de inicio</label>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-floating">
+              <input
+                class="form-control form-control-lg rounded-0"
+                type="date"
+                [(ngModel)]="filtros.fechaFin"
+                placeholder="Fecha de fin"
+              />
+              <label class="form-label">Fecha de fin</label>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <div class="form-floating">
+              <input
+                class="form-control form-control-lg rounded-0"
+                type="number"
+                [(ngModel)]="filtros.huespedes"
+                min="1"
+                placeholder="Huéspedes"
+              />
+              <label class="form-label">Huéspedes</label>
+            </div>
+          </div>
+          <div class="col-md-1 d-flex align-items-end">
+            <button (click)="buscarHoteles()" class="btn btn-primary btn-lg">
+              Buscar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
