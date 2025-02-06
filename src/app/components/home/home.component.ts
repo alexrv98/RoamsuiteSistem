@@ -7,7 +7,7 @@ import { ListaHotelesComponent } from '../lista-hoteles/lista-hoteles.component'
   selector: 'app-home',
   imports: [FiltroHotelesComponent, ListaHotelesComponent],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
   hoteles: any[] = [];
