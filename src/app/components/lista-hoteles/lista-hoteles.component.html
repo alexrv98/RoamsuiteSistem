@@ -7,4 +7,6 @@
   <p><strong>Imagen:</strong></p>
   <img [src]="hotel.imagenes" alt="{{ hotel.nombre }}" width="300">
   <p><strong>Estrellas:</strong> {{ hotel.estrellas }}</p>
+  <p>Ubicación: {{ hotel.lugar }}</p>
+  <button (click)="verHabitaciones(hotel.id)">Ver Habitaciones</button>
 </div>
