@@ -4,5 +4,7 @@
   <p>{{ hotel.descripcion }}</p>
   <p><strong>Dirección:</strong> {{ hotel.direccion }}</p>
   <p><strong>Teléfono:</strong> {{ hotel.telefono }}</p>
+  <p><strong>Imagen:</strong></p>
+  <img [src]="hotel.imagenes" alt="{{ hotel.nombre }}" width="300">
   <p><strong>Estrellas:</strong> {{ hotel.estrellas }}</p>
 </div>
