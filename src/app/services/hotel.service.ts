@@ -17,7 +17,5 @@ export class HotelService {
   obtenerHotelesDisponibles(filtros: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/buscarHoteles.php`, filtros);
   }
-  obtenerHabitacionesDisponibles(hotelId: number, filtros: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/buscarHabitaciones.php`, { hotelId, ...filtros });
-  }
+
 }

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HotelService } from '../../services/hotel.service';
 
 @Component({
@@ -11,6 +11,7 @@ import { HotelService } from '../../services/hotel.service';
   styleUrls: ['./filtro-hoteles.component.css']
 })
 export class FiltroHotelesComponent implements OnInit {
+  
   destinos: any[] = [];
   filtros = {
     destino: '',
@@ -19,10 +20,19 @@ export class FiltroHotelesComponent implements OnInit {
     huespedes: 1,
   };
 
-  constructor(private hotelService: HotelService, private router: Router) {}
+  constructor(private hotelService: HotelService, private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit() {
     this.cargarDestinos();
+  
+    this.route.params.subscribe((params) => {
+      this.filtros = {
+        destino: params['destino'] || '',
+        fechaInicio: params['fechaInicio'] || '',
+        fechaFin: params['fechaFin'] || '',
+        huespedes: params['huespedes'] || 1,
+      };
+    });
   }
 
   cargarDestinos() {
@@ -40,7 +50,7 @@ export class FiltroHotelesComponent implements OnInit {
     });
   }
 
-  
+
 
   buscarHoteles() {
     const { destino, fechaInicio, fechaFin, huespedes } = this.filtros;
