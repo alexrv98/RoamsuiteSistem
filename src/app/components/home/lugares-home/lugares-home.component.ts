@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import{trigger, state, style, animate, transition} from '@angular/animations';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { LugarService } from '../../../services/lugar.service';
@@ -11,7 +11,7 @@ import { inject } from '@angular/core';
   selector: 'app-lugares-home',
   imports: [CommonModule, FormsModule, RouterOutlet],
   templateUrl: './lugares-home.component.html',
-  styleUrl: './lugares-home.component.css',
+  styleUrls: ['./lugares-home.component.css'],
   animations: [
     trigger('fadeIn', [
       transition(':enter', [
@@ -22,7 +22,6 @@ import { inject } from '@angular/core';
   ]
 })
 export class LugaresHomeComponent {
-
   lugares: any[] = [];
   lugaresFiltrados: any[] = [];
   categorias: any[] = [];
@@ -33,11 +32,10 @@ export class LugaresHomeComponent {
     categoria: null,
   };
 
-
   lugaresService: LugarService = inject(LugarService);
   router: Router = inject(Router);
-  ngOnInit(): void {
 
+  ngOnInit(): void {
     this.obtenerCategorias();  // Llamar al método para obtener categorías
     this.obtenerLugares();      // Llamar al método para obtener lugares
   }
@@ -62,8 +60,8 @@ export class LugaresHomeComponent {
       next: (response) => {
         if (response.status === 'success') {
           this.lugares = response.data;
-          this.lugaresFiltrados = this.lugares;
-          console.log("Lugares recibidos del backend:", this.lugares); // 👀 Verifica estructura
+          this.lugaresFiltrados = [...this.lugares];  // Inicializa con todos los lugares
+          console.log("Lugares recibidos del backend:", this.lugares); // Verifica estructura
         } else {
           console.error('Error al obtener lugares:', response.message);
         }
@@ -74,23 +72,27 @@ export class LugaresHomeComponent {
     });
   }
 
-
-  // Filtrar lugares por categoría al seleccionar una opción
   filtrarPorCategoria(): void {
     console.log("Categoría seleccionada:", this.filtros.categoria);
 
-    if (this.filtros.categoria !== null && this.filtros.categoria !== undefined) {
-      const categoriaSeleccionada = Number(this.filtros.categoria);
+    const categoriaSeleccionada = this.filtros.categoria ? Number(this.filtros.categoria) : undefined;
 
-      this.lugaresFiltrados = this.lugares.filter(lugar => Number(lugar.categoria_id) === categoriaSeleccionada);
-
-      console.log("Lugares filtrados:", this.lugaresFiltrados);
-    } else {
-      this.lugaresFiltrados = [...this.lugares]; // Copia completa de los lugares originales
-    }
+    this.lugaresService.obtenerLugares(categoriaSeleccionada).subscribe({
+      next: (response) => {
+        if (response.status === 'success') {
+          this.lugaresFiltrados = response.data;
+          console.log("Lugares filtrados desde API:", this.lugaresFiltrados);
+        } else {
+          console.error("Error al obtener lugares:", response.message);
+        }
+      },
+      error: (error) => {
+        console.error("Error en la petición:", error);
+      }
+    });
   }
 
-
+  // Método que actualiza la ubicación según el destino seleccionado
   actualizarUbicacion(): void {
     const lugarSeleccionado = this.lugares.find(lugar => lugar.id === this.filtros.destino);
     if (lugarSeleccionado) {
@@ -98,9 +100,7 @@ export class LugaresHomeComponent {
     }
   }
 
-
-
-
+  // Métodos para el desplazamiento horizontal en el contenedor
   scrollLeft() {
     document.getElementById('scrollContainer')!.scrollBy({ left: -300, behavior: 'smooth' });
   }
@@ -108,7 +108,4 @@ export class LugaresHomeComponent {
   scrollRight() {
     document.getElementById('scrollContainer')!.scrollBy({ left: 300, behavior: 'smooth' });
   }
-
-
 }
-
