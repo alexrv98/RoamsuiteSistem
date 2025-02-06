@@ -5,10 +5,11 @@ import { ListaHotelesComponent } from '../lista-hoteles/lista-hoteles.component'
 import { NavbarComponent } from '../navbar/navbar.component';
 import { LugaresHomeComponent } from "./lugares-home/lugares-home.component";
 import { CommonModule } from '@angular/common';
+import { ComentariosComponent } from "./comentarios/comentarios.component";
 
 @Component({
   selector: 'app-home',
-  imports: [FiltroHotelesComponent, ListaHotelesComponent, NavbarComponent, LugaresHomeComponent, CommonModule],
+  imports: [FiltroHotelesComponent, ListaHotelesComponent, NavbarComponent, LugaresHomeComponent, CommonModule, ComentariosComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
