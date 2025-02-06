@@ -44,24 +44,19 @@ export class ListaHotelesComponent implements OnInit {
     }
   }
 
-  actualizarFiltros(nuevosFiltros: any) {
-    this.router.navigate([], {
-      queryParams: nuevosFiltros,
-      queryParamsHandling: 'merge',
-    });
-  }
-
-
 
   verHabitaciones(hotelId: number) {
     this.router.navigate(['/habitaciones', hotelId], {
       queryParams: {
+        destino: this.filtros.destino, 
         fechaInicio: this.filtros.fechaInicio,
         fechaFin: this.filtros.fechaFin,
         huespedes: this.filtros.huespedes,
       },
     });
   }
+  
+  
   // Función para convertir el número de estrellas en un array de estrellas para mostrar en el HTML
   getStarArray(promedio: number): number[] {
     return Array(Math.round(promedio)).fill(1);

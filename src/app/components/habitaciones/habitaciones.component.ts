@@ -1,8 +1,8 @@
-import { FiltroHotelesComponent } from './../filtro-hoteles/filtro-hoteles.component';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { HabitacionesService } from '../../services/habitacion.service';
+import { CommonModule } from '@angular/common';
+import { FiltroHotelesComponent } from './../filtro-hoteles/filtro-hoteles.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
@@ -14,9 +14,12 @@ import { NavbarComponent } from '../navbar/navbar.component';
 })
 export class HabitacionesComponent implements OnInit {
   hotelId!: number;
-  fechaInicio!: string;
-  fechaFin!: string;
-  huespedes!: number;
+  filtros: any = {
+    destino: '',
+    fechaInicio: '',
+    fechaFin: '',
+    huespedes: 1,
+  };
   habitaciones: any = { mejorOpcion: [], otrasHabitaciones: [] };
 
   constructor(
@@ -26,24 +29,31 @@ export class HabitacionesComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      this.hotelId = +params['hotelId'];
+      this.hotelId = +params['hotelId']; // El ID del hotel
     });
-
+  
     this.route.queryParams.subscribe((queryParams) => {
-      this.fechaInicio = queryParams['fechaInicio'];
-      this.fechaFin = queryParams['fechaFin'];
-      this.huespedes = +queryParams['huespedes'];
-
+      // Actualizamos los filtros según los queryParams de la URL
+      this.filtros = {
+        destino: queryParams['destino'] || '', // Filtro de destino
+        fechaInicio: queryParams['fechaInicio'] || '', // Filtro de fecha de inicio
+        fechaFin: queryParams['fechaFin'] || '', // Filtro de fecha de fin
+        huespedes: +queryParams['huespedes'] || 1, // Filtro de huéspedes
+      };
+      
+      // Ahora que los filtros están actualizados, obtenemos las habitaciones
       this.obtenerHabitaciones();
     });
   }
+  
+  
 
   obtenerHabitaciones() {
     const filtros = {
       hotelId: this.hotelId,
-      fechaInicio: this.fechaInicio,
-      fechaFin: this.fechaFin,
-      huespedes: this.huespedes,
+      fechaInicio: this.filtros.fechaInicio,
+      fechaFin: this.filtros.fechaFin,
+      huespedes: this.filtros.huespedes,
     };
 
     this.habitacionesService.obtenerHabitaciones(filtros).subscribe((res) => {

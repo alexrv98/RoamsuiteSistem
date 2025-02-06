@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotelService } from '../../services/hotel.service';
@@ -13,27 +13,34 @@ import { HotelService } from '../../services/hotel.service';
 export class FiltroHotelesComponent implements OnInit {
   
   destinos: any[] = [];
-  filtros = {
+  @Input() filtros: any = { 
     destino: '',
     fechaInicio: '',
     fechaFin: '',
-    huespedes: 1,
+    huespedes: 1
   };
+  
 
   constructor(private hotelService: HotelService, private router: Router, private route: ActivatedRoute) {}
 
+  
   ngOnInit() {
     this.cargarDestinos();
-  
-    this.route.params.subscribe((params) => {
-      this.filtros = {
-        destino: params['destino'] || '',
-        fechaInicio: params['fechaInicio'] || '',
-        fechaFin: params['fechaFin'] || '',
-        huespedes: params['huespedes'] || 1,
-      };
-    });
+    
+    // Verificar si ya hay filtros antes de suscribirse
+    if (!this.filtros.destino || !this.filtros.fechaInicio || !this.filtros.fechaFin || this.filtros.huespedes < 1) {
+      this.route.params.subscribe((params) => {
+        this.filtros = {
+          destino: params['destino'] || '',
+          fechaInicio: params['fechaInicio'] || '',
+          fechaFin: params['fechaFin'] || '',
+          huespedes: params['huespedes'] || 1,
+        };
+      });
+    }
   }
+  
+
 
   cargarDestinos() {
     this.hotelService.obtenerDestinos().subscribe({
@@ -49,8 +56,6 @@ export class FiltroHotelesComponent implements OnInit {
       },
     });
   }
-
-
 
   buscarHoteles() {
     const { destino, fechaInicio, fechaFin, huespedes } = this.filtros;
