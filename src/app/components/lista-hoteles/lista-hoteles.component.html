@@ -16,14 +16,19 @@
             <div class="d-flex align-items-center mb-2">
               <p class="mb-0"><strong>Calificación promedio:</strong></p>
               <div class="ms-2">
-                <span
-                  *ngFor="let star of getStarArray(hotel.estrellas)"
-                  class="text-warning"
-                  >⭐</span
-                >
-                <span class="ms-1 text-muted"
-                  >({{ hotel.estrellas.toFixed(1) }})</span
-                >
+                <span *ngIf="hotel.estrellas; else noEstrellas">
+                  <span
+                    *ngFor="let star of getStarArray(hotel.estrellas)"
+                    class="text-warning"
+                    >⭐</span
+                  >
+                  <span class="ms-1 text-muted"
+                    >({{ hotel.estrellas.toFixed(1) }})</span
+                  >
+                </span>
+                <ng-template #noEstrellas>
+                  <span class="text-muted">Sin calificación</span>
+                </ng-template>
               </div>
             </div>
             <a class="ms-2 text-primary fw-bold" style="cursor: pointer">
