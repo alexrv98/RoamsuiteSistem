@@ -4,11 +4,17 @@ import { HabitacionesService } from '../../services/habitacion.service';
 import { CommonModule } from '@angular/common';
 import { FiltroHotelesComponent } from './../filtro-hoteles/filtro-hoteles.component';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { ModalReservaComponent } from './modal-reserva/modal-reserva.component';
 
 @Component({
   selector: 'app-habitaciones',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, FiltroHotelesComponent],
+  imports: [
+    CommonModule,
+    NavbarComponent,
+    FiltroHotelesComponent,
+    ModalReservaComponent,
+  ],
   templateUrl: './habitaciones.component.html',
   styleUrls: ['./habitaciones.component.css'],
 })
@@ -31,7 +37,7 @@ export class HabitacionesComponent implements OnInit {
     this.route.params.subscribe((params) => {
       this.hotelId = +params['hotelId']; // El ID del hotel
     });
-  
+
     this.route.queryParams.subscribe((queryParams) => {
       // Actualizamos los filtros según los queryParams de la URL
       this.filtros = {
@@ -40,13 +46,11 @@ export class HabitacionesComponent implements OnInit {
         fechaFin: queryParams['fechaFin'] || '', // Filtro de fecha de fin
         huespedes: +queryParams['huespedes'] || 1, // Filtro de huéspedes
       };
-      
+
       // Ahora que los filtros están actualizados, obtenemos las habitaciones
       this.obtenerHabitaciones();
     });
   }
-  
-  
 
   obtenerHabitaciones() {
     const filtros = {
