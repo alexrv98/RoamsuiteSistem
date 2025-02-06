@@ -10,9 +10,16 @@ export class LugarService {
 
   constructor(private http: HttpClient) {}
 
-  obtenerLugares(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/listLugaresTuristicos.php`);
+  obtenerLugares(categoria_id?: number): Observable<any> {
+    let url = `${this.baseUrl}/listLugaresTuristicos.php`;
+
+    if (categoria_id) {
+      url += `?categoria_id=${categoria_id}`;
+    }
+
+    return this.http.get(url);
   }
+
 
   obtenerCategorias(): Observable<any> {
     return this.http.get(`${this.baseUrl}/categorias.php`);
