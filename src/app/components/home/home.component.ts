@@ -8,11 +8,11 @@ import { NavbarComponent } from '../navbar/navbar.component';
   selector: 'app-home',
   imports: [FiltroHotelesComponent, ListaHotelesComponent, NavbarComponent],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
   hoteles: any[] = [];
-
+//
   constructor(private hotelService: HotelService) {}
 
   onFiltrosAplicados(filtros: any) {
