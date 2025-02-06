@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotelService } from '../../services/hotel.service';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { FiltroHotelesComponent } from '../filtro-hoteles/filtro-hoteles.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 
@@ -44,6 +43,15 @@ export class ListaHotelesComponent implements OnInit {
       });
     }
   }
+
+  actualizarFiltros(nuevosFiltros: any) {
+    this.router.navigate([], {
+      queryParams: nuevosFiltros,
+      queryParamsHandling: 'merge',
+    });
+  }
+
+
 
   verHabitaciones(hotelId: number) {
     this.router.navigate(['/habitaciones', hotelId], {

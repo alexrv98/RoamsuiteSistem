@@ -12,12 +12,12 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  hoteles: any[] = [];  // La lista de hoteles se guarda aquí.
+  hoteles: any[] = []; 
   filtros: any = {
     destino: null,
     fechaInicio: null,
     fechaFin: null,
-    huespedes: 1, // Valor por defecto
+    huespedes: 1,
   };
 
   constructor(private hotelService: HotelService) {}
