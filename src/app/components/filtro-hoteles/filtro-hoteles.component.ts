@@ -40,8 +40,11 @@ export class FiltroHotelesComponent implements OnInit {
     });
   }
 
+  
+
   buscarHoteles() {
     const { destino, fechaInicio, fechaFin, huespedes } = this.filtros;
+  
     if (!destino || !fechaInicio || !fechaFin || huespedes < 1) {
       alert('Por favor, completa todos los campos.');
       return;
@@ -49,4 +52,5 @@ export class FiltroHotelesComponent implements OnInit {
     
     this.router.navigate(['/buscar', destino, fechaInicio, fechaFin, huespedes]);
   }
+  
 }

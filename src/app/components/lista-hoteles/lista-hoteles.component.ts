@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HotelService } from '../../services/hotel.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,27 +13,45 @@ import { NavbarComponent } from '../navbar/navbar.component';
   styleUrls: ['./lista-hoteles.component.css'],
 })
 export class ListaHotelesComponent implements OnInit {
-  hoteles: any[] = [];
+  @Input() hoteles: any[] = [];
+  @Input() filtros: any = {};
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private hotelService: HotelService
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      const filtros = {
-        destino: params['destino'],
-        fechaInicio: params['fechaInicio'],
-        fechaFin: params['fechaFin'],
-        huespedes: params['huespedes'],
-      };
+    if (!this.filtros || !this.filtros.destino) {
+      this.route.params.subscribe((params) => {
+        this.filtros = {
+          destino: params['destino'],
+          fechaInicio: params['fechaInicio'],
+          fechaFin: params['fechaFin'],
+          huespedes: params['huespedes'],
+        };
 
-      this.hotelService
-        .obtenerHotelesDisponibles(filtros)
-        .subscribe((response) => {
-          this.hoteles = response.data;
-        });
+        this.hotelService
+          .obtenerHotelesDisponibles(this.filtros)
+          .subscribe((res) => {
+            if (res.status === 'success') {
+              this.hoteles = res.data;
+            } else {
+              console.error('Error en la API:', res.message);
+            }
+          });
+      });
+    }
+  }
+
+  verHabitaciones(hotelId: number) {
+    this.router.navigate(['/habitaciones', hotelId], {
+      queryParams: {
+        fechaInicio: this.filtros.fechaInicio,
+        fechaFin: this.filtros.fechaFin,
+        huespedes: this.filtros.huespedes,
+      },
     });
   }
   // Función para convertir el número de estrellas en un array de estrellas para mostrar en el HTML
