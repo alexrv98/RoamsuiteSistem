@@ -1,10 +1,49 @@
-<div *ngIf="hoteles.length === 0">No hay hoteles disponibles.</div>
-<div *ngFor="let hotel of hoteles">
-  <h3>{{ hotel.nombre }}</h3>
-  <p>{{ hotel.descripcion }}</p>
-  <p><strong>Dirección:</strong> {{ hotel.direccion }}</p>
-  <p><strong>Teléfono:</strong> {{ hotel.telefono }}</p>
-  <p><strong>Imagen:</strong></p>
-  <img [src]="hotel.imagenes" alt="{{ hotel.nombre }}" width="300">
-  <p><strong>Estrellas:</strong> {{ hotel.estrellas }}</p>
+<app-navbar></app-navbar>
+<app-filtro-hoteles></app-filtro-hoteles>
+<div class="container">
+  <div *ngIf="hoteles.length === 0">No hay hoteles disponibles.</div>
+  <div class="row">
+    <div class="col-md-4 mb-3 d-flex" *ngFor="let hotel of hoteles">
+      <div class="card shadow-sm lugar-card">
+        <img [src]="hotel.imagenes" alt="hotel" height="200" />
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title">{{ hotel.nombre }}</h5>
+          <p><strong>Ubicación:</strong> {{ hotel.ubicacion }}</p>
+          <p><strong>Descripción:</strong> {{ hotel.descripcion }}</p>
+
+          <!-- Apartado de reseñas -->
+          <div *ngIf="hotel.comentarios && hotel.comentarios.length > 0">
+            <div class="d-flex align-items-center mb-2">
+              <p class="mb-0"><strong>Calificación promedio:</strong></p>
+              <div class="ms-2">
+                <span
+                  *ngFor="let star of getStarArray(hotel.estrellas)"
+                  class="text-warning"
+                  >⭐</span
+                >
+                <span class="ms-1 text-muted"
+                  >({{ hotel.estrellas.toFixed(1) }})</span
+                >
+              </div>
+            </div>
+            <a class="ms-2 text-primary fw-bold" style="cursor: pointer">
+              Ver reseñas
+            </a>
+          </div>
+          <div *ngIf="hotel.comentarios && hotel.comentarios.length === 0">
+            <p class="text-muted">No hay reseñas aún.</p>
+          </div>
+          <div class="mt-auto">
+            <!-- <button
+              class="btn btn-primary w-100"
+              (click)="verHabitaciones(hotel)"
+            >
+              Ver habitaciones
+            </button> -->
+            <button class="btn btn-primary w-100">Ver habitaciones</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
