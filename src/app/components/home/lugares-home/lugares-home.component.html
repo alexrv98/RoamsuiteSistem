@@ -1,62 +1,93 @@
-<div class="container">
-  <!-- Filtro por categoría de lugar turístico -->
-  <h2>Lugares Turísticos</h2>
-  <div class="col-md-4">
-    <div class="card p-3 mb-4">
-      <div class="col-md-12">
-        <label for="categoria">
-          <i class="fas fa-tags"></i> Filtrar por categoría
-        </label>
-        <select
-          class="form-control"
-          [(ngModel)]="filtros.categoria"
-          (change)="filtrarPorCategoria()"
-        >
-          <option [value]="undefined">Todos</option>
-          <option *ngFor="let categoria of categorias" [value]="categoria.id">
-            {{ categoria.nombre }}
-          </option>
-        </select>
-      </div>
-    </div>
-  </div>
-
-  <!-- Lugares filtrados por categoría -->
-  <div class="col-md-12" id="lugaresTuristicos">
-    <br />
-    <div class="position-relative">
-      <!-- Contenedor deslizable -->
-      <div class="d-flex overflow-auto" id="scrollContainer">
-        <div
-          class="col-md-3 mb-3 d-flex flex-shrink-0"
-          *ngFor="let lugar of lugaresFiltrados"
-        >
-          <div class="card w-100 lugar-card shadow-sm" style="width: 18rem">
-            <img [src]="lugar.imagen" alt="lugar" height="200" />
-            <div class="card-body d-flex flex-column">
-              <h5 class="card-title">{{ lugar.nombre }}</h5>
-              <p><i class="bi bi-geo-alt"></i> {{ lugar.descripcion }}</p>
-              <p>{{ lugar.ubicacion }}</p>
-              <div class="mt-auto"></div>
-            </div>
-          </div>
+<div class="container mt-5">
+  <div class="row">
+    <!-- Filtro por categoría -->
+    <div class="col-md-3">
+      <div class="card p-4 shadow-lg border-0 rounded-4">
+        <h5 class="fw-bold text-primary text-center">
+          <i class="fa-solid fa-tags"></i> Categorías
+        </h5>
+        <div class="form-floating mt-3">
+          <select
+            class="form-select"
+            [(ngModel)]="filtros.categoria"
+            (change)="filtrarPorCategoria()"
+          >
+            <option [value]="undefined">Todos</option>
+            <option *ngFor="let categoria of categorias" [value]="categoria.id">
+              {{ categoria.nombre }}
+            </option>
+          </select>
+          <label>
+            <i class="fa-solid fa-filter text-primary"></i> Filtrar por categoría
+          </label>
         </div>
       </div>
 
-      <!-- Botones de desplazamiento -->
-      <button
-        class="btn bg-dark text-white btn-lg p-3 shadow position-absolute start-0 top-50 translate-middle-y"
-        (click)="scrollLeft()"
-      >
-        <i class="fa-solid fa-angles-left" style="color: #ffffff"></i>
-      </button>
+      <!-- Mapa Interactivo -->
+      <div class="card mt-4 p-3 shadow-lg border-0 rounded-4">
+        <h5 class="fw-bold text-primary text-center">
+          <i class="fa-solid fa-map"></i> Mapa de Lugares
+        </h5>
+        <div id="map" class="rounded-4" style="height: 300px;"></div>
+      </div>
+    </div>
 
-      <button
-        class="btn bg-dark text-white btn-lg p-3 shadow position-absolute end-0 top-50 translate-middle-y"
-        (click)="scrollRight()"
-      >
-        <i class="fa-solid fa-angles-right" style="color: #ffffff"></i>
-      </button>
+    <!-- Carrusel de Lugares Turísticos -->
+    <div class="col-md-9">
+      <div class="card p-4 shadow-lg border-0 rounded-4">
+        <h5 class="fw-bold text-primary text-center mb-3">
+          <i class="fa-solid fa-map-location-dot"></i> Lugares Turísticos
+        </h5>
+
+        <div class="position-relative">
+          <!-- Contenedor deslizable -->
+          <div class="d-flex overflow-auto gap-3 p-2" id="scrollContainer">
+            <div
+              class="col-md-3 mb-3 d-flex flex-shrink-0"
+              *ngFor="let lugar of lugaresFiltrados"
+            >
+              <div class="card lugar-card shadow-sm rounded-4" style="width: 18rem">
+                <img
+                  [src]="lugar.imagen"
+                  class="rounded-top"
+                  alt="lugar"
+                  height="150"
+                />
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title fw-bold">
+                    <i class="fa-solid fa-map-marker-alt text-danger"></i>
+                    {{ lugar.nombre }}
+                  </h5>
+                  <p class="text-muted">
+                    <i class="fa-solid fa-location-dot"></i> {{ lugar.ubicacion }}
+                  </p>
+                  <p class="small">{{ lugar.descripcion }}</p>
+                  <div class="mt-auto">
+                    <button class="btn btn-outline-primary btn-sm w-100">
+                      Ver más
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botones de desplazamiento -->
+          <button
+            class="btn btn-primary btn-lg p-3 shadow position-absolute start-0 top-50 translate-middle-y"
+            (click)="scrollLeft()"
+          >
+            <i class="fa-solid fa-angles-left"></i>
+          </button>
+
+          <button
+            class="btn btn-primary btn-lg p-3 shadow position-absolute end-0 top-50 translate-middle-y"
+            (click)="scrollRight()"
+          >
+            <i class="fa-solid fa-angles-right"></i>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

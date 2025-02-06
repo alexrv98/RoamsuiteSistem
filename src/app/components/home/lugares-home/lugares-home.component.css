@@ -48,3 +48,24 @@ h4{
   color: #ffff;
 }
 
+.form-floating label i {
+  margin-right: 5px;
+}
+.form-select, .form-control {
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+.btn-primary {
+  background: linear-gradient(45deg, #007bff, #0056b3);
+  border: none;
+  transition: 0.3s;
+}
+.btn-primary:hover {
+  background: linear-gradient(45deg, #0056b3, #003d80);
+}
+.card.lugar-card {
+  transition: transform 0.3s ease-in-out;
+}
+.card.lugar-card:hover {
+  transform: scale(1.05);
+}
