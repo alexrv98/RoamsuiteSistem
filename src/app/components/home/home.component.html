@@ -13,6 +13,7 @@
     </div>
   </section>
 </header>
-
 <app-filtro-hoteles (filtrosAplicados)="onFiltrosAplicados($event)"></app-filtro-hoteles>
 <app-lista-hoteles *ngIf="hoteles.length > 0" [hoteles]="hoteles" [filtros]="filtros"></app-lista-hoteles>
+
+<app-lugares-home></app-lugares-home>
