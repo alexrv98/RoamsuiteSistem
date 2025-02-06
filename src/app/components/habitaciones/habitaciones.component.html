@@ -37,10 +37,17 @@
                   <strong>Numero de camas:</strong> {{ habitacion.camas }}
                 </p>
                 <p class="card-text fw-bold">
-                  <strong>Precio:</strong> MXN ${{ habitacion.precio }}
+                  <strong>Precio por noche:</strong> MXN ${{
+                    habitacion.precio
+                  }}
                 </p>
 
-                <button class="btn btn-primary btn-lg mt-2 w-100 rounded-0">
+                <button
+                  type="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#reserva"
+                  class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
+                >
                   Reservar
                 </button>
               </div>
@@ -84,9 +91,16 @@
                     <strong>Numero de camas:</strong> {{ habitacion.camas }}
                   </p>
                   <p class="card-text fw-bold">
-                    <strong>Precio:</strong> MXN ${{ habitacion.precio }}
+                    <strong>Precio por noche:</strong> MXN ${{
+                      habitacion.precio
+                    }}
                   </p>
-                  <button class="btn btn-primary btn-lg mt-2 w-100 rounded-0">
+                  <button
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#reserva"
+                    class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
+                  >
                     Reservar
                   </button>
                 </div>
@@ -114,3 +128,4 @@
     <!-- ---------------------- -->
   </div>
 </div>
+<app-modal-reserva></app-modal-reserva>
