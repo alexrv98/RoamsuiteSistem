@@ -35,19 +35,17 @@ export class HabitacionesComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      this.hotelId = +params['hotelId']; // El ID del hotel
+      this.hotelId = +params['hotelId']; 
     });
 
     this.route.queryParams.subscribe((queryParams) => {
-      // Actualizamos los filtros según los queryParams de la URL
       this.filtros = {
-        destino: queryParams['destino'] || '', // Filtro de destino
-        fechaInicio: queryParams['fechaInicio'] || '', // Filtro de fecha de inicio
-        fechaFin: queryParams['fechaFin'] || '', // Filtro de fecha de fin
-        huespedes: +queryParams['huespedes'] || 1, // Filtro de huéspedes
+        destino: queryParams['destino'] || '',
+        fechaInicio: queryParams['fechaInicio'] || '', 
+        fechaFin: queryParams['fechaFin'] || '', 
+        huespedes: +queryParams['huespedes'] || 1, 
       };
-
-      // Ahora que los filtros están actualizados, obtenemos las habitaciones
+      
       this.obtenerHabitaciones();
     });
   }
@@ -68,6 +66,8 @@ export class HabitacionesComponent implements OnInit {
       }
     });
   }
+
+
   scrollLeft() {
     document
       .getElementById('scrollContainer')!
