@@ -1,0 +1,23 @@
+<h2>Habitaciones disponibles</h2>
+
+<div *ngIf="habitaciones.mejorOpcion.length > 0">
+  <h3>Mejor opción</h3>
+  <ul>
+    <li *ngFor="let habitacion of habitaciones.mejorOpcion">
+      <strong>{{ habitacion.tipo_habitacion }}</strong> - 
+      Capacidad: {{ habitacion.capacidad }} - 
+      Precio: ${{ habitacion.precio }}
+    </li>
+  </ul>
+</div>
+
+<div *ngIf="habitaciones.otrasHabitaciones.length > 0">
+  <h3>Otras habitaciones</h3>
+  <ul>
+    <li *ngFor="let habitacion of habitaciones.otrasHabitaciones">
+      <strong>{{ habitacion.tipo_habitacion }}</strong> - 
+      Capacidad: {{ habitacion.capacidad }} - 
+      Precio: ${{ habitacion.precio }}
+    </li>
+  </ul>
+</div>
