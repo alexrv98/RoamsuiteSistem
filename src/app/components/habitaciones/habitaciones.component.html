@@ -5,7 +5,7 @@
     <div class="col-8">
       <h4 class="text-secondary">Habitaciones disponibles</h4>
       <div *ngIf="habitaciones.mejorOpcion.length > 0">
-        <h5 class="fw-bold">Mejores opciones</h5>
+        <h5 class="fw-bold text-primary">Mejores opciones</h5>
         <div class="card" *ngFor="let habitacion of habitaciones.mejorOpcion">
           <!-- <h5 class="card-header bg-info fw-bold text-white">
             {{ habitacion.tipo_habitacion }}
@@ -43,15 +43,14 @@
                 </p>
 
                 <button
-                type="button"
-                class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
-                data-bs-toggle="modal"
-                data-bs-target="#reserva"
-                (click)="seleccionarHabitacion(habitacion)"
-              >
-                Reservar
-              </button>
-              
+                  type="button"
+                  class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
+                  data-bs-toggle="modal"
+                  data-bs-target="#reserva"
+                  (click)="seleccionarHabitacion(habitacion)"
+                >
+                  Reservar
+                </button>
               </div>
             </div>
           </div>
@@ -98,16 +97,14 @@
                     }}
                   </p>
                   <button
-  type="button"
-  class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
-  data-bs-toggle="modal"
-  data-bs-target="#reserva"
-  (click)="seleccionarHabitacion(habitacion)"
->
-  Reservar
-</button>
-
-
+                    type="button"
+                    class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
+                    data-bs-toggle="modal"
+                    data-bs-target="#reserva"
+                    (click)="seleccionarHabitacion(habitacion)"
+                  >
+                    Reservar
+                  </button>
                 </div>
               </div>
             </div>
@@ -133,7 +130,5 @@
     <!-- ---------------------- -->
   </div>
 </div>
-<app-modal-reserva 
-  [habitacion]="habitacionSeleccionada"
-  [filtros]="filtros">
+<app-modal-reserva [habitacion]="habitacionSeleccionada" [filtros]="filtros">
 </app-modal-reserva>

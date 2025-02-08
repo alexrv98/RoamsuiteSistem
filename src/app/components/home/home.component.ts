@@ -3,18 +3,24 @@ import { HotelService } from '../../services/hotel.service';
 import { FiltroHotelesComponent } from '../filtro-hoteles/filtro-hoteles.component';
 import { ListaHotelesComponent } from '../lista-hoteles/lista-hoteles.component';
 import { NavbarComponent } from '../navbar/navbar.component';
-import { LugaresHomeComponent } from "./lugares-home/lugares-home.component";
+import { LugaresHomeComponent } from './lugares-home/lugares-home.component';
 import { CommonModule } from '@angular/common';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-home',
-  imports: [FiltroHotelesComponent, ListaHotelesComponent, NavbarComponent, LugaresHomeComponent, CommonModule],
+  imports: [
+    FiltroHotelesComponent,
+    ListaHotelesComponent,
+    NavbarComponent,
+    LugaresHomeComponent,
+    FooterComponent,
+  ],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
-
 export class HomeComponent {
-  hoteles: any[] = []; 
+  hoteles: any[] = [];
   filtros: any = {
     destino: null,
     fechaInicio: null,
@@ -36,4 +42,3 @@ export class HomeComponent {
     });
   }
 }
-
