@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HotelService } from '../../services/hotel.service';
+import { LugarService } from '../../services/lugar.service';
 
 @Component({
   selector: 'app-filtro-hoteles',
@@ -29,7 +29,7 @@ export class FiltroHotelesComponent implements OnInit {
   };
 
   constructor(
-    private hotelService: HotelService,
+    private LugarService: LugarService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -60,7 +60,8 @@ export class FiltroHotelesComponent implements OnInit {
     const maxFecha = new Date();
     maxFecha.setFullYear(hoy.getFullYear() + 1);
 
-    this.fechaMaxima = maxFecha.toISOString().split('T')[0]; // Fecha máxima = 1 año después
+    this.fechaMinima = hoy.toISOString().split('T')[0];
+    this.fechaMaxima = maxFecha.toISOString().split('T')[0];
   }
 
   validarFechas() {
@@ -69,6 +70,11 @@ export class FiltroHotelesComponent implements OnInit {
     const hoy = new Date();
     const maxFecha = new Date();
     maxFecha.setFullYear(hoy.getFullYear() + 1);
+
+    if (fechaInicio < hoy) {
+      alert('La fecha de inicio no puede ser anterior a hoy.');
+      this.filtros.fechaInicio = this.fechaMinima;
+    }
 
     if (fechaFin < fechaInicio) {
       alert('La fecha de fin no puede ser anterior a la fecha de inicio.');
@@ -100,7 +106,7 @@ export class FiltroHotelesComponent implements OnInit {
   }
 
   cargarDestinos() {
-    this.hotelService.obtenerDestinos().subscribe({
+    this.LugarService.obtenerLugares().subscribe({
       next: (response) => {
         if (response.status === 'success') {
           this.destinos = response.data;
@@ -114,20 +120,3 @@ export class FiltroHotelesComponent implements OnInit {
     });
   }
 }
-document.addEventListener('DOMContentLoaded', () => {
-  const fechaInicio = document.getElementById(
-    'fechaInicio'
-  ) as HTMLInputElement;
-
-  if (fechaInicio) {
-    const hoy = new Date().toISOString().split('T')[0];
-    fechaInicio.min = hoy;
-  }
-
-  const fechaFin = document.getElementById('fechaFin') as HTMLInputElement;
-
-  if (fechaFin) {
-    const hoy = new Date().toISOString().split('T')[0];
-    fechaFin.min = hoy;
-  }
-});
