@@ -3,24 +3,23 @@ import { Router } from '@angular/router';
 import { ReservaService } from '../../services/reserva.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NavbarComponent } from '../navbar/navbar.component';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-confirmacion-reserva',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent],
   templateUrl: './confirmacion-reserva.component.html',
   styleUrls: ['./confirmacion-reserva.component.css'],
 })
 export class ConfirmarReservaComponent implements OnInit {
-    @Input() filtros: any = null;
-    
+  @Input() filtros: any = null;
+
   reserva: any;
   cliente = { nombre: '', email: '', telefono: '' };
 
-  constructor(
-    private router: Router,
-    private reservaService: ReservaService
-  ) { }
+  constructor(private router: Router, private reservaService: ReservaService) {}
 
   ngOnInit() {
     document.body.classList.remove('modal-open');
@@ -58,6 +57,4 @@ export class ConfirmarReservaComponent implements OnInit {
       }
     );
   }
-
-
 }

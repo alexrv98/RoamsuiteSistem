@@ -1,0 +1,26 @@
+.ticket-card {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.ticket-line {
+  border-top: 2px dashed #007bff;
+  margin: 10px 0;
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ticket-info p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 5px 0;
+  text-align: center;
+}
+
+.ticket-info strong {
+  color: #007bff;
+}

@@ -18,7 +18,8 @@
             </option>
           </select>
           <label>
-            <i class="fa-solid fa-filter text-primary"></i> Filtrar por categoría
+            <i class="fa-solid fa-filter text-primary"></i> Filtrar por
+            categoría
           </label>
         </div>
       </div>
@@ -28,7 +29,7 @@
         <h5 class="fw-bold text-primary text-center">
           <i class="fa-solid fa-map"></i> Mapa de Lugares
         </h5>
-        <div id="map" class="rounded-4" style="height: 300px;"></div>
+        <div id="map" class="rounded-4" style="height: 300px"></div>
       </div>
     </div>
 
@@ -46,7 +47,10 @@
               class="col-md-3 mb-3 d-flex flex-shrink-0"
               *ngFor="let lugar of lugaresFiltrados"
             >
-              <div class="card lugar-card shadow-sm rounded-4" style="width: 18rem">
+              <div
+                class="card lugar-card shadow-sm rounded-4"
+                style="width: 18rem"
+              >
                 <img
                   [src]="lugar.imagen"
                   class="rounded-top"
@@ -59,7 +63,8 @@
                     {{ lugar.nombre }}
                   </h5>
                   <p class="text-muted">
-                    <i class="fa-solid fa-location-dot"></i> {{ lugar.ubicacion }}
+                    <i class="fa-solid fa-location-dot"></i>
+                    {{ lugar.ubicacion }}
                   </p>
                   <p class="small">{{ lugar.descripcion }}</p>
                   <div class="mt-auto">
