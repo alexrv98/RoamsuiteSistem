@@ -2,6 +2,35 @@
   <div class="card shadow-sm border-0 rounded-4 p-4">
     <h4 class="mb-4"><i class="fa-solid fa-comments"></i> Deja tu comentario</h4>
 
+
+
+    <!-- Mostrar comentarios -->
+    <div class="mt-4">
+      <h5>Comentarios:</h5>
+      <div *ngFor="let comentario of comentarios | slice:0:comentariosMostrados" class="border p-3 mb-2 rounded-3">
+        <h6 class="ml-3">{{ comentario.nombre }}</h6>
+
+        <div class="d-flex align-items-center">
+          <!-- Mostrar estrellas en lugar de texto -->
+          <div *ngFor="let star of estrellas; let i = index">
+            <i class="fa-star" [ngClass]="i < comentario.calificacion ? 'fa-solid text-warning' : 'fa-regular'"></i>
+          </div>
+        </div>
+        <p>{{ comentario.texto }}</p>
+        <!-- Mostrar la fecha -->
+        <small class="text-muted">{{ comentario.fecha | date:'short' }}</small>
+
+        <!-- Mostrar la foto, si existe -->
+        <div *ngIf="comentario.foto">
+          <img [src]="comentario.foto" alt="Imagen del comentario" class="mt-2 img-fluid" style="max-height: 200px; object-fit: cover;">
+        </div>
+      </div>
+
+      <!-- Botón para ver más comentarios -->
+      <button *ngIf="comentarios.length > comentariosMostrados" class="btn btn-link" (click)="verMas()">
+        Ver más
+      </button>
+    </div>
     <!-- Formulario para agregar un comentario -->
     <div class="mb-3">
       <label for="nombre" class="form-label"><i class="fa-solid fa-user"></i> Nombre</label>
@@ -23,7 +52,15 @@
       </div>
     </div>
 
+    <!-- Subir fotos -->
+    <div class="mb-3">
+      <label for="foto" class="form-label"><i class="fa-solid fa-image"></i> Subir foto</label>
+      <input type="file" class="form-control rounded-3" id="foto" (change)="onFileChange($event)" />
+    </div>
+
     <button class="btn btn-primary w-100" (click)="agregarComentario()">
       <i class="fa-solid fa-paper-plane"></i> Enviar comentario
     </button>
+
   </div>
+</div>
