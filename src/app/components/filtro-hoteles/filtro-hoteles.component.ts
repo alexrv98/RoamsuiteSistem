@@ -29,14 +29,6 @@ export class FiltroHotelesComponent implements OnInit {
     huespedes: 1,
   };
 
-export class FiltroHotelesComponent implements OnInit {
-  destinos: any[] = [];
-  @Input() filtros: any = {
-    destino: '',
-    fechaInicio: '',
-    fechaFin: '',
-    huespedes: 1
-  };
 
   constructor(private lugarService: LugarService, private router: Router, private filtroService: FiltroService) {}
 
@@ -69,9 +61,7 @@ export class FiltroHotelesComponent implements OnInit {
 
   }
   
-   
-
-  }
+  
 
   establecerFechasMinMax() {
     const hoy = new Date();
@@ -103,38 +93,5 @@ export class FiltroHotelesComponent implements OnInit {
       alert('El rango máximo permitido es de 1 año.');
       this.filtros.fechaFin = this.fechaMaxima;
     }
-  }
-
-  buscarHoteles() {
-    this.validarFechas();
-
-    const { destino, fechaInicio, fechaFin, huespedes } = this.filtros;
-    if (!destino || !fechaInicio || !fechaFin || huespedes < 1) {
-      alert('Por favor, completa todos los campos.');
-      return;
-    }
-
-    this.router.navigate([
-      '/buscar',
-      destino,
-      fechaInicio,
-      fechaFin,
-      huespedes,
-    ]);
-  }
-
-  cargarDestinos() {
-    this.LugarService.obtenerLugares().subscribe({
-      next: (response) => {
-        if (response.status === 'success') {
-          this.destinos = response.data;
-        } else {
-          console.error('Error al obtener destinos:', response.message);
-        }
-      },
-      error: (error) => {
-        console.error('Error en la API:', error);
-      },
-    });
   }
 }
