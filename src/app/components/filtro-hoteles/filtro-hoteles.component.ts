@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotelService } from '../../services/hotel.service';
+import { LugarService } from '../../services/lugar.service';
 
 @Component({
   selector: 'app-filtro-hoteles',
@@ -23,7 +24,7 @@ import { HotelService } from '../../services/hotel.service';
       huespedes: 1
     };
 
-    constructor(private hotelService: HotelService, private router: Router, private route: ActivatedRoute) {}
+    constructor(private LugarService: LugarService, private router: Router, private route: ActivatedRoute) {}
 
     ngOnInit() {
       this.cargarDestinos();
@@ -46,8 +47,8 @@ import { HotelService } from '../../services/hotel.service';
       const maxFecha = new Date();
       maxFecha.setFullYear(hoy.getFullYear() + 1);
 
-      this.fechaMinima = hoy.toISOString().split('T')[0]; // Fecha mínima = hoy
-      this.fechaMaxima = maxFecha.toISOString().split('T')[0]; // Fecha máxima = 1 año después
+      this.fechaMinima = hoy.toISOString().split('T')[0]; 
+      this.fechaMaxima = maxFecha.toISOString().split('T')[0]; 
     }
 
     validarFechas() {
@@ -87,7 +88,7 @@ import { HotelService } from '../../services/hotel.service';
 
 
     cargarDestinos() {
-      this.hotelService.obtenerDestinos().subscribe({
+      this.LugarService.obtenerLugares().subscribe({
         next: (response) => {
           if (response.status === 'success') {
             this.destinos = response.data;
