@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
@@ -6,6 +6,7 @@ import { LugarService } from '../../../services/lugar.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-lugares-home',
@@ -21,7 +22,7 @@ import { inject } from '@angular/core';
     ])
   ]
 })
-export class LugaresHomeComponent {
+export class LugaresHomeComponent implements OnInit {
   lugares: any[] = [];
   lugaresFiltrados: any[] = [];
   categorias: any[] = [];
@@ -34,10 +35,12 @@ export class LugaresHomeComponent {
 
   lugaresService: LugarService = inject(LugarService);
   router: Router = inject(Router);
+  map: any; // Variable para almacenar el mapa
 
   ngOnInit(): void {
     this.obtenerCategorias();  // Llamar al método para obtener categorías
     this.obtenerLugares();      // Llamar al método para obtener lugares
+    this.inicializarMapa();     // Inicializar el mapa
   }
 
   obtenerCategorias(): void {
@@ -61,7 +64,7 @@ export class LugaresHomeComponent {
         if (response.status === 'success') {
           this.lugares = response.data;
           this.lugaresFiltrados = [...this.lugares];  // Inicializa con todos los lugares
-          console.log("Lugares recibidos del backend:", this.lugares); // Verifica estructura
+          this.agregarMarcadores(); // Actualizar mapa con los lugares
         } else {
           console.error('Error al obtener lugares:', response.message);
         }
@@ -82,12 +85,41 @@ export class LugaresHomeComponent {
         if (response.status === 'success') {
           this.lugaresFiltrados = response.data;
           console.log("Lugares filtrados desde API:", this.lugaresFiltrados);
+          this.agregarMarcadores(); // Actualizar mapa con lugares filtrados
         } else {
           console.error("Error al obtener lugares:", response.message);
         }
       },
       error: (error) => {
         console.error("Error en la petición:", error);
+      }
+    });
+  }
+
+  // Inicializar el mapa con Leaflet
+  inicializarMapa(): void {
+    this.map = L.map('map').setView([10.0, -84.0], 6); // Coordenadas iniciales
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(this.map);
+  }
+
+  // Agregar marcadores de lugares en el mapa
+  agregarMarcadores(): void {
+    // Primero limpiamos el mapa de cualquier marcador previo
+    this.map.eachLayer((layer: any) => {
+      if (layer instanceof L.Marker) {
+        this.map.removeLayer(layer);
+      }
+    });
+
+    // Agregar nuevos marcadores
+    this.lugaresFiltrados.forEach((lugar) => {
+      if (lugar.latitud && lugar.longitud) {
+        L.marker([lugar.latitud, lugar.longitud])
+          .addTo(this.map)
+          .bindPopup(`<b>${lugar.nombre}</b><br>${lugar.ubicacion}`);
       }
     });
   }

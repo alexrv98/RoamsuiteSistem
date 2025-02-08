@@ -28,6 +28,13 @@ export class HabitacionesComponent implements OnInit {
   };
   habitaciones: any = { mejorOpcion: [], otrasHabitaciones: [] };
 
+
+  habitacionSeleccionada: any = null;
+
+  seleccionarHabitacion(habitacion: any) {
+    this.habitacionSeleccionada = habitacion;
+  }
+  
   constructor(
     private route: ActivatedRoute,
     private habitacionesService: HabitacionesService

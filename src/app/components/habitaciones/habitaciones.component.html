@@ -43,13 +43,15 @@
                 </p>
 
                 <button
-                  type="button"
-                  data-bs-toggle="modal"
-                  data-bs-target="#reserva"
-                  class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
-                >
-                  Reservar
-                </button>
+                type="button"
+                class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
+                data-bs-toggle="modal"
+                data-bs-target="#reserva"
+                (click)="seleccionarHabitacion(habitacion)"
+              >
+                Reservar
+              </button>
+              
               </div>
             </div>
           </div>
@@ -96,13 +98,16 @@
                     }}
                   </p>
                   <button
-                    type="button"
-                    data-bs-toggle="modal"
-                    data-bs-target="#reserva"
-                    class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
-                  >
-                    Reservar
-                  </button>
+  type="button"
+  class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
+  data-bs-toggle="modal"
+  data-bs-target="#reserva"
+  (click)="seleccionarHabitacion(habitacion)"
+>
+  Reservar
+</button>
+
+
                 </div>
               </div>
             </div>
@@ -128,4 +133,7 @@
     <!-- ---------------------- -->
   </div>
 </div>
-<app-modal-reserva></app-modal-reserva>
+<app-modal-reserva 
+  [habitacion]="habitacionSeleccionada"
+  [filtros]="filtros">
+</app-modal-reserva>
