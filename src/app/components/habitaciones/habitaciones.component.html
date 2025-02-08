@@ -51,7 +51,7 @@
               >
                 Reservar
               </button>
-              
+
               </div>
             </div>
           </div>
@@ -59,8 +59,11 @@
       </div>
       <!-- ------------------------------ -->
     </div>
-    <div class="col-4">Comentarios</div>
+    <div class="col-4">
+      <app-comentarios></app-comentarios>
+    </div>
     <!-- ----------------- -->
+
 
     <!--  -->
     <div *ngIf="habitaciones.otrasHabitaciones.length > 0">
@@ -133,7 +136,7 @@
     <!-- ---------------------- -->
   </div>
 </div>
-<app-modal-reserva 
+<app-modal-reserva
   [habitacion]="habitacionSeleccionada"
   [filtros]="filtros">
 </app-modal-reserva>

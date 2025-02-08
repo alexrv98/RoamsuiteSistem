@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 export class ComentariosComponent {
 
 
+
   comentarios: any[] = [];
   nuevoComentario = { nombre: '', texto: '', calificacion: 0 };
   estrellas = [1, 2, 3, 4, 5];

@@ -5,7 +5,7 @@ import { ListaHotelesComponent } from '../lista-hoteles/lista-hoteles.component'
 import { NavbarComponent } from '../navbar/navbar.component';
 import { LugaresHomeComponent } from "./lugares-home/lugares-home.component";
 import { CommonModule } from '@angular/common';
-import { ComentariosComponent } from "./comentarios/comentarios.component";
+import { ComentariosComponent } from "../habitaciones/comentarios/comentarios.component";
 
 @Component({
   selector: 'app-home',
@@ -15,7 +15,7 @@ import { ComentariosComponent } from "./comentarios/comentarios.component";
 })
 
 export class HomeComponent {
-  hoteles: any[] = []; 
+  hoteles: any[] = [];
   filtros: any = {
     destino: null,
     fechaInicio: null,
