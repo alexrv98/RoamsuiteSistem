@@ -20,12 +20,7 @@ import { ModalReservaComponent } from './modal-reserva/modal-reserva.component';
 })
 export class HabitacionesComponent implements OnInit {
   hotelId!: number;
-  filtros: any = {
-    destino: '',
-    fechaInicio: '',
-    fechaFin: '',
-    huespedes: 1,
-  };
+  filtros: any = {};
   habitaciones: any = { mejorOpcion: [], otrasHabitaciones: [] };
 
 
@@ -41,20 +36,16 @@ export class HabitacionesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe((params) => {
-      this.hotelId = +params['hotelId']; 
-    });
+    this.hotelId = Number(this.route.snapshot.paramMap.get('hotelId'));
 
-    this.route.queryParams.subscribe((queryParams) => {
-      this.filtros = {
-        destino: queryParams['destino'] || '',
-        fechaInicio: queryParams['fechaInicio'] || '', 
-        fechaFin: queryParams['fechaFin'] || '', 
-        huespedes: +queryParams['huespedes'] || 1, 
-      };
-      
-      this.obtenerHabitaciones();
-    });
+    const state = history.state;
+    if (state.filtros) {
+      this.filtros = state.filtros;
+    } else {
+      console.warn('No hay filtros en el estado de navegación.');
+    }
+
+    this.obtenerHabitaciones();
   }
 
   obtenerHabitaciones() {

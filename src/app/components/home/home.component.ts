@@ -23,18 +23,6 @@ export class HomeComponent {
     huespedes: 1,
   };
 
-  constructor(private hotelService: HotelService) {}
 
-  onFiltrosAplicados(filtros: any) {
-    this.filtros = { ...filtros };
-    this.hoteles = [];
-    this.hotelService.obtenerHotelesDisponibles(filtros).subscribe((res) => {
-      if (res.status === 'success') {
-        this.hoteles = res.data;
-      } else {
-        console.error('Error al obtener los hoteles:', res.message);
-      }
-    });
-  }
 }
 

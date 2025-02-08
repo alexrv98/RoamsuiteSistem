@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotelService } from '../../services/hotel.service';
 import { LugarService } from '../../services/lugar.service';
+import { FiltroService } from '../../services/filtro.service';
 
 @Component({
   selector: 'app-filtro-hoteles',
@@ -12,94 +13,46 @@ import { LugarService } from '../../services/lugar.service';
   styleUrls: ['./filtro-hoteles.component.css']
 })
 
-  export class FiltroHotelesComponent implements OnInit {
+export class FiltroHotelesComponent implements OnInit {
+  destinos: any[] = [];
+  @Input() filtros: any = {
+    destino: '',
+    fechaInicio: '',
+    fechaFin: '',
+    huespedes: 1
+  };
 
-    destinos: any[] = [];
-    fechaMinima: string = '';
-    fechaMaxima: string = '';
-    @Input() filtros: any = {
-      destino: '',
-      fechaInicio: '',
-      fechaFin: '',
-      huespedes: 1
-    };
+  constructor(private lugarService: LugarService, private router: Router, private filtroService: FiltroService) {}
 
-    constructor(private LugarService: LugarService, private router: Router, private route: ActivatedRoute) {}
+  ngOnInit() {
+    this.cargarDestinos();
+  }
 
-    ngOnInit() {
-      this.cargarDestinos();
-      this.establecerFechasMinMax();
+  cargarDestinos() {
+    this.lugarService.obtenerLugares().subscribe({
+      next: (response) => {
+        if (response.status === 'success') {
+          this.destinos = response.data;
+        } else {
+          console.error('Error al obtener destinos:', response.message);
+        }
+      },
+      error: (error) => console.error('Error en la API:', error)
+    });
+  }
 
-      if (!this.filtros.destino || !this.filtros.fechaInicio || !this.filtros.fechaFin || this.filtros.huespedes < 1) {
-        this.route.params.subscribe((params) => {
-          this.filtros = {
-            destino: params['destino'] || '',
-            fechaInicio: params['fechaInicio'] || '',
-            fechaFin: params['fechaFin'] || '',
-            huespedes: params['huespedes'] || 1,
-          };
-        });
-      }
+  buscarHoteles() {
+  
+    const { destino, fechaInicio, fechaFin, huespedes } = this.filtros;
+    if (!destino || !fechaInicio || !fechaFin || huespedes < 1) {
+      alert('Por favor, completa todos los campos.');
+      return;
     }
 
-    establecerFechasMinMax() {
-      const hoy = new Date();
-      const maxFecha = new Date();
-      maxFecha.setFullYear(hoy.getFullYear() + 1);
+    this.router.navigate(['/buscar'], { state: { filtros: this.filtros } });
 
-      this.fechaMinima = hoy.toISOString().split('T')[0]; 
-      this.fechaMaxima = maxFecha.toISOString().split('T')[0]; 
-    }
-
-    validarFechas() {
-      const fechaInicio = new Date(this.filtros.fechaInicio);
-      const fechaFin = new Date(this.filtros.fechaFin);
-      const hoy = new Date();
-      const maxFecha = new Date();
-      maxFecha.setFullYear(hoy.getFullYear() + 1);
-
-      if (fechaInicio < hoy) {
-        alert('La fecha de inicio no puede ser anterior a hoy.');
-        this.filtros.fechaInicio = this.fechaMinima;
-      }
-
-      if (fechaFin < fechaInicio) {
-        alert('La fecha de fin no puede ser anterior a la fecha de inicio.');
-        this.filtros.fechaFin = this.filtros.fechaInicio;
-      }
-
-      if (fechaFin > maxFecha) {
-        alert('El rango máximo permitido es de 1 año.');
-        this.filtros.fechaFin = this.fechaMaxima;
-      }
-    }
-
-    buscarHoteles() {
-      this.validarFechas();
-
-      const { destino, fechaInicio, fechaFin, huespedes } = this.filtros;
-      if (!destino || !fechaInicio || !fechaFin || huespedes < 1) {
-        alert('Por favor, completa todos los campos.');
-        return;
-      }
-
-      this.router.navigate(['/buscar', destino, fechaInicio, fechaFin, huespedes]);
-    }
-
-
-    cargarDestinos() {
-      this.LugarService.obtenerLugares().subscribe({
-        next: (response) => {
-          if (response.status === 'success') {
-            this.destinos = response.data;
-          } else {
-            console.error('Error al obtener destinos:', response.message);
-          }
-        },
-        error: (error) => {
-          console.error('Error en la API:', error);
-        },
-      });
-    }
+  }
+  
+   
 
   }

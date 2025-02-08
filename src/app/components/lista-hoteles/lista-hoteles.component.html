@@ -1,5 +1,8 @@
 <app-navbar></app-navbar>
-<app-filtro-hoteles></app-filtro-hoteles>
+<app-filtro-hoteles
+  [filtros]="filtros"
+  (filtrosAplicados)="actualizarFiltros($event)"
+></app-filtro-hoteles>
 
 
 <div class="container">
