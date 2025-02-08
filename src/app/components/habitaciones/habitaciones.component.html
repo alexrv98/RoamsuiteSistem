@@ -1,131 +1,96 @@
 <app-navbar></app-navbar>
 <app-filtro-hoteles [filtros]="filtros"></app-filtro-hoteles>
+
 <div class="container">
   <div class="row">
-    <div class="col-8">
+    <!-- Columna de habitaciones disponibles -->
+    <div class="col-12 col-md-8">
       <h4 class="text-secondary">Habitaciones disponibles</h4>
+
+      <!-- Mejores opciones de habitaciones -->
       <div *ngIf="habitaciones.mejorOpcion.length > 0">
         <h5 class="fw-bold text-primary">Mejores opciones</h5>
-        <div class="card" *ngFor="let habitacion of habitaciones.mejorOpcion">
-          <!-- <h5 class="card-header bg-info fw-bold text-white">
-            {{ habitacion.tipo_habitacion }}
-          </h5> -->
-          <div class="card-body">
-            <div class="d-flex align-items-center">
-              <!-- Imagen de la habitación -->
-              <img
-                src="assets/habitacion.jpg"
-                alt="Imagen de la habitación"
-                class="room-image me-3"
-                width="300"
-                height="200"
-              />
-
-              <div class="flex-grow-1">
-                <h5 class="card-title text-secondary">
-                  {{ habitacion.tipo_habitacion }}
-                </h5>
-                <p class="card-text mb-1">
-                  <strong>No. Habitación:</strong>
-                  {{ habitacion.numero_habitacion }}
-                </p>
-                <p class="card-text mb-1">
-                  <strong>Capacidad:</strong>
-                  {{ habitacion.capacidad }} persona(s)
-                </p>
-                <p class="card-text fw-bold">
-                  <strong>Numero de camas:</strong> {{ habitacion.camas }}
-                </p>
-                <p class="card-text fw-bold">
-                  <strong>Precio por noche:</strong> MXN ${{
-                    habitacion.precio
-                  }}
-                </p>
-
-                <button
-                  type="button"
-                  class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
-                  data-bs-toggle="modal"
-                  data-bs-target="#reserva"
-                  (click)="seleccionarHabitacion(habitacion)"
-                >
-                  Reservar
-                </button>
-              </div>
+        <div class="card shadow-sm mb-3" *ngFor="let habitacion of habitaciones.mejorOpcion">
+          <div class="card-body d-flex align-items-center">
+            <img
+              src="assets/habitacion.jpg"
+              alt="Imagen de la habitación"
+              class="room-image me-3"
+              width="100%"
+              height="auto"
+              style="max-width: 300px;"
+            />
+            <div class="flex-grow-1">
+              <h5 class="card-title text-secondary">{{ habitacion.tipo_habitacion }}</h5>
+              <p class="card-text mb-1"><strong>No. Habitación:</strong> {{ habitacion.numero_habitacion }}</p>
+              <p class="card-text mb-1"><strong>Capacidad:</strong> {{ habitacion.capacidad }} persona(s)</p>
+              <p class="card-text fw-bold"><strong>Numero de camas:</strong> {{ habitacion.camas }}</p>
+              <p class="card-text fw-bold"><strong>Precio por noche:</strong> MXN ${{ habitacion.precio }}</p>
+              <button
+                type="button"
+                class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
+                data-bs-toggle="modal"
+                data-bs-target="#reserva"
+                (click)="seleccionarHabitacion(habitacion)"
+              >
+                Reservar
+              </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-4">
+
+    <!-- Columna de comentarios -->
+    <div class="col-12 col-md-4 mt-3 mt-md-0">
       <app-comentarios></app-comentarios>
     </div>
-    <!-- ----------------- -->
+  </div>
 
-    <div *ngIf="habitaciones.otrasHabitaciones.length > 0">
-      <h5 class="fw-bold">Otras habitaciones</h5>
-
-      <div class="col-md-12">
-        <br />
-        <div class="position-relative">
-          <div class="d-flex overflow-auto" id="scrollContainer">
-            <div
-              class="col-md-3 mb-3 d-flex flex-shrink-0"
-              *ngFor="let habitacion of habitaciones.otrasHabitaciones"
-            >
-              <div class="card w-100 lugar-card shadow-sm" style="width: 18rem">
-                <img src="assets/habitacion2.jpg" alt="lugar" height="200" />
-                <div class="card-body d-flex flex-column">
-                  <h5 class="card-title text-secondary">
-                    {{ habitacion.tipo_habitacion }}
-                  </h5>
-                  <p class="card-text mb-1">
-                    <strong>No. Habitación:</strong>
-                    {{ habitacion.numero_habitacion }}
-                  </p>
-                  <p class="card-text mb-1">
-                    <strong>Capacidad:</strong>
-                    {{ habitacion.capacidad }} persona(s)
-                  </p>
-                  <p class="card-text fw-bold">
-                    <strong>Numero de camas:</strong> {{ habitacion.camas }}
-                  </p>
-                  <p class="card-text fw-bold">
-                    <strong>Precio por noche:</strong> MXN ${{
-                      habitacion.precio
-                    }}
-                  </p>
-                  <button
-                    type="button"
-                    class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
-                    data-bs-toggle="modal"
-                    data-bs-target="#reserva"
-                    (click)="seleccionarHabitacion(habitacion)"
-                  >
-                    Reservar
-                  </button>
-                </div>
-              </div>
+  <!-- Otras habitaciones -->
+  <div *ngIf="habitaciones.otrasHabitaciones.length > 0">
+    <h5 class="fw-bold mt-4">Otras habitaciones</h5>
+    <div class="position-relative">
+      <div class="d-flex overflow-auto" id="scrollContainer">
+        <div class="col-6 col-md-3 mb-3 d-flex flex-shrink-0" *ngFor="let habitacion of habitaciones.otrasHabitaciones">
+          <div class="card w-100 lugar-card shadow-sm">
+            <img src="assets/habitacion2.jpg" alt="Habitación" height="200" class="w-100" />
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title text-secondary">{{ habitacion.tipo_habitacion }}</h5>
+              <p class="card-text mb-1"><strong>No. Habitación:</strong> {{ habitacion.numero_habitacion }}</p>
+              <p class="card-text mb-1"><strong>Capacidad:</strong> {{ habitacion.capacidad }} persona(s)</p>
+              <p class="card-text fw-bold"><strong>Numero de camas:</strong> {{ habitacion.camas }}</p>
+              <p class="card-text fw-bold"><strong>Precio por noche:</strong> MXN ${{ habitacion.precio }}</p>
+              <button
+                type="button"
+                class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
+                data-bs-toggle="modal"
+                data-bs-target="#reserva"
+                (click)="seleccionarHabitacion(habitacion)"
+              >
+                Reservar
+              </button>
             </div>
           </div>
-
-          <button
-            class="btn bg-dark text-white btn-lg p-3 shadow position-absolute start-0 top-50 translate-middle-y"
-            (click)="scrollLeft()"
-          >
-            <i class="fa-solid fa-angles-left" style="color: #ffffff"></i>
-          </button>
-
-          <button
-            class="btn bg-dark text-white btn-lg p-3 shadow position-absolute end-0 top-50 translate-middle-y"
-            (click)="scrollRight()"
-          >
-            <i class="fa-solid fa-angles-right" style="color: #ffffff"></i>
-          </button>
         </div>
       </div>
+
+      <!-- Botones de desplazamiento -->
+      <button
+        class="btn bg-dark text-white btn-lg p-3 shadow position-absolute start-0 top-50 translate-middle-y"
+        (click)="scrollLeft()"
+      >
+        <i class="fa-solid fa-angles-left" style="color: #ffffff"></i>
+      </button>
+      <button
+        class="btn bg-dark text-white btn-lg p-3 shadow position-absolute end-0 top-50 translate-middle-y"
+        (click)="scrollRight()"
+      >
+        <i class="fa-solid fa-angles-right" style="color: #ffffff"></i>
+      </button>
     </div>
   </div>
 </div>
-<app-modal-reserva [habitacion]="habitacionSeleccionada" [filtros]="filtros">
-</app-modal-reserva>
+
+<!-- Modal de reserva -->
+<app-modal-reserva [habitacion]="habitacionSeleccionada" [filtros]="filtros"></app-modal-reserva>
