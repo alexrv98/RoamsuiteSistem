@@ -5,7 +5,7 @@
     <div class="col-8">
       <h4 class="text-secondary">Habitaciones disponibles</h4>
       <div *ngIf="habitaciones.mejorOpcion.length > 0">
-        <h5 class="fw-bold">Mejores opciones</h5>
+        <h5 class="fw-bold text-primary">Mejores opciones</h5>
         <div class="card" *ngFor="let habitacion of habitaciones.mejorOpcion">
           <!-- <h5 class="card-header bg-info fw-bold text-white">
             {{ habitacion.tipo_habitacion }}
@@ -57,22 +57,16 @@
           </div>
         </div>
       </div>
-      <!-- ------------------------------ -->
     </div>
-    <div class="col-4">
-      <app-comentarios></app-comentarios>
-    </div>
+    <div class="col-4">Comentarios</div>
     <!-- ----------------- -->
 
-
-    <!--  -->
     <div *ngIf="habitaciones.otrasHabitaciones.length > 0">
       <h5 class="fw-bold">Otras habitaciones</h5>
 
       <div class="col-md-12">
         <br />
         <div class="position-relative">
-          <!-- Contenedor deslizable -->
           <div class="d-flex overflow-auto" id="scrollContainer">
             <div
               class="col-md-3 mb-3 d-flex flex-shrink-0"
@@ -101,22 +95,28 @@
                     }}
                   </p>
                   <button
-  type="button"
-  class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
-  data-bs-toggle="modal"
-  data-bs-target="#reserva"
-  (click)="seleccionarHabitacion(habitacion)"
->
-  Reservar
-</button>
-
-
+                    type="button"
+                    class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
+                    data-bs-toggle="modal"
+                    data-bs-target="#reserva"
+                    (click)="seleccionarHabitacion(habitacion)"
+                  >
+                    Reservar
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
+                    data-bs-toggle="modal"
+                    data-bs-target="#reserva"
+                    (click)="seleccionarHabitacion(habitacion)"
+                  >
+                    Reservar
+                  </button>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Botones de desplazamiento -->
           <button
             class="btn bg-dark text-white btn-lg p-3 shadow position-absolute start-0 top-50 translate-middle-y"
             (click)="scrollLeft()"
@@ -133,7 +133,6 @@
         </div>
       </div>
     </div>
-    <!-- ---------------------- -->
   </div>
 </div>
 <app-modal-reserva
