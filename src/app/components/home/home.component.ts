@@ -5,6 +5,7 @@ import { ListaHotelesComponent } from '../lista-hoteles/lista-hoteles.component'
 import { NavbarComponent } from '../navbar/navbar.component';
 import { LugaresHomeComponent } from './lugares-home/lugares-home.component';
 import { CommonModule } from '@angular/common';
+import { ComentariosComponent } from '../habitaciones/comentarios/comentarios.component';
 import { FooterComponent } from '../footer/footer.component';
 @Component({
   selector: 'app-home',

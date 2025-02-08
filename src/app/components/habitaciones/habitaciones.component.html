@@ -57,7 +57,10 @@
         </div>
       </div>
     </div>
-    <div class="col-4">Comentarios</div>
+    <div class="col-4">
+      <app-comentarios></app-comentarios>
+    </div>
+    <!-- ----------------- -->
 
     <div *ngIf="habitaciones.otrasHabitaciones.length > 0">
       <h5 class="fw-bold">Otras habitaciones</h5>
@@ -92,7 +95,6 @@
                       habitacion.precio
                     }}
                   </p>
-
                   <button
                     type="button"
                     class="btn btn-primary btn-lg mt-2 w-100 rounded-0"

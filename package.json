@@ -21,6 +21,7 @@
     "@types/leaflet": "^1.9.16",
     "jquery": "^3.7.1",
     "leaflet": "^1.9.4",
+    "ngx-disqus": "^3.0.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

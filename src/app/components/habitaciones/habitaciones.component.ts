@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FiltroHotelesComponent } from './../filtro-hoteles/filtro-hoteles.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { ModalReservaComponent } from './modal-reserva/modal-reserva.component';
+import { ComentariosComponent } from "./comentarios/comentarios.component";
 
 @Component({
   selector: 'app-habitaciones',
@@ -14,7 +15,8 @@ import { ModalReservaComponent } from './modal-reserva/modal-reserva.component';
     NavbarComponent,
     FiltroHotelesComponent,
     ModalReservaComponent,
-  ],
+    ComentariosComponent
+],
   templateUrl: './habitaciones.component.html',
   styleUrls: ['./habitaciones.component.css'],
 })
@@ -34,7 +36,7 @@ export class HabitacionesComponent implements OnInit {
   seleccionarHabitacion(habitacion: any) {
     this.habitacionSeleccionada = habitacion;
   }
-  
+
   constructor(
     private route: ActivatedRoute,
     private habitacionesService: HabitacionesService
@@ -42,17 +44,17 @@ export class HabitacionesComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
-      this.hotelId = +params['hotelId']; 
+      this.hotelId = +params['hotelId'];
     });
 
     this.route.queryParams.subscribe((queryParams) => {
       this.filtros = {
         destino: queryParams['destino'] || '',
-        fechaInicio: queryParams['fechaInicio'] || '', 
-        fechaFin: queryParams['fechaFin'] || '', 
-        huespedes: +queryParams['huespedes'] || 1, 
+        fechaInicio: queryParams['fechaInicio'] || '',
+        fechaFin: queryParams['fechaFin'] || '',
+        huespedes: +queryParams['huespedes'] || 1,
       };
-      
+
       this.obtenerHabitaciones();
     });
   }
