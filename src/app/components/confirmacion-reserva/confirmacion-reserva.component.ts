@@ -1,4 +1,4 @@
-import { Component, Input, input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReservaService } from '../../services/reserva.service';
 import { CommonModule } from '@angular/common';
@@ -24,6 +24,7 @@ export class ConfirmarReservaComponent implements OnInit {
   ngOnInit() {
     document.body.classList.remove('modal-open');
     document.querySelector('.modal-backdrop')?.remove();
+    document.body.style.overflow = 'auto';
 
     const state = history.state;
     if (state.reserva) {

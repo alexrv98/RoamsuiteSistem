@@ -1,26 +1,53 @@
-<div class="modal fade" id="reserva" tabindex="-1" aria-labelledby="reservaLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="reserva"
+  tabindex="-1"
+  aria-labelledby="reservaLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header bg-primary">
         <h1 class="modal-title fs-5 text-white" id="reservaLabel">
           Reservar habitación
         </h1>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="align-items-center text-center p-3">
           <img src="assets/habitacion2.jpg" alt="lugar" height="200" />
         </div>
         <h5 class="card-title text-secondary">Resumen de la reserva</h5>
-        <p class="card-text mb-1"><strong>No. Habitación:</strong> {{ habitacion?.numero_habitacion }}</p>
-        <p class="card-text mb-1"><strong>Capacidad:</strong> {{ habitacion?.capacidad }} persona(s)</p>
-        <p class="card-text fw-bold"><strong>Número de camas:</strong> {{ habitacion?.camas }}</p>
-        <p class="card-text fw-bold"><strong>Precio por noche:</strong> MXN ${{ habitacion?.precio }}</p>
-        <p class="card-text fw-bold text-success"><strong>Total a pagar:</strong> MXN ${{ precioTotal }}</p>
+        <p class="card-text mb-1">
+          <strong>No. Habitación:</strong> {{ habitacion?.numero_habitacion }}
+        </p>
+        <p class="card-text mb-1">
+          <strong>Capacidad:</strong> {{ habitacion?.capacidad }} persona(s)
+        </p>
+        <p class="card-text fw-bold">
+          <strong>Número de camas:</strong> {{ habitacion?.camas }}
+        </p>
+        <p class="card-text fw-bold">
+          <strong>Precio por noche:</strong> MXN ${{ habitacion?.precio }}
+        </p>
+        <p class="card-text fw-bold text-success">
+          <strong>Total a pagar:</strong> MXN ${{ precioTotal }}
+        </p>
       </div>
-      
+
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="continuarReserva()">Continuar</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="continuarReserva()"
+        >
+          Continuar
+        </button>
       </div>
     </div>
   </div>
