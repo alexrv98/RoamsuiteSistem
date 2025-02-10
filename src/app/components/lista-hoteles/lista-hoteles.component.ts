@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { HotelService } from '../../services/hotel.service';
 import { CommonModule } from '@angular/common';
 import { FiltroHotelesComponent } from '../filtro-hoteles/filtro-hoteles.component';
@@ -13,12 +13,9 @@ import { NavbarComponent } from '../navbar/navbar.component';
 })
 export class ListaHotelesComponent implements OnInit {
   hoteles: any[] = [];
-  filtros: any = {}; 
+  filtros: any = {};
 
-  constructor(
-    private router: Router,
-    private hotelService: HotelService
-  ) {}
+  constructor(private router: Router, private hotelService: HotelService) {}
 
   ngOnInit() {
     const state = history.state;
@@ -33,26 +30,25 @@ export class ListaHotelesComponent implements OnInit {
   actualizarFiltros(nuevosFiltros: any) {
     this.filtros = { ...nuevosFiltros };
   }
-  
+
   cargarHoteles() {
-    this.hotelService.obtenerHotelesDisponibles(this.filtros).subscribe((res) => {
-      if (res.status === 'success') {
-        this.hoteles = res.data;
-      } else {
-        console.error('Error en la API:', res.message);
-      }
-    });
+    this.hotelService
+      .obtenerHotelesDisponibles(this.filtros)
+      .subscribe((res) => {
+        if (res.status === 'success') {
+          this.hoteles = res.data;
+        } else {
+          console.error('Error en la API:', res.message);
+        }
+      });
   }
-  
 
   verHabitaciones(hotelId: number) {
     this.router.navigate(['/habitaciones', hotelId], {
       state: { filtros: this.filtros }, // 🔥 Pasamos los filtros de forma oculta
     });
   }
-  
-  
-  
+
   // Función para convertir el número de estrellas en un array de estrellas para mostrar en el HTML
   getStarArray(promedio: number): number[] {
     return Array(Math.round(promedio)).fill(1);
