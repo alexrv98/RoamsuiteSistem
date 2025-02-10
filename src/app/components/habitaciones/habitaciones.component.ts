@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FiltroHotelesComponent } from './../filtro-hoteles/filtro-hoteles.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { ModalReservaComponent } from './modal-reserva/modal-reserva.component';
-import { ComentariosComponent } from "./comentarios/comentarios.component";
+import { ComentariosComponent } from './comentarios/comentarios.component';
 
 @Component({
   selector: 'app-habitaciones',
@@ -25,7 +25,6 @@ export class HabitacionesComponent implements OnInit {
   hotelId!: number;
   filtros: any = {};
   habitaciones: any = { mejorOpcion: [], otrasHabitaciones: [] };
-
 
   habitacionSeleccionada: any = null;
 
@@ -68,7 +67,7 @@ export class HabitacionesComponent implements OnInit {
     });
   }
 
-
+  // Botones para scroll horizontal
   scrollLeft() {
     document
       .getElementById('scrollContainer')!

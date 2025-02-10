@@ -1,14 +1,7 @@
-import { CommonModule } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import { CommonModule } from '@angular/common'; // Permite usar directivas como *ngIf, *ngFor, etc.
+import { Component, Input, OnInit } from '@angular/core'; //Necesario para definir un componente en Angular.
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { LugarService } from '../../services/lugar.service';
 
 @Component({
@@ -44,12 +37,11 @@ export class FiltroHotelesComponent implements OnInit {
           console.error('Error al obtener destinos:', response.message);
         }
       },
-      error: (error) => console.error('Error en la API:', error)
+      error: (error) => console.error('Error en la API:', error),
     });
   }
 
   buscarHoteles() {
-  
     const { destino, fechaInicio, fechaFin, huespedes } = this.filtros;
     if (!destino || !fechaInicio || !fechaFin || huespedes < 1) {
       alert('Por favor, completa todos los campos.');
@@ -57,10 +49,7 @@ export class FiltroHotelesComponent implements OnInit {
     }
 
     this.router.navigate(['/buscar'], { state: { filtros: this.filtros } });
-
   }
-  
-  
 
   establecerFechasMinMax() {
     const hoy = new Date();

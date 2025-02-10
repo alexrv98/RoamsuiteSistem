@@ -2,7 +2,6 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { LugarService } from '../../../services/lugar.service';
 
-
 @Component({
   selector: 'app-modal-reserva',
   templateUrl: './modal-reserva.component.html',
@@ -14,7 +13,7 @@ export class ModalReservaComponent implements OnChanges {
   @Input() filtros: any = null;
   precioTotal: number = 0;
 
-  constructor(private router: Router, private lugarService: LugarService) { }
+  constructor(private router: Router, private lugarService: LugarService) {}
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('Cambios detectados en el modal:', changes);
@@ -24,17 +23,25 @@ export class ModalReservaComponent implements OnChanges {
   }
 
   calcularPrecioTotal(): number {
-    if (this.habitacion && this.filtros?.fechaInicio && this.filtros?.fechaFin) {
+    if (
+      this.habitacion &&
+      this.filtros?.fechaInicio &&
+      this.filtros?.fechaFin
+    ) {
       const fechaInicio = new Date(this.filtros.fechaInicio);
       const fechaFin = new Date(this.filtros.fechaFin);
-      const noches = Math.max(1, Math.floor((fechaFin.getTime() - fechaInicio.getTime()) / (1000 * 60 * 60 * 24)));
+      const noches = Math.max(
+        1,
+        Math.floor(
+          (fechaFin.getTime() - fechaInicio.getTime()) / (1000 * 60 * 60 * 24)
+        )
+      );
       return noches * this.habitacion.precio;
     }
     return 0;
   }
 
   continuarReserva() {
-
     const reserva = {
       tipo_habitacion: this.habitacion.tipo_habitacion,
       capacidad: this.habitacion.capacidad,
@@ -43,7 +50,7 @@ export class ModalReservaComponent implements OnChanges {
       totalReserva: this.calcularPrecioTotal(),
       habitacion_id: this.habitacion.numero_habitacion,
       destino_id: this.filtros.destino,
-      destino: ""
+      destino: '',
     };
 
     this.lugarService.obtenerDestinoPorId(this.filtros.destino).subscribe((response) => {
@@ -55,5 +62,4 @@ export class ModalReservaComponent implements OnChanges {
       }
     });
   }
-
 }
