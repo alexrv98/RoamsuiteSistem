@@ -6,6 +6,7 @@ import { LugarService } from '../../../services/lugar.service';
 @Component({
   selector: 'app-modal-reserva',
   templateUrl: './modal-reserva.component.html',
+  imports: [],
   styleUrls: ['./modal-reserva.component.css'],
 })
 export class ModalReservaComponent implements OnChanges {
@@ -13,7 +14,7 @@ export class ModalReservaComponent implements OnChanges {
   @Input() filtros: any = null;
   precioTotal: number = 0;
 
-  constructor(private router: Router, private lugarService: LugarService) {}
+  constructor(private router: Router, private lugarService: LugarService) { }
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('Cambios detectados en el modal:', changes);
@@ -33,6 +34,7 @@ export class ModalReservaComponent implements OnChanges {
   }
 
   continuarReserva() {
+
     const reserva = {
       tipo_habitacion: this.habitacion.tipo_habitacion,
       capacidad: this.habitacion.capacidad,
@@ -44,15 +46,16 @@ export class ModalReservaComponent implements OnChanges {
       destino: ""
     };
 
-    // Obtener el nombre del destino usando el servicio
+  
+
     this.lugarService.obtenerDestinoPorId(this.filtros.destino).subscribe((response) => {
       if (response.status === 'success') {
-        reserva.destino = response.nombre;  // Asignamos el nombre del destino
+        reserva.destino = response.nombre;
         this.router.navigate(['/confirmar-reserva'], { state: { reserva }, replaceUrl: true });
       } else {
         alert('Error al obtener el destino');
       }
     });
   }
-  
+
 }
