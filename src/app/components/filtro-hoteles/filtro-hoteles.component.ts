@@ -10,7 +10,6 @@ import {
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LugarService } from '../../services/lugar.service';
-import { FiltroService } from '../../services/filtro.service';
 
 @Component({
   selector: 'app-filtro-hoteles',
@@ -30,7 +29,7 @@ export class FiltroHotelesComponent implements OnInit {
   };
 
 
-  constructor(private lugarService: LugarService, private router: Router, private filtroService: FiltroService) {}
+  constructor(private lugarService: LugarService, private router: Router) {}
 
   ngOnInit() {
     this.cargarDestinos();

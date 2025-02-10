@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReservaService } from '../../services/reserva.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
@@ -20,33 +20,42 @@ export class ConfirmarReservaComponent implements OnInit {
   reserva: any;
   paypal: any;
   cliente = { nombre: '', email: '', telefono: '' };
-  pagoRealizado: boolean = false;  // Nuevo estado para controlar el pago
+  pagoRealizado: boolean = false; 
 
-  constructor(private router: Router, private reservaService: ReservaService) {}
+  constructor(private router: Router, private reservaService: ReservaService, private location: Location) {}
+
 
   ngOnInit() {
     document.body.classList.remove('modal-open');
     document.querySelector('.modal-backdrop')?.remove();
     document.body.style.overflow = 'auto';
-  
+
     const state = history.state;
+
     if (state.reserva) {
-      // Si ya hay una reserva almacenada, úsala en lugar de sobrescribirla.
-      this.reserva = this.reserva || state.reserva;
-      
-      // Si el cliente ya ha ingresado sus datos, no los borres.
-      this.cliente = this.cliente.nombre ? this.cliente : { nombre: '', email: '', telefono: '' };
-  
-      // Si el botón de PayPal aún no se ha cargado, lo cargamos
+      this.reserva = state.reserva;
+      this.location.replaceState('/confirmar-reserva', '');  
+
       if (!this.paypal) {
         this.cargarPaypalScript();
       }
     } else {
       this.router.navigate(['/']);
     }
+
+
   }
-  
-  
+
+
+// Evento para detectar cuando el usuario intente abandonar la página
+@HostListener('window:beforeunload', ['$event'])
+
+unloadNotification($event: any): void {
+  if (!this.pagoRealizado || !this.cliente.nombre || !this.cliente.email || !this.cliente.telefono) {
+    $event.returnValue = true; 
+  }
+}
+
   cargarPaypalScript() {
     if (window.paypal) {
       this.paypal = window.paypal;
@@ -91,7 +100,6 @@ export class ConfirmarReservaComponent implements OnInit {
       }).render('#paypal-button-container');  
     }
   }
-    
   confirmarReserva() {
     if (this.pagoRealizado && this.cliente.nombre && this.cliente.email && this.cliente.telefono) {
       const datosReserva = {
@@ -100,12 +108,12 @@ export class ConfirmarReservaComponent implements OnInit {
         email: this.cliente.email,
         telefono: this.cliente.telefono,
       };
-
+  
       this.reservaService.realizarReserva(datosReserva).subscribe(
         (res) => {
           if (res.status === 'success') {
             alert('Reserva confirmada con éxito');
-            this.reserva = null;
+            sessionStorage.removeItem('reservaValida');
             this.router.navigate(['/'], { replaceUrl: true });
           } else {
             alert('Error al realizar la reserva');
@@ -119,4 +127,5 @@ export class ConfirmarReservaComponent implements OnInit {
       alert('Por favor, completa todos los campos y realiza el pago antes de confirmar.');
     }
   }
+  
 }

@@ -46,8 +46,6 @@ export class ModalReservaComponent implements OnChanges {
       destino: ""
     };
 
-  
-
     this.lugarService.obtenerDestinoPorId(this.filtros.destino).subscribe((response) => {
       if (response.status === 'success') {
         reserva.destino = response.nombre;
