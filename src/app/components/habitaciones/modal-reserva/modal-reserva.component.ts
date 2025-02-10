@@ -5,6 +5,7 @@ import { LugarService } from '../../../services/lugar.service';
 @Component({
   selector: 'app-modal-reserva',
   templateUrl: './modal-reserva.component.html',
+  imports: [],
   styleUrls: ['./modal-reserva.component.css'],
 })
 export class ModalReservaComponent implements OnChanges {
@@ -52,12 +53,11 @@ export class ModalReservaComponent implements OnChanges {
       destino: '',
     };
 
-    // Obtener el nombre del destino usando el servicio
     this.lugarService
       .obtenerDestinoPorId(this.filtros.destino)
       .subscribe((response) => {
         if (response.status === 'success') {
-          reserva.destino = response.nombre; // Asignamos el nombre del destino
+          reserva.destino = response.nombre;
           this.router.navigate(['/confirmar-reserva'], {
             state: { reserva },
             replaceUrl: true,

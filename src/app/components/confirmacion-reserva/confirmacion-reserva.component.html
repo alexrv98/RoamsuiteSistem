@@ -55,10 +55,12 @@
           </div>
         </div>
 
+        <div id="paypal-button-container"></div>
+
         <button
           type="submit"
           class="btn btn-success"
-          [disabled]="reservaForm.invalid"
+          [disabled]="reservaForm.invalid || !pagoRealizado"
         >
           Confirmar Reserva
         </button>
