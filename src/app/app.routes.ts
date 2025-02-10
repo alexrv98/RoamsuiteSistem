@@ -6,7 +6,7 @@ import { ConfirmarReservaComponent } from './components/confirmacion-reserva/con
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'buscar/:destino/:fechaInicio/:fechaFin/:huespedes', component: ListaHotelesComponent },
+  { path: 'buscar', component: ListaHotelesComponent },
   { path: 'habitaciones/:hotelId', component: HabitacionesComponent },
   { path: 'confirmar-reserva', component: ConfirmarReservaComponent }
 

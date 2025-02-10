@@ -10,6 +10,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LugarService } from '../../services/lugar.service';
+import { FiltroService } from '../../services/filtro.service';
 
 @Component({
   selector: 'app-filtro-hoteles',
@@ -28,32 +29,39 @@ export class FiltroHotelesComponent implements OnInit {
     huespedes: 1,
   };
 
-  constructor(
-    private LugarService: LugarService,
-    private router: Router,
-    private route: ActivatedRoute
-  ) {}
+
+  constructor(private lugarService: LugarService, private router: Router, private filtroService: FiltroService) {}
 
   ngOnInit() {
     this.cargarDestinos();
-    this.establecerFechasMinMax();
-
-    if (
-      !this.filtros.destino ||
-      !this.filtros.fechaInicio ||
-      !this.filtros.fechaFin ||
-      this.filtros.huespedes < 1
-    ) {
-      this.route.params.subscribe((params) => {
-        this.filtros = {
-          destino: params['destino'] || '',
-          fechaInicio: params['fechaInicio'] || '',
-          fechaFin: params['fechaFin'] || '',
-          huespedes: params['huespedes'] || 1,
-        };
-      });
-    }
   }
+
+  cargarDestinos() {
+    this.lugarService.obtenerLugares().subscribe({
+      next: (response) => {
+        if (response.status === 'success') {
+          this.destinos = response.data;
+        } else {
+          console.error('Error al obtener destinos:', response.message);
+        }
+      },
+      error: (error) => console.error('Error en la API:', error)
+    });
+  }
+
+  buscarHoteles() {
+  
+    const { destino, fechaInicio, fechaFin, huespedes } = this.filtros;
+    if (!destino || !fechaInicio || !fechaFin || huespedes < 1) {
+      alert('Por favor, completa todos los campos.');
+      return;
+    }
+
+    this.router.navigate(['/buscar'], { state: { filtros: this.filtros } });
+
+  }
+  
+  
 
   establecerFechasMinMax() {
     const hoy = new Date();
@@ -85,38 +93,5 @@ export class FiltroHotelesComponent implements OnInit {
       alert('El rango máximo permitido es de 1 año.');
       this.filtros.fechaFin = this.fechaMaxima;
     }
-  }
-
-  buscarHoteles() {
-    this.validarFechas();
-
-    const { destino, fechaInicio, fechaFin, huespedes } = this.filtros;
-    if (!destino || !fechaInicio || !fechaFin || huespedes < 1) {
-      alert('Por favor, completa todos los campos.');
-      return;
-    }
-
-    this.router.navigate([
-      '/buscar',
-      destino,
-      fechaInicio,
-      fechaFin,
-      huespedes,
-    ]);
-  }
-
-  cargarDestinos() {
-    this.LugarService.obtenerLugares().subscribe({
-      next: (response) => {
-        if (response.status === 'success') {
-          this.destinos = response.data;
-        } else {
-          console.error('Error al obtener destinos:', response.message);
-        }
-      },
-      error: (error) => {
-        console.error('Error en la API:', error);
-      },
-    });
   }
 }
