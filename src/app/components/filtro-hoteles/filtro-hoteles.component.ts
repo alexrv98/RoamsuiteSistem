@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common'; // Permite usar directivas como *ngIf, *ngFor, etc.
-import { Component, Input, OnInit } from '@angular/core'; //Necesario para definir un componente en Angular.
+import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LugarService } from '../../services/lugar.service';
@@ -21,11 +21,11 @@ export class FiltroHotelesComponent implements OnInit {
     huespedes: 1,
   };
 
-
   constructor(private lugarService: LugarService, private router: Router) {}
 
   ngOnInit() {
     this.cargarDestinos();
+    this.establecerFechasMinMax();
   }
 
   cargarDestinos() {
@@ -43,8 +43,12 @@ export class FiltroHotelesComponent implements OnInit {
 
   buscarHoteles() {
     const { destino, fechaInicio, fechaFin, huespedes } = this.filtros;
+    
     if (!destino || !fechaInicio || !fechaFin || huespedes < 1) {
       alert('Por favor, completa todos los campos.');
+      return;
+    }
+    if (!this.validarFechas()) {
       return;
     }
 
@@ -59,27 +63,38 @@ export class FiltroHotelesComponent implements OnInit {
     this.fechaMinima = hoy.toISOString().split('T')[0];
     this.fechaMaxima = maxFecha.toISOString().split('T')[0];
   }
-
-  validarFechas() {
+  validarFechas(): boolean {
     const fechaInicio = new Date(this.filtros.fechaInicio);
     const fechaFin = new Date(this.filtros.fechaFin);
     const hoy = new Date();
     const maxFecha = new Date();
     maxFecha.setFullYear(hoy.getFullYear() + 1);
-
-    if (fechaInicio < hoy) {
+  
+    const hoyString = hoy.toISOString().split('T')[0]; 
+    const fechaInicioString = fechaInicio.toISOString().split('T')[0];
+    const fechaFinString = fechaFin.toISOString().split('T')[0]; 
+  
+    // Validar fecha de inicio no anterior a hoy
+    if (fechaInicioString < hoyString) {
       alert('La fecha de inicio no puede ser anterior a hoy.');
-      this.filtros.fechaInicio = this.fechaMinima;
+      this.filtros.fechaInicio = hoyString;
+      return false;
     }
-
-    if (fechaFin < fechaInicio) {
+  
+    if (fechaFinString < fechaInicioString) {
       alert('La fecha de fin no puede ser anterior a la fecha de inicio.');
-      this.filtros.fechaFin = this.filtros.fechaInicio;
+      this.filtros.fechaFin = fechaInicioString; 
+      return false;
     }
-
-    if (fechaFin > maxFecha) {
+  
+    if (fechaFinString > maxFecha.toISOString().split('T')[0]) {
       alert('El rango máximo permitido es de 1 año.');
-      this.filtros.fechaFin = this.fechaMaxima;
+      this.filtros.fechaFin = maxFecha.toISOString().split('T')[0];
+      return false;
     }
+  
+    return true; 
   }
+  
+  
 }
