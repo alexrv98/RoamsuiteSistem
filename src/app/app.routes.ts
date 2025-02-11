@@ -10,7 +10,7 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'buscar', component: ListaHotelesComponent },
   { path: 'habitaciones/:hotelId', component: HabitacionesComponent },
-  { path: 'confirmar-reserva', component: ConfirmarReservaComponent, canActivate: [ReservaGuard] },
+  { path: 'confirmar-reserva', component: ConfirmarReservaComponent},
   { path: 'comentarios/:hotelId', component: ComentariosComponent },
 
 ];

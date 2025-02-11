@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -7,10 +7,16 @@ import { Observable } from 'rxjs';
 })
 export class ReservaService {
   private apiUrl = 'http://192.168.1.102/HTLES/AAJHoteles/apisHoteles/reservar_sin_cuenta.php'; 
+  private tokenUrl = 'http://192.168.1.102/HTLES/AAJHoteles/apisHoteles/generar_token.php';
 
   constructor(private http: HttpClient) {}
 
-  realizarReserva(datosReserva: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, datosReserva);
+  obtenerToken(): Observable<any> {
+    return this.http.get<any>(this.tokenUrl);
+  }
+
+  realizarReserva(datosReserva: any, token: string): Observable<any> {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post<any>(this.apiUrl, datosReserva, { headers });
   }
 }
