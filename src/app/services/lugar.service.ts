@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { API_CONFIG } from '../api.config'; 
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LugarService {
-  private baseUrl = 'http://192.168.1.102/HTLES/AAJHoteles/apisHoteles';
-
+  private baseUrl = API_CONFIG.baseUrl;  
+  
   constructor(private http: HttpClient) {}
 
   obtenerLugares(categoria_id?: number): Observable<any> {

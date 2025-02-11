@@ -44,8 +44,6 @@ export class ConfirmarReservaComponent implements OnInit {
     }
   }
 
-
-// Evento para detectar cuando el usuario intente abandonar la página
 @HostListener('window:beforeunload', ['$event'])
 
 unloadNotification($event: any): void {
