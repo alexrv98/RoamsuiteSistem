@@ -24,7 +24,6 @@ export class ConfirmarReservaComponent implements OnInit {
 
   constructor(private router: Router, private reservaService: ReservaService, private location: Location) {}
 
-
   ngOnInit() {
     document.body.classList.remove('modal-open');
     document.querySelector('.modal-backdrop')?.remove();
