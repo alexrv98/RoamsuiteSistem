@@ -20,9 +20,13 @@ export class ConfirmarReservaComponent implements OnInit {
   reserva: any;
   paypal: any;
   cliente = { nombre: '', email: '', telefono: '' };
-  pagoRealizado: boolean = false; 
+  pagoRealizado: boolean = false;
 
-  constructor(private router: Router, private reservaService: ReservaService, private location: Location) {}
+  constructor(
+    private router: Router,
+    private reservaService: ReservaService,
+    private location: Location
+  ) {}
 
   ngOnInit() {
     document.body.classList.remove('modal-open');
@@ -33,7 +37,7 @@ export class ConfirmarReservaComponent implements OnInit {
 
     if (state.reserva) {
       this.reserva = state.reserva;
-      this.location.replaceState('/confirmar-reserva', '');  
+      this.location.replaceState('/confirmar-reserva', '');
 
       if (!this.paypal) {
         this.cargarPaypalScript();
@@ -43,13 +47,17 @@ export class ConfirmarReservaComponent implements OnInit {
     }
   }
 
-@HostListener('window:beforeunload', ['$event'])
-
-unloadNotification($event: any): void {
-  if (!this.pagoRealizado || !this.cliente.nombre || !this.cliente.email || !this.cliente.telefono) {
-    $event.returnValue = true; 
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any): void {
+    if (
+      !this.pagoRealizado ||
+      !this.cliente.nombre ||
+      !this.cliente.email ||
+      !this.cliente.telefono
+    ) {
+      $event.returnValue = true;
+    }
   }
-}
 
   cargarPaypalScript() {
     if (window.paypal) {
@@ -57,60 +65,67 @@ unloadNotification($event: any): void {
       this.renderizarBotonPago();
       return;
     }
-  
-    const scriptUrl = `https://www.paypal.com/sdk/js?client-id=AWIzDf7xorUxwwhL-i8PFdB4g4rO7r6y9quBVumXa8bllB86EiqsIXKtiPcCq8JqItGU1mWF0Xinoigs&components=buttons&currency=MXN&_=${new Date().getTime()}`;
-  
-    const scriptElement = document.createElement("script");
+
+    const scriptUrl =
+      'https://www.paypal.com/sdk/js?client-id=AWIzDf7xorUxwwhL-i8PFdB4g4rO7r6y9quBVumXa8bllB86EiqsIXKtiPcCq8JqItGU1mWF0Xinoigs&components=buttons&currency=MXN&_=${new Date().getTime()}';
+
+    const scriptElement = document.createElement('script');
     scriptElement.src = scriptUrl;
     scriptElement.onload = () => {
       this.renderizarBotonPago();
     };
     document.body.appendChild(scriptElement);
   }
-  
-  
-    
+
   renderizarBotonPago() {
     if (!document.getElementById('paypal-button-container')?.hasChildNodes()) {
-      this.paypal.Buttons({
-        createOrder: (data: any, actions: any) => {
-          return actions.order.create({
-            purchase_units: [{
-              amount: {
-                value: this.reserva.totalReserva.toString(),
-              },
-            }],
-          });
-        },
-        onApprove: (data: any, actions: any) => {
-          return actions.order.capture().then((details: any) => {
-            alert('Pago realizado con éxito');
-            this.pagoRealizado = true; 
-          });
-        },
-        onError: (error: any) => {
-          console.error("Error en el proceso de pago:", error);
-          alert('Error al realizar el pago, intenta de nuevo.');
-        }
-      }).render('#paypal-button-container');  
+      this.paypal
+        .Buttons({
+          createOrder: (data: any, actions: any) => {
+            return actions.order.create({
+              purchase_units: [
+                {
+                  amount: {
+                    value: this.reserva.totalReserva.toString(),
+                  },
+                },
+              ],
+            });
+          },
+          onApprove: (data: any, actions: any) => {
+            return actions.order.capture().then((details: any) => {
+              alert('Pago realizado con éxito');
+              this.pagoRealizado = true;
+            });
+          },
+          onError: (error: any) => {
+            console.error('Error en el proceso de pago:', error);
+            alert('Error al realizar el pago, intenta de nuevo.');
+          },
+        })
+        .render('#paypal-button-container');
     }
   }
 
-
   confirmarReserva() {
-    if (this.pagoRealizado && this.cliente.nombre && this.cliente.email && this.cliente.telefono) {
+    if (
+      this.pagoRealizado &&
+      this.cliente.nombre &&
+      this.cliente.email &&
+      this.cliente.telefono
+    ) {
       this.reservaService.obtenerToken().subscribe(
         (response) => {
           if (response.status === 'success') {
             const token = response.token; // Recibe el token desde la API
-  
+
             const datosReserva = {
               ...this.reserva,
               nombre: this.cliente.nombre,
               email: this.cliente.email,
               telefono: this.cliente.telefono,
             };
-  
+
             this.reservaService.realizarReserva(datosReserva, token).subscribe(
               (res) => {
                 if (res.status === 'success') {
@@ -134,8 +149,9 @@ unloadNotification($event: any): void {
         }
       );
     } else {
-      alert('Por favor, completa todos los campos y realiza el pago antes de confirmar.');
+      alert(
+        'Por favor, completa todos los campos y realiza el pago antes de confirmar.'
+      );
     }
   }
-  
 }
