@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-comentarios',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './comentarios.component.html',
   styleUrls: ['./comentarios.component.css']
 })
@@ -14,6 +15,7 @@ export class ComentariosComponent implements OnInit {
   nuevoComentario = { nombre: '', texto: '', calificacion: 0, fecha: '', foto: '' };
   estrellas = [1, 2, 3, 4, 5];
   comentariosMostrados = 2;  // Mostrar solo dos comentarios inicialmente
+  @Input() hotelId: number | null = null;  // Recibir hotelId como input
 
   ngOnInit(): void {
     this.cargarComentarios();  // Cargar comentarios desde el LocalStorage

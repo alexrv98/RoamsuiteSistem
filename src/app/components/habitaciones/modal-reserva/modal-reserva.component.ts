@@ -53,18 +53,13 @@ export class ModalReservaComponent implements OnChanges {
       destino: '',
     };
 
-    this.lugarService
-      .obtenerDestinoPorId(this.filtros.destino)
-      .subscribe((response) => {
-        if (response.status === 'success') {
-          reserva.destino = response.nombre;
-          this.router.navigate(['/confirmar-reserva'], {
-            state: { reserva },
-            replaceUrl: true,
-          });
-        } else {
-          alert('Error al obtener el destino');
-        }
-      });
+    this.lugarService.obtenerDestinoPorId(this.filtros.destino).subscribe((response) => {
+      if (response.status === 'success') {
+        reserva.destino = response.nombre;
+        this.router.navigate(['/confirmar-reserva'], { state: { reserva }, replaceUrl: true });
+      } else {
+        alert('Error al obtener el destino');
+      }
+    });
   }
 }

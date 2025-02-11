@@ -6,15 +6,17 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class ComentariosService {
-
-
   constructor(private http: HttpClient) {}
-
+  private apiUrl = 'http://192.168.1.102/HTLES/AAJHoteles/apisHoteles';
 
   getComentarios(hotel_id: number): Observable<any> {
-    return this.http.get(`${this.http}/comentarios.php?hotel_id=${hotel_id}`);
+    return this.http.get(`${this.apiUrl}/comentarios.php?hotel_id=${hotel_id}`);
   }
 
+  
 
 }
+
+
+
 

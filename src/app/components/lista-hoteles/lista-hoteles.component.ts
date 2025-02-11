@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HotelService } from '../../services/hotel.service';
 import { CommonModule } from '@angular/common';
 import { FiltroHotelesComponent } from '../filtro-hoteles/filtro-hoteles.component';
@@ -8,7 +8,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
 @Component({
   selector: 'app-lista-hoteles',
   templateUrl: './lista-hoteles.component.html',
-  imports: [CommonModule, FiltroHotelesComponent, NavbarComponent],
+  imports: [CommonModule, FiltroHotelesComponent, NavbarComponent, RouterLink],
   styleUrls: ['./lista-hoteles.component.css'],
 })
 export class ListaHotelesComponent implements OnInit {
@@ -45,12 +45,8 @@ export class ListaHotelesComponent implements OnInit {
 
   verHabitaciones(hotelId: number) {
     this.router.navigate(['/habitaciones', hotelId], {
-      state: { filtros: this.filtros }, // 🔥 Pasamos los filtros de forma oculta
+      state: { filtros: this.filtros }, 
     });
   }
-
-  // Función para convertir el número de estrellas en un array de estrellas para mostrar en el HTML
-  getStarArray(promedio: number): number[] {
-    return Array(Math.round(promedio)).fill(1);
-  }
+  
 }
