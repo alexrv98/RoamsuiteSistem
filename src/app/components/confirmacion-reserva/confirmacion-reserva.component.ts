@@ -59,7 +59,6 @@ export class ConfirmarReservaComponent implements OnInit {
     }
   }
 
->>>>>>> 017e74ad6499d4b36448f2f173261329a024bd7d
   cargarPaypalScript() {
     if (window.paypal) {
       this.paypal = window.paypal;
