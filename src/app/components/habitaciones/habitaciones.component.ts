@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HabitacionesService } from '../../services/habitacion.service';
 import { CommonModule } from '@angular/common';
 import { FiltroHotelesComponent } from './../filtro-hoteles/filtro-hoteles.component';

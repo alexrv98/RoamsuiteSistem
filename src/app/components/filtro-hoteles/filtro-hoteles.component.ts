@@ -3,7 +3,6 @@ import { Component, Input, OnInit } from '@angular/core'; //Necesario para defin
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LugarService } from '../../services/lugar.service';
-import { FiltroService } from '../../services/filtro.service';
 
 @Component({
   selector: 'app-filtro-hoteles',
@@ -22,11 +21,8 @@ export class FiltroHotelesComponent implements OnInit {
     huespedes: 1,
   };
 
-  constructor(
-    private lugarService: LugarService,
-    private router: Router,
-    private filtroService: FiltroService
-  ) {}
+
+  constructor(private lugarService: LugarService, private router: Router) {}
 
   ngOnInit() {
     this.cargarDestinos();
