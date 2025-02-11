@@ -18,25 +18,29 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  
+
   onLogin(): void {
     this.authService.login(this.correo, this.password).subscribe({
       next: (response) => {
         if (response.status === 'success') {
-          // Verifica si el usuario tiene un rol
           const userRole = response.rol;
-          if (userRole === 'admin') {
-            this.router.navigate(['/admin']);
+          const state = history.state;
+  
+          if (state.reserva) {
+            this.router.navigate(['/confirmar-reserva'], { state: { reserva: state.reserva } });
           } else {
-            this.router.navigate(['/']);
+            this.router.navigate([userRole === 'admin' ? '/admin' : '/']);
           }
         } else {
           this.errorMessage = response.message;
         }
       },
-      error: (err) => {
+      error: () => {
         this.errorMessage = 'Error en el servidor. Intente nuevamente.';
       },
     });
   }
+  
   
 }

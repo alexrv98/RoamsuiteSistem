@@ -26,6 +26,10 @@ export class AuthService {
   getToken(): string | null {
     return this.tokenSubject.value;
   }
+  
+  estaAutenticado(): boolean {
+    return this.tokenSubject.value !== null;
+  }
 
   logout(): void {
     this.tokenSubject.next(null);
