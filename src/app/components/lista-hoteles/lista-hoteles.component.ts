@@ -4,11 +4,17 @@ import { HotelService } from '../../services/hotel.service';
 import { CommonModule } from '@angular/common';
 import { FiltroHotelesComponent } from '../filtro-hoteles/filtro-hoteles.component';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-lista-hoteles',
   templateUrl: './lista-hoteles.component.html',
-  imports: [CommonModule, FiltroHotelesComponent, NavbarComponent],
+  imports: [
+    CommonModule,
+    FiltroHotelesComponent,
+    NavbarComponent,
+    FooterComponent,
+  ],
   styleUrls: ['./lista-hoteles.component.css'],
 })
 export class ListaHotelesComponent implements OnInit {

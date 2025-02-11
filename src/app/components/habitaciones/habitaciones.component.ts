@@ -6,7 +6,7 @@ import { FiltroHotelesComponent } from './../filtro-hoteles/filtro-hoteles.compo
 import { NavbarComponent } from '../navbar/navbar.component';
 import { ModalReservaComponent } from './modal-reserva/modal-reserva.component';
 import { ComentariosComponent } from './comentarios/comentarios.component';
-
+import { FooterComponent } from '../footer/footer.component';
 @Component({
   selector: 'app-habitaciones',
   standalone: true,
@@ -16,6 +16,7 @@ import { ComentariosComponent } from './comentarios/comentarios.component';
     FiltroHotelesComponent,
     ModalReservaComponent,
     ComentariosComponent,
+    FooterComponent,
   ],
   templateUrl: './habitaciones.component.html',
   styleUrls: ['./habitaciones.component.css'],
