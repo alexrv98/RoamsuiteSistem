@@ -4,12 +4,14 @@ import { Router } from '@angular/router';
 import { HotelService } from '../../services/hoteles.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { FooterComponent } from '../footer/footer.component';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-administrador',
   templateUrl: './administrador.component.html',
-  imports: [CommonModule, FormsModule],
-  styleUrl: './administrador.component.css'
+  imports: [CommonModule, FormsModule, FooterComponent, NavbarComponent],
+  styleUrl: './administrador.component.css',
 })
 export class AdministradorComponent implements OnInit {
   hoteles: any[] = [];
