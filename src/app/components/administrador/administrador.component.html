@@ -1,6 +1,17 @@
-<p>administrador works!</p>
-<button
-              class="btn btn-primary w-100"
-              (click)="logout()"
-            >
-Logout            </button>
+<p>Administrador de Hoteles</p>
+
+<ul *ngIf="hoteles.length > 0; else sinHoteles">
+  <li *ngFor="let hotel of hoteles">
+    <h3>{{ hotel.nombre }}</h3>
+    <p>{{ hotel.descripcion }}</p>
+    <p><strong>Dirección:</strong> {{ hotel.direccion }}</p>
+    <p><strong>Teléfono:</strong> {{ hotel.telefono }}</p>
+    <img *ngIf="hotel.imagenes" [src]="hotel.imagenes" alt="Imagen del hotel" width="200">
+  </li>
+</ul>
+
+<ng-template #sinHoteles>
+  <p>No tienes hoteles registrados.</p>
+</ng-template>
+
+<button class="btn btn-primary w-100" (click)="logout()">Logout</button>
