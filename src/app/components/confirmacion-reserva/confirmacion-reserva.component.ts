@@ -6,9 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
 import { loadScript } from '@paypal/paypal-js';
-
-
-
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-confirmacion-reserva',
@@ -22,15 +20,16 @@ export class ConfirmarReservaComponent implements OnInit {
 
   reserva: any;
   paypal: any;
-  cliente = { nombre: '', email: '', telefono: '' };
+  cliente = {id: '', nombre: '', correo: '' }; 
   pagoRealizado: boolean = false;
 
   constructor(
     private router: Router,
     private reservaService: ReservaService,
-    private location: Location
-  ) {}
+    private location: Location,
+    private authService: AuthService
 
+  ) {}
 
 
   ngOnInit() {
@@ -47,18 +46,39 @@ export class ConfirmarReservaComponent implements OnInit {
       if (!this.paypal) {
         this.cargarPaypalScript();
       }
+
+      // Obtener el token y los datos del usuario logueado
+      const token = this.authService.getToken();
+      if (token) {
+        this.authService.obtenerUsuarioLogueado(token).subscribe(
+          (response) => {
+            console.log('Respuesta de la API:', response); // Verifica si el correo está presente
+            if (response.status === 'success') {
+              this.cliente = response.usuario;
+            } else {
+              console.error('No se pudo obtener la información del usuario');
+            }
+          },
+          (error) => {
+            console.error('Error al obtener los datos del usuario:', error);
+          }
+        );
+        
+      } else {
+        this.router.navigate(['/login']); 
+      }
     } else {
       this.router.navigate(['/']);
     }
   }
+
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any): void {
     if (
       !this.pagoRealizado ||
       !this.cliente.nombre ||
-      !this.cliente.email ||
-      !this.cliente.telefono
+      !this.cliente.correo
     ) {
       $event.returnValue = true;
     }
@@ -111,18 +131,21 @@ export class ConfirmarReservaComponent implements OnInit {
         .render('#paypal-button-container');
     }
   }
+
   confirmarReserva() {
     if (
       this.pagoRealizado &&
       this.cliente.nombre &&
-      this.cliente.email &&
-      this.cliente.telefono
+      this.cliente.correo 
     ) {
       const datosReserva = {
-        ...this.reserva,
+        usuario_id: this.cliente.id,
+        habitacion_id: this.reserva.habitacion_id,
+        fechaInicio: this.reserva.fechaInicio, 
+        fechaFin: this.reserva.fechaFin, 
+        totalReserva: this.reserva.totalReserva, 
         nombre: this.cliente.nombre,
-        email: this.cliente.email,
-        telefono: this.cliente.telefono,
+        email: this.cliente.correo,
       };
   
       this.reservaService.realizarReserva(datosReserva).subscribe(
@@ -145,4 +168,5 @@ export class ConfirmarReservaComponent implements OnInit {
       );
     }
   }
+
   }
