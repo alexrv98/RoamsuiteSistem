@@ -1,3 +1,4 @@
+// auth.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -9,6 +10,7 @@ import { tap } from 'rxjs/operators';
 export class AuthService {
   private apiUrl = 'http://192.168.1.102/AAJHoteles/Hoteles/apisHoteles/';
   public tokenSubject = new BehaviorSubject<string | null>(this.getTokenFromSessionStorage());
+  public nombreUsuarioSubject = new BehaviorSubject<string | null>(null);  // Nuevo BehaviorSubject para el nombre del usuario
 
   constructor(private http: HttpClient) {}
 
@@ -19,17 +21,22 @@ export class AuthService {
           this.tokenSubject.next(response.token);
           this.storeTokenInSession(response.token); // Almacenar el token en sessionStorage
           console.log('Token almacenado en memoria:', response.token);
+          // Obtener y almacenar el nombre del usuario
+          this.obtenerUsuarioLogueado(response.token).subscribe(usuario => {
+            this.nombreUsuarioSubject.next(usuario.nombre);
+          });
         }
       })
     );
   }
 
-  // Método para obtener los datos del usuario logueado
-  obtenerUsuarioLogueado(token: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/usuario.php`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-  }
+// Servicio AuthService ya configurado correctamente
+obtenerUsuarioLogueado(token: string): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/usuario.php`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
 
   getToken(): string | null {
     return this.tokenSubject.value;
@@ -41,7 +48,8 @@ export class AuthService {
 
   logout(): void {
     this.tokenSubject.next(null);
-    this.removeTokenFromSession(); 
+    this.nombreUsuarioSubject.next(null); // Limpiar el nombre del usuario al cerrar sesión
+    this.removeTokenFromSession();
     console.log('Token eliminado');
   }
 
@@ -59,5 +67,10 @@ export class AuthService {
 
   register(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register.php`, data);
+  }
+
+  // Método para obtener el nombre del usuario como un Observable
+  getNombreUsuario(): Observable<string | null> {
+    return this.nombreUsuarioSubject.asObservable();
   }
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
@@ -9,13 +10,29 @@ import { CommonModule } from '@angular/common';
   imports:[RouterLink, CommonModule],
   styleUrl: './navbar.component.css',
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   isAuthenticated: boolean = false;
+  nombreUsuario: string = '';  // Variable para almacenar el nombre del usuario
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.isAuthenticated = this.authService.estaAutenticado();
+    if (this.isAuthenticated) {
+      const token = this.authService.getToken();
+      this.authService.obtenerUsuarioLogueado(token!).subscribe({
+        next: (response) => {
+          if (response.status === 'success') {
+            this.nombreUsuario = response.usuario.nombre;  // Obtener el nombre del usuario
+          } else {
+            console.error('Error al obtener el usuario');
+          }
+        },
+        error: (error) => {
+          console.error('Error al obtener los datos del usuario:', error);
+        }
+      });
+    }
     this.authService.tokenSubject.subscribe(token => {
       this.isAuthenticated = token !== null;
     });
