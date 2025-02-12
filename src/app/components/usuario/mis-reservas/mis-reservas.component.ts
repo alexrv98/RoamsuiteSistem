@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReservaService } from '../../../services/reserva.service';
 import { NavbarComponent } from '../../navbar/navbar.component';
+import { FooterComponent } from '../../footer/footer.component';
 
 @Component({
   selector: 'app-misreservas',
-  imports: [CommonModule, NavbarComponent],
+  imports: [CommonModule, NavbarComponent, FooterComponent],
   templateUrl: './mis-reservas.component.html',
-  styleUrl: './mis-reservas.component.css'
+  styleUrl: './mis-reservas.component.css',
 })
-
 export class MisReservasComponent implements OnInit {
   reservaciones: any[] = [];
   reservacionSeleccionada: any;
@@ -35,6 +35,4 @@ export class MisReservasComponent implements OnInit {
       }
     );
   }
-
-
 }
