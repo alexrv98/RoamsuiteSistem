@@ -7,7 +7,6 @@ import {
   transition,
 } from '@angular/animations';
 import { FormsModule } from '@angular/forms';
-import { RouterOutlet } from '@angular/router';
 import { LugarService } from '../../../services/lugar.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -16,7 +15,7 @@ import * as L from 'leaflet';
 
 @Component({
   selector: 'app-lugares-home',
-  imports: [CommonModule, FormsModule, RouterOutlet],
+  imports: [CommonModule, FormsModule],
   templateUrl: './lugares-home.component.html',
   styleUrls: ['./lugares-home.component.css'],
   animations: [
@@ -44,17 +43,17 @@ export class LugaresHomeComponent implements OnInit {
 
   lugaresService: LugarService = inject(LugarService);
   router: Router = inject(Router);
-  map: any; // Variable para almacenar el mapa
+  map: any;
 
   ngOnInit(): void {
-    this.obtenerCategorias(); // Llamar al método para obtener categorías
-    this.obtenerLugares(); // Llamar al método para obtener lugares
+    this.obtenerCategorias();
+    this.obtenerLugares();
     this.inicializarMapa();
 
     setTimeout(() => {
       this.inicializarMapa();
-    }, 500); // Espera 500ms para asegurarse de que el div del mapa está renderizado
-  } // Inicializar el mapa
+    }, 500);
+  }
 
   obtenerCategorias(): void {
     this.lugaresService.obtenerCategorias().subscribe({
@@ -74,8 +73,6 @@ export class LugaresHomeComponent implements OnInit {
   obtenerLugares(): void {
     this.lugaresService.obtenerLugares().subscribe({
       next: (response) => {
-        console.log('Respuesta de la API con coordenadas:', response);
-
         if (response.status === 'success') {
           this.lugares = response.data;
 
@@ -120,9 +117,8 @@ export class LugaresHomeComponent implements OnInit {
     });
   }
 
-  // Inicializar el mapa con Leaflet
   inicializarMapa(): void {
-    if (this.map) return; // Evita reiniciar el mapa si ya está creado
+    if (this.map) return;
 
     this.map = L.map('map').setView([10.0, -84.0], 6);
 
@@ -160,15 +156,13 @@ export class LugaresHomeComponent implements OnInit {
     }
   }
 
-  // Agregar una propiedad para almacenar marcadores
   private marcadores: L.Marker[] = [];
 
   agregarMarcadores(): void {
-    if (!this.map) return; // Evitar errores si el mapa aún no está listo
+    if (!this.map) return;
 
-    // Eliminar marcadores anteriores del mapa
     this.marcadores.forEach((marker) => this.map.removeLayer(marker));
-    this.marcadores = []; // Vaciar el array de marcadores
+    this.marcadores = [];
 
     // Si hay lugares, centrar en el primer lugar
     if (this.lugaresFiltrados.length > 0) {
@@ -178,14 +172,13 @@ export class LugaresHomeComponent implements OnInit {
       }
     }
 
-    // Agregar nuevos marcadores
     this.lugaresFiltrados.forEach((lugar) => {
       if (lugar.latitud && lugar.longitud) {
         const marcador = L.marker([lugar.latitud, lugar.longitud])
           .addTo(this.map)
           .bindPopup(`<b>${lugar.nombre}</b><br>${lugar.ubicacion}`);
 
-        this.marcadores.push(marcador); // Guardar marcador en el array
+        this.marcadores.push(marcador);
       }
     });
   }
