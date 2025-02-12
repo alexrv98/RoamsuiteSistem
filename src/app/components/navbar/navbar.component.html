@@ -9,7 +9,10 @@
     <div>
       <!-- Si el usuario no está autenticado, muestra estos botones -->
       <ng-container>
+
+        <a [routerLink]="['/login']">
         <button class="btn btn-outline-primary me-2">Iniciar sesión</button>
+      </a>
       </ng-container>
 
       <!-- Si el usuario está autenticado, muestra estos botones 

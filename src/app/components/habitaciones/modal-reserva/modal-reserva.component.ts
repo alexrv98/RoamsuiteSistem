@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { LugarService } from '../../../services/lugar.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-modal-reserva',
@@ -13,7 +14,9 @@ export class ModalReservaComponent implements OnChanges {
   @Input() filtros: any = null;
   precioTotal: number = 0;
 
-  constructor(private router: Router, private lugarService: LugarService) {}
+  constructor(private router: Router, private lugarService: LugarService,
+    private authService: AuthService
+  ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     console.log('Cambios detectados en el modal:', changes);
@@ -52,14 +55,23 @@ export class ModalReservaComponent implements OnChanges {
       destino_id: this.filtros.destino,
       destino: '',
     };
-
+  
     this.lugarService.obtenerDestinoPorId(this.filtros.destino).subscribe((response) => {
       if (response.status === 'success') {
         reserva.destino = response.nombre;
-        this.router.navigate(['/confirmar-reserva'], { state: { reserva }, replaceUrl: true });
+  
+        // Verificar si el usuario está autenticado
+        const usuarioAutenticado = this.authService.estaAutenticado(); // Debes implementar esta función en `AuthService`
+  
+        if (usuarioAutenticado) {
+          this.router.navigate(['/confirmar-reserva'], { state: { reserva }, replaceUrl: true });
+        } else {
+          this.router.navigate(['/login'], { state: { reserva } }); // Pasar la reserva al login
+        }
       } else {
         alert('Error al obtener el destino');
       }
     });
   }
+  
 }

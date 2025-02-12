@@ -1,0 +1,61 @@
+.bg-light {
+  background: #f8f9fa;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-card {
+  width: 400px;
+  max-width: 600px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.brand-logo {
+  border-radius: 10px;
+}
+
+h4 {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+p {
+  font-size: 14px;
+}
+
+.form-label {
+  font-size: 15px;
+}
+
+.input-group-text {
+  background: #e9ecef;
+  border: none;
+  color: #495057;
+  font-size: 20px;
+}
+
+.form-control {
+  background: #ffffff;
+  border: 1px solid #ced4da;
+  color: #495057;
+  font-size: 18px;
+  padding: 10px;
+}
+
+.form-control::placeholder {
+  color: #6c757d;
+  font-size: 16px;
+}
+
+.btn {
+  font-size: 15px;
+  padding: 12px;
+}
