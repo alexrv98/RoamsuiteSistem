@@ -6,14 +6,14 @@ import { ConfirmarReservaComponent } from './components/confirmacion-reserva/con
 import { ComentariosComponent } from './components/comentarios/comentarios.component';
 import { LoginComponent } from './components/login/login.component';
 import { AdministradorComponent } from './components/administrador/administrador.component';
-
+import { RegisterComponent } from './components/register/register.component';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'admin', component: AdministradorComponent },
   { path: 'buscar', component: ListaHotelesComponent },
   { path: 'habitaciones/:hotelId', component: HabitacionesComponent },
-  { path: 'confirmar-reserva', component: ConfirmarReservaComponent},
+  { path: 'confirmar-reserva', component: ConfirmarReservaComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'comentarios/:hotelId', component: ComentariosComponent },
-
 ];
