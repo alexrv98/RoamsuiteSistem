@@ -20,6 +20,7 @@ import { FooterComponent } from '../footer/footer.component';
 export class ListaHotelesComponent implements OnInit {
   hoteles: any[] = [];
   filtros: any = {};
+  isLoading: boolean = true; // Indicador de carga
 
   constructor(private router: Router, private hotelService: HotelService) {}
 
@@ -42,6 +43,7 @@ export class ListaHotelesComponent implements OnInit {
         } else {
           console.error('Error en la API:', res.message);
         }
+        this.isLoading = false;
       });
   }
 

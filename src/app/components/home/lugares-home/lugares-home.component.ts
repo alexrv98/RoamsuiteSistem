@@ -35,7 +35,7 @@ export class LugaresHomeComponent implements OnInit {
   lugares: any[] = [];
   lugaresFiltrados: any[] = [];
   categorias: any[] = [];
-
+  isLoading: boolean = true; // Indicador de carga
   filtros = {
     destino: '',
     ubicacion: '',
@@ -54,8 +54,7 @@ export class LugaresHomeComponent implements OnInit {
     setTimeout(() => {
       this.inicializarMapa();
     }, 500); // Espera 500ms para asegurarse de que el div del mapa está renderizado
-  }// Inicializar el mapa
-
+  } // Inicializar el mapa
 
   obtenerCategorias(): void {
     this.lugaresService.obtenerCategorias().subscribe({
@@ -75,9 +74,9 @@ export class LugaresHomeComponent implements OnInit {
   obtenerLugares(): void {
     this.lugaresService.obtenerLugares().subscribe({
       next: (response) => {
-        console.log("Respuesta de la API con coordenadas:", response);
+        console.log('Respuesta de la API con coordenadas:', response);
 
-        if (response.status === "success") {
+        if (response.status === 'success') {
           this.lugares = response.data;
 
           this.lugares.forEach((lugar) => {
@@ -88,15 +87,15 @@ export class LugaresHomeComponent implements OnInit {
           this.lugaresFiltrados = [...this.lugares];
           this.agregarMarcadores();
         } else {
-          console.error("Error al obtener lugares:", response.message);
+          console.error('Error al obtener lugares:', response.message);
         }
+        this.isLoading = false;
       },
       error: (error) => {
-        console.error("Error en la petición:", error);
+        console.error('Error en la petición:', error);
       },
     });
   }
-
 
   filtrarPorCategoria(): void {
     console.log('Categoría seleccionada:', this.filtros.categoria);
@@ -133,7 +132,7 @@ export class LugaresHomeComponent implements OnInit {
   }
   verMas(lugar: any): void {
     if (!this.map) {
-      console.error("El mapa aún no está inicializado.");
+      console.error('El mapa aún no está inicializado.');
       return;
     }
 
@@ -157,41 +156,39 @@ export class LugaresHomeComponent implements OnInit {
 
       this.marcadores.push(marcador);
     } else {
-      console.warn("El lugar seleccionado no tiene coordenadas válidas.");
+      console.warn('El lugar seleccionado no tiene coordenadas válidas.');
     }
   }
-
 
   // Agregar una propiedad para almacenar marcadores
-private marcadores: L.Marker[] = [];
+  private marcadores: L.Marker[] = [];
 
-agregarMarcadores(): void {
-  if (!this.map) return; // Evitar errores si el mapa aún no está listo
+  agregarMarcadores(): void {
+    if (!this.map) return; // Evitar errores si el mapa aún no está listo
 
-  // Eliminar marcadores anteriores del mapa
-  this.marcadores.forEach((marker) => this.map.removeLayer(marker));
-  this.marcadores = []; // Vaciar el array de marcadores
+    // Eliminar marcadores anteriores del mapa
+    this.marcadores.forEach((marker) => this.map.removeLayer(marker));
+    this.marcadores = []; // Vaciar el array de marcadores
 
-  // Si hay lugares, centrar en el primer lugar
-  if (this.lugaresFiltrados.length > 0) {
-    const primerLugar = this.lugaresFiltrados[0];
-    if (primerLugar.latitud && primerLugar.longitud) {
-      this.map.setView([primerLugar.latitud, primerLugar.longitud], 10);
+    // Si hay lugares, centrar en el primer lugar
+    if (this.lugaresFiltrados.length > 0) {
+      const primerLugar = this.lugaresFiltrados[0];
+      if (primerLugar.latitud && primerLugar.longitud) {
+        this.map.setView([primerLugar.latitud, primerLugar.longitud], 10);
+      }
     }
+
+    // Agregar nuevos marcadores
+    this.lugaresFiltrados.forEach((lugar) => {
+      if (lugar.latitud && lugar.longitud) {
+        const marcador = L.marker([lugar.latitud, lugar.longitud])
+          .addTo(this.map)
+          .bindPopup(`<b>${lugar.nombre}</b><br>${lugar.ubicacion}`);
+
+        this.marcadores.push(marcador); // Guardar marcador en el array
+      }
+    });
   }
-
-  // Agregar nuevos marcadores
-  this.lugaresFiltrados.forEach((lugar) => {
-    if (lugar.latitud && lugar.longitud) {
-      const marcador = L.marker([lugar.latitud, lugar.longitud])
-        .addTo(this.map)
-        .bindPopup(`<b>${lugar.nombre}</b><br>${lugar.ubicacion}`);
-
-      this.marcadores.push(marcador); // Guardar marcador en el array
-    }
-  });
-}
-
 
   // Métodos para el desplazamiento horizontal en el contenedor
   scrollLeft() {
