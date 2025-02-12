@@ -49,8 +49,13 @@ export class LugaresHomeComponent implements OnInit {
   ngOnInit(): void {
     this.obtenerCategorias(); // Llamar al método para obtener categorías
     this.obtenerLugares(); // Llamar al método para obtener lugares
-    this.inicializarMapa(); // Inicializar el mapa
-  }
+    this.inicializarMapa();
+
+    setTimeout(() => {
+      this.inicializarMapa();
+    }, 500); // Espera 500ms para asegurarse de que el div del mapa está renderizado
+  }// Inicializar el mapa
+
 
   obtenerCategorias(): void {
     this.lugaresService.obtenerCategorias().subscribe({
@@ -70,19 +75,28 @@ export class LugaresHomeComponent implements OnInit {
   obtenerLugares(): void {
     this.lugaresService.obtenerLugares().subscribe({
       next: (response) => {
-        if (response.status === 'success') {
+        console.log("Respuesta de la API con coordenadas:", response);
+
+        if (response.status === "success") {
           this.lugares = response.data;
-          this.lugaresFiltrados = [...this.lugares]; // Inicializa con todos los lugares
-          this.agregarMarcadores(); // Actualizar mapa con los lugares
+
+          this.lugares.forEach((lugar) => {
+            lugar.latitud = Number(lugar.latitud);
+            lugar.longitud = Number(lugar.longitud);
+          });
+
+          this.lugaresFiltrados = [...this.lugares];
+          this.agregarMarcadores();
         } else {
-          console.error('Error al obtener lugares:', response.message);
+          console.error("Error al obtener lugares:", response.message);
         }
       },
       error: (error) => {
-        console.error('Error en la petición:', error);
+        console.error("Error en la petición:", error);
       },
     });
   }
+
 
   filtrarPorCategoria(): void {
     console.log('Categoría seleccionada:', this.filtros.categoria);
@@ -109,41 +123,75 @@ export class LugaresHomeComponent implements OnInit {
 
   // Inicializar el mapa con Leaflet
   inicializarMapa(): void {
-    this.map = L.map('map').setView([10.0, -84.0], 6); // Coordenadas iniciales
+    if (this.map) return; // Evita reiniciar el mapa si ya está creado
+
+    this.map = L.map('map').setView([10.0, -84.0], 6);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors',
     }).addTo(this.map);
   }
+  verMas(lugar: any): void {
+    if (!this.map) {
+      console.error("El mapa aún no está inicializado.");
+      return;
+    }
 
-  // Agregar marcadores de lugares en el mapa
-  agregarMarcadores(): void {
-    // Primero limpiamos el mapa de cualquier marcador previo
-    this.map.eachLayer((layer: any) => {
-      if (layer instanceof L.Marker) {
-        this.map.removeLayer(layer);
-      }
-    });
+    const lat = Number(lugar.latitud);
+    const lng = Number(lugar.longitud);
 
-    // Agregar nuevos marcadores
-    this.lugaresFiltrados.forEach((lugar) => {
-      if (lugar.latitud && lugar.longitud) {
-        L.marker([lugar.latitud, lugar.longitud])
-          .addTo(this.map)
-          .bindPopup(`<b>${lugar.nombre}</b><br>${lugar.ubicacion}`);
-      }
-    });
-  }
+    if (!isNaN(lat) && !isNaN(lng)) {
+      console.log(`Centrando el mapa en: ${lugar.nombre} (${lat}, ${lng})`);
 
-  // Método que actualiza la ubicación según el destino seleccionado
-  actualizarUbicacion(): void {
-    const lugarSeleccionado = this.lugares.find(
-      (lugar) => lugar.id === this.filtros.destino
-    );
-    if (lugarSeleccionado) {
-      this.filtros.ubicacion = lugarSeleccionado.ubicacion;
+      this.map.flyTo([lat, lng], 12, { duration: 1.5 });
+
+      // Eliminar marcadores anteriores
+      this.marcadores.forEach((marker) => this.map.removeLayer(marker));
+      this.marcadores = [];
+
+      // Agregar nuevo marcador
+      const marcador = L.marker([lat, lng])
+        .addTo(this.map)
+        .bindPopup(`<b>${lugar.nombre}</b><br>${lugar.ubicacion}`)
+        .openPopup();
+
+      this.marcadores.push(marcador);
+    } else {
+      console.warn("El lugar seleccionado no tiene coordenadas válidas.");
     }
   }
+
+
+  // Agregar una propiedad para almacenar marcadores
+private marcadores: L.Marker[] = [];
+
+agregarMarcadores(): void {
+  if (!this.map) return; // Evitar errores si el mapa aún no está listo
+
+  // Eliminar marcadores anteriores del mapa
+  this.marcadores.forEach((marker) => this.map.removeLayer(marker));
+  this.marcadores = []; // Vaciar el array de marcadores
+
+  // Si hay lugares, centrar en el primer lugar
+  if (this.lugaresFiltrados.length > 0) {
+    const primerLugar = this.lugaresFiltrados[0];
+    if (primerLugar.latitud && primerLugar.longitud) {
+      this.map.setView([primerLugar.latitud, primerLugar.longitud], 10);
+    }
+  }
+
+  // Agregar nuevos marcadores
+  this.lugaresFiltrados.forEach((lugar) => {
+    if (lugar.latitud && lugar.longitud) {
+      const marcador = L.marker([lugar.latitud, lugar.longitud])
+        .addTo(this.map)
+        .bindPopup(`<b>${lugar.nombre}</b><br>${lugar.ubicacion}`);
+
+      this.marcadores.push(marcador); // Guardar marcador en el array
+    }
+  });
+}
+
 
   // Métodos para el desplazamiento horizontal en el contenedor
   scrollLeft() {
