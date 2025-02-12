@@ -1,55 +1,107 @@
-<main class="d-flex align-items-center justify-content-center vh-100 bg-light">
-  <div class="login-container">
-    <div class="card login-card shadow-sm p-4">
-      <div class="text-center">
-        <img
-          class="brand-logo mb-3"
-          src="assets/logoH.png"
-          alt="logo"
-          width="80"
-        />
-        <h4 class="text-dark">Bienvenido</h4>
-        <p class="text-muted">Ingresa tus credenciales para continuar</p>
+<div class="registro-container">
+  <div class="registro-card">
+    <h2 class="text-center">Registro</h2>
+    <form>
+      <div class="form-group">
+        <label for="nombre" class="form-label"></label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-person"></i></span>
+          <input
+            id="nombre"
+            formControlName="nombre"
+            type="text"
+            class="form-control"
+            placeholder="Ingresa tu nombre"
+          />
+        </div>
+        <!-- <small
+          *ngIf="
+            registroForm.get('nombre')?.invalid &&
+            registroForm.get('nombre')?.touched
+          "
+          class="error"
+        >
+          <span *ngIf="registroForm.get('nombre')?.errors?.['required']">
+            El nombre es obligatorio.
+          </span>
+          <span *ngIf="registroForm.get('nombre')?.errors?.['minlength']">
+            Mínimo 3 caracteres.
+          </span>
+        </small> -->
       </div>
-      <form>
-        <div class="mb-3">
-          <label for="correo" class="form-label">Correo</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-            <input
-              type="email"
-              id="correo"
-              class="form-control"
-              name="correo"
-              required
-              placeholder="Ingresa tu correo"
-            />
-          </div>
+
+      <div class="form-group">
+        <label for="correo" class="form-label"></label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+          <input
+            id="correo"
+            formControlName="correo"
+            type="email"
+            class="form-control"
+            placeholder="Ingresa tu correo"
+          />
         </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Contraseña</label>
-          <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-lock"></i></span>
-            <input
-              type="password"
-              id="password"
-              class="form-control"
-              name="password"
-              required
-              placeholder="Ingresa tu contraseña"
-            />
-          </div>
+        <!-- <small
+          *ngIf="
+            registroForm.get('correo')?.invalid &&
+            registroForm.get('correo')?.touched
+          "
+          class="error"
+        >
+          <span *ngIf="registroForm.get('correo')?.errors?.['required']">
+            El correo es obligatorio.
+          </span>
+          <span *ngIf="registroForm.get('correo')?.errors?.['email']">
+            Formato de correo inválido.
+          </span>
+        </small> -->
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label"></label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="bi bi-lock"></i></span>
+          <input
+            id="password"
+            formControlName="password"
+            type="password"
+            class="form-control"
+            placeholder="Ingresa tu contraseña"
+          />
         </div>
-        <button type="submit" class="btn btn-primary w-100">Ingresar</button>
-        <!-- <p class="text-danger mt-2 text-center">{{ errorMessage }}</p> -->
-      </form>
+        <!-- <small
+          *ngIf="
+            registroForm.get('password')?.invalid &&
+            registroForm.get('password')?.touched
+          "
+          class="error"
+        >
+          <span *ngIf="registroForm.get('password')?.errors?.['required']">
+            La contraseña es obligatoria.
+          </span>
+          <span *ngIf="registroForm.get('password')?.errors?.['minlength']">
+            Mínimo 6 caracteres.
+          </span>
+        </small> -->
+      </div>
+
+      <!-- <button type="submit" class="btn btn-primary w-100 mt-3" [disabled]="registroForm.invalid">
+        Registrar
+      </button> -->
+      <button type="submit" class="btn btn-primary w-100 mt-3">
+        Registrar
+      </button>
       <div class="mt-3 text-center">
         <p class="small">
-          ¿No tienes una cuenta?
-          <a routerLink="/registro" class="text-primary">Regístrate aquí</a>
+          ¿Tienes una cuenta?
+          <a routerLink="/" class="text-primary">Inicia sesión aquí</a>
         </p>
-        <p class="small"></p>
       </div>
-    </div>
+    </form>
+
+    <!-- <div *ngIf="errorMessage" class="text-danger text-center mt-2">
+      {{ errorMessage }}
+    </div> -->
   </div>
-</main>
+</div>

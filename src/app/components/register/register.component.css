@@ -1,15 +1,16 @@
-.bg-light {
-  background: #f8f9fa;
+body {
+  font-size: 18px; /* Aumenta el tamaño general de la fuente */
 }
 
-.login-container {
+.registro-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background: #f8f9fa;
 }
 
-.login-card {
+.registro-card {
   width: 400px;
   max-width: 600px;
   padding: 20px;
@@ -18,17 +19,9 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.brand-logo {
-  border-radius: 10px;
-}
-
-h4 {
+h2 {
   font-size: 22px;
   font-weight: bold;
-}
-
-p {
-  font-size: 14px;
 }
 
 .form-label {
@@ -38,24 +31,33 @@ p {
 .input-group-text {
   background: #e9ecef;
   border: none;
-  color: #495057;
+  color: hsl(210, 9%, 31%);
   font-size: 20px;
 }
 
-.form-control {
+.form-control,
+.form-select {
   background: #ffffff;
   border: 1px solid #ced4da;
   color: #495057;
-  font-size: 18px;
+  font-size: 15px;
   padding: 10px;
 }
 
 .form-control::placeholder {
   color: #6c757d;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 .btn {
   font-size: 15px;
   padding: 12px;
+}
+
+.error {
+  color: #dc3545;
+  font-size: 13px;
+}
+p {
+  font-size: 14px;
 }
