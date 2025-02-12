@@ -13,20 +13,22 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   login(correo: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login.php`, { correo, password }).pipe(
-      tap((response: any) => {
-        if (response.status === 'success') {
-          this.tokenSubject.next(response.token);
-          console.log('Token almacenado en memoria:', response.token); // 🔹 Imprime el token en consola
-        }
-      })
-    );
+    return this.http
+      .post(`${this.apiUrl}/login.php`, { correo, password })
+      .pipe(
+        tap((response: any) => {
+          if (response.status === 'success') {
+            this.tokenSubject.next(response.token);
+            console.log('Token almacenado en memoria:', response.token); // 🔹 Imprime el token en consola
+          }
+        })
+      );
   }
 
   getToken(): string | null {
     return this.tokenSubject.value;
   }
-  
+
   estaAutenticado(): boolean {
     return this.tokenSubject.value !== null;
   }
@@ -34,5 +36,8 @@ export class AuthService {
   logout(): void {
     this.tokenSubject.next(null);
     console.log('Token eliminado'); // 🔹 Confirma que el token se borra al cerrar sesión
+  }
+  register(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register.php`, data);
   }
 }
