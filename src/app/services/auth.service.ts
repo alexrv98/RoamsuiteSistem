@@ -26,7 +26,7 @@ export class AuthService {
   getToken(): string | null {
     return this.tokenSubject.value;
   }
-  
+
   estaAutenticado(): boolean {
     return this.tokenSubject.value !== null;
   }
@@ -34,5 +34,8 @@ export class AuthService {
   logout(): void {
     this.tokenSubject.next(null);
     console.log('Token eliminado');
+  }
+  register(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register.php`, data);
   }
 }

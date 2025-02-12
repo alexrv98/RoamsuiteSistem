@@ -1,15 +1,23 @@
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  imports: [CommonModule, FormsModule, RouterModule, NavbarComponent],
-  styleUrls: ['./login.component.css']
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    NavbarComponent,
+    RouterLink,
+    FooterComponent,
+  ],
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
   correo: string = '';
@@ -32,9 +40,11 @@ export class LoginComponent {
         if (response.status === 'success') {
           const userRole = response.rol;
           const state = history.state;
-  
+
           if (state.reserva) {
-            this.router.navigate(['/confirmar-reserva'], { state: { reserva: state.reserva } });
+            this.router.navigate(['/confirmar-reserva'], {
+              state: { reserva: state.reserva },
+            });
           } else {
             this.router.navigate([userRole === 'admin' ? '/admin' : '/']);
           }
@@ -47,6 +57,4 @@ export class LoginComponent {
       },
     });
   }
-  
-  
 }

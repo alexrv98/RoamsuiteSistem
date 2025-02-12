@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { HotelService } from '../../services/hotel.service';
 import { CommonModule } from '@angular/common';
 import { FiltroHotelesComponent } from '../filtro-hoteles/filtro-hoteles.component';
@@ -32,7 +32,6 @@ export class ListaHotelesComponent implements OnInit {
       console.warn('No hay filtros en el estado de navegación.');
     }
   }
-
 
   cargarHoteles() {
     this.hotelService
