@@ -7,6 +7,9 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
 import { loadScript } from '@paypal/paypal-js';
 
+
+
+
 @Component({
   selector: 'app-confirmacion-reserva',
   standalone: true,
@@ -27,6 +30,8 @@ export class ConfirmarReservaComponent implements OnInit {
     private reservaService: ReservaService,
     private location: Location
   ) {}
+
+
 
   ngOnInit() {
     document.body.classList.remove('modal-open');
