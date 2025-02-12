@@ -4,6 +4,7 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { FooterComponent } from '../footer/footer.component';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
     RouterModule,
     NavbarComponent,
     RouterLink,
+    FooterComponent,
   ],
   styleUrls: ['./login.component.css'],
 })
@@ -23,6 +25,14 @@ export class LoginComponent {
   errorMessage: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
+
+  
+  ngOnInit() {
+    document.body.classList.remove('modal-open');
+    document.querySelector('.modal-backdrop')?.remove();
+    document.body.style.overflow = 'auto';
+  }
+
 
   onLogin(): void {
     this.authService.login(this.correo, this.password).subscribe({

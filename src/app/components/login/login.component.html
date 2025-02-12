@@ -7,7 +7,7 @@
           class="brand-logo mb-3"
           src="assets/logo.png"
           alt="logo"
-          width="80"
+          width="200"
         />
         <h4 class="text-dark">Bienvenido</h4>
         <p class="text-muted">Ingresa tus credenciales para continuar</p>
@@ -16,7 +16,9 @@
         <div class="mb-3">
           <label for="correo" class="form-label">Correo</label>
           <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+            <span class="input-group-text"
+              ><i class="fa-regular fa-envelope"></i
+            ></span>
             <input
               type="email"
               id="correo"
@@ -31,7 +33,9 @@
         <div class="mb-3">
           <label for="password" class="form-label">Contraseña</label>
           <div class="input-group">
-            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <span class="input-group-text"
+              ><i class="fa-solid fa-lock"></i
+            ></span>
             <input
               type="password"
               id="password"
@@ -40,6 +44,7 @@
               name="password"
               required
               placeholder="Ingresa tu contraseña"
+              maxlength="12"
             />
           </div>
         </div>
@@ -58,3 +63,4 @@
     </div>
   </div>
 </main>
+<app-footer></app-footer>

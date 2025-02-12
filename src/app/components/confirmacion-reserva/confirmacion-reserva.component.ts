@@ -111,7 +111,6 @@ export class ConfirmarReservaComponent implements OnInit {
         .render('#paypal-button-container');
     }
   }
-
   confirmarReserva() {
     if (
       this.pagoRealizado &&
@@ -119,38 +118,25 @@ export class ConfirmarReservaComponent implements OnInit {
       this.cliente.email &&
       this.cliente.telefono
     ) {
-      this.reservaService.obtenerToken().subscribe(
-        (response) => {
-          if (response.status === 'success') {
-            const token = response.token; // Recibe el token desde la API
-
-            const datosReserva = {
-              ...this.reserva,
-              nombre: this.cliente.nombre,
-              email: this.cliente.email,
-              telefono: this.cliente.telefono,
-            };
-
-            this.reservaService.realizarReserva(datosReserva, token).subscribe(
-              (res) => {
-                if (res.status === 'success') {
-                  alert('Reserva confirmada con éxito');
-                  sessionStorage.removeItem('reservaValida');
-                  this.router.navigate(['/'], { replaceUrl: true });
-                } else {
-                  alert('Error al realizar la reserva');
-                }
-              },
-              (error) => {
-                console.error('Error en la reserva:', error);
-              }
-            );
+      const datosReserva = {
+        ...this.reserva,
+        nombre: this.cliente.nombre,
+        email: this.cliente.email,
+        telefono: this.cliente.telefono,
+      };
+  
+      this.reservaService.realizarReserva(datosReserva).subscribe(
+        (res) => {
+          if (res.status === 'success') {
+            alert('Reserva confirmada con éxito');
+            sessionStorage.removeItem('reservaValida');
+            this.router.navigate(['/'], { replaceUrl: true });
           } else {
-            alert('Error al obtener el token');
+            alert('Error al realizar la reserva');
           }
         },
         (error) => {
-          console.error('Error al obtener el token:', error);
+          console.error('Error en la reserva:', error);
         }
       );
     } else {
@@ -159,4 +145,4 @@ export class ConfirmarReservaComponent implements OnInit {
       );
     }
   }
-}
+  }
