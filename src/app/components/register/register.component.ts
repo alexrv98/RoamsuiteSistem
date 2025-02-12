@@ -48,7 +48,7 @@ export class RegisterComponent {
         next: (response) => {
           if (response.status === 'success') {
             alert('Usuario registrado con éxito');
-            this.router.navigate(['/']);
+            this.router.navigate(['/login']);
           } else {
             this.errorMessage = response.message;
           }
