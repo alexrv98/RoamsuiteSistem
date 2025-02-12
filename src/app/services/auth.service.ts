@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://192.168.1.102/HTLES/AAJHoteles/apisHoteles';
+  private apiUrl = 'http://192.168.1.102/AAJHoteles/Hoteles/apisHoteles/';
   private tokenSubject = new BehaviorSubject<string | null>(null);
 
   constructor(private http: HttpClient) {}
