@@ -14,7 +14,19 @@ export class ReservaService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   realizarReserva(datosReserva: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reservar_sin_cuenta.php`, datosReserva);
+    const token = this.authService.getToken();
+    
+    if (!token) {
+      return throwError(() => new Error('Token no disponible. Debes iniciar sesión.'));
+    }
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post(`${this.apiUrl}/reservar_con_cuenta.php`, datosReserva, { headers })
+      .pipe(
+        catchError((error) => {
+          console.error('Error en la reserva:', error);
+          return throwError(error);
+        })
+      );
   }
 
   obtenerReservacionesUsuario(): Observable<any> {
