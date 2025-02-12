@@ -29,7 +29,7 @@
         <h5 class="fw-bold text-primary text-center">
           <i class="fa-solid fa-map"></i> Mapa de Lugares
         </h5>
-        <div id="map" class="rounded-4" style="height: 300px"></div>
+        <div id="map" style="height: 400px;"></div>
       </div>
     </div>
 
@@ -68,9 +68,10 @@
                   </p>
                   <p class="small">{{ lugar.descripcion }}</p>
                   <div class="mt-auto">
-                    <button class="btn btn-outline-primary btn-sm w-100">
+                    <button class="btn btn-outline-primary btn-sm w-100" (click)="verMas(lugar)">
                       Ver más
                     </button>
+
                   </div>
                 </div>
               </div>
