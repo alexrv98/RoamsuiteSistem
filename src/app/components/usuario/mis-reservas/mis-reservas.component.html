@@ -1,0 +1,37 @@
+<app-navbar></app-navbar>
+<div class="reservaciones-container container mt-4">
+    <h2 class="mb-4">Mis Reservaciones</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>Hotel</th>
+                    <th>Lugar Turístico</th>
+                    <th>Habitación</th>
+                    <th>Tipo</th>
+                    <th>Capacidad</th>
+                    <th>Fecha de Inicio</th>
+                    <th>Fecha de Fin</th>
+                    <th>Días de Hospedaje</th>
+                    <th>Precio Por noche</th>
+                    <th>Total a Pagar</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let reservacion of reservaciones">
+                    <td>{{ reservacion.nombre_hotel }}</td>
+                    <td>{{ reservacion.nombre_lugar_turistico }}</td>
+                    <td>{{ reservacion.numero_habitacion }}</td>
+                    <td>{{ reservacion.tipo_habitacion }}</td>
+                    <td>{{ reservacion.capacidad }} personas</td>
+                    <td>{{ reservacion.fecha_inicio | date: 'dd/MM/yyyy HH:mm' }}</td>
+                    <td>{{ reservacion.fecha_fin | date: 'dd/MM/yyyy HH:mm' }}</td>
+                    <td>{{ reservacion.total_dias_hospedaje }}</td>
+                    <td>${{ reservacion.precio | number:'1.2-2' }}</td>
+
+                    <td>${{ reservacion.total_a_pagar | number:'1.2-2' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

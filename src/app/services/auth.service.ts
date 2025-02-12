@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
@@ -8,7 +8,7 @@ import { tap } from 'rxjs/operators';
 })
 export class AuthService {
   private apiUrl = 'http://192.168.1.102/AAJHoteles/Hoteles/apisHoteles/';
-  private tokenSubject = new BehaviorSubject<string | null>(null);
+  public tokenSubject = new BehaviorSubject<string | null>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -17,7 +17,7 @@ export class AuthService {
       tap((response: any) => {
         if (response.status === 'success') {
           this.tokenSubject.next(response.token);
-          console.log('Token almacenado en memoria:', response.token); // 🔹 Imprime el token en consola
+          console.log('Token almacenado en memoria:', response.token);
         }
       })
     );
@@ -33,6 +33,6 @@ export class AuthService {
 
   logout(): void {
     this.tokenSubject.next(null);
-    console.log('Token eliminado'); // 🔹 Confirma que el token se borra al cerrar sesión
+    console.log('Token eliminado');
   }
 }
