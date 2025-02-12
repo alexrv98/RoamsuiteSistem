@@ -3,12 +3,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { API_CONFIG } from '../api.config'; 
 
 @Injectable({
   providedIn: 'root',
 })
+
 export class AuthService {
-  private apiUrl = 'http://192.168.1.102/AAJHoteles/Hoteles/apisHoteles/';
+  private apiUrl = API_CONFIG.baseUrl; 
+  
   public tokenSubject = new BehaviorSubject<string | null>(this.getTokenFromSessionStorage());
   public nombreUsuarioSubject = new BehaviorSubject<string | null>(null);  // Nuevo BehaviorSubject para el nombre del usuario
 
