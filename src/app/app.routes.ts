@@ -13,15 +13,15 @@ import { RegisterComponent } from './components/register/register.component';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'admin', component: AdministradorComponent },
+  { path: 'admin', component: AdministradorComponent, canActivate: [AuthGuard] },
   { path: 'buscar', component: ListaHotelesComponent },
   { path: 'habitaciones/:hotelId', component: HabitacionesComponent },
-  { path: 'confirmar-reserva', component: ConfirmarReservaComponent },
+  { path: 'confirmar-reserva', component: ConfirmarReservaComponent, canActivate: [AuthGuard] },
   { path: 'register', component: RegisterComponent },
   { path: 'comentarios/:hotelId', component: ComentariosComponent },
   {
     path: 'mis-reservaciones',
-    component: MisReservasComponent,
+    component: MisReservasComponent, 
     canActivate: [AuthGuard],
   },
 ];
