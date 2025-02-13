@@ -63,10 +63,12 @@ export class ComentariosComponent implements OnInit {
 
   cargarDatosDesdeRuta(): void {
     const queryParams = this.router.routerState.snapshot.root.queryParams;
-    if (queryParams) {
+    if (queryParams['hotelId'] && queryParams['nombreHotel']) {
       this.nuevoComentario.hotelId = queryParams['hotelId'];
       this.nuevoComentario.nombreHotel = queryParams['nombreHotel'];
       console.log("Datos cargados desde la ruta:", queryParams);
+    } else {
+      console.log("Parámetros de la ruta faltantes o incorrectos.");
     }
   }
 
@@ -76,11 +78,10 @@ export class ComentariosComponent implements OnInit {
       return;
     }
 
-    this.reservaService.getReservaciones().subscribe({
+    this.comentariosService.getReservaciones().subscribe({
       next: (response) => {
-        console.log("Respuesta de la API:", response); // Depura la respuesta completa
+        console.log("Respuesta de la API:", response);
         if (response && response.status === 'success' && response.data && Array.isArray(response.data)) {
-          // Si los datos son válidos, los asignas
           this.hotelesReservados = response.data.map((reserva: any) => ({
             id: reserva.hotel_id,
             nombre: reserva.hotel_nombre
@@ -93,7 +94,6 @@ export class ComentariosComponent implements OnInit {
         console.error("Error al cargar las reservas:", error);
       }
     });
-
   }
 
 
@@ -130,6 +130,9 @@ export class ComentariosComponent implements OnInit {
     const selectedHotel = this.hotelesReservados.find(hotel => hotel.id === this.nuevoComentario.hotelId);
     if (selectedHotel) {
       this.nuevoComentario.nombreHotel = selectedHotel.nombre;
+    } else {
+      console.error('Hotel no encontrado en la lista de reservas');
     }
   }
+
 }
