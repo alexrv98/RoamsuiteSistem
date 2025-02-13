@@ -12,7 +12,7 @@ import { OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
   isAuthenticated: boolean = false;
-  nombreUsuario: string = '';  // Variable para almacenar el nombre del usuario
+  nombreUsuario: string = '';  
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -23,7 +23,7 @@ export class NavbarComponent implements OnInit {
       this.authService.obtenerUsuarioLogueado(token!).subscribe({
         next: (response) => {
           if (response.status === 'success') {
-            this.nombreUsuario = response.usuario.nombre;  // Obtener el nombre del usuario
+            this.nombreUsuario = response.usuario.nombre; 
           } else {
             console.error('Error al obtener el usuario');
           }

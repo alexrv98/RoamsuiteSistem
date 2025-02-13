@@ -13,7 +13,7 @@ export class AuthService {
   private apiUrl = API_CONFIG.baseUrl;
 
   public tokenSubject = new BehaviorSubject<string | null>(this.getTokenFromSessionStorage());
-  public nombreUsuarioSubject = new BehaviorSubject<string | null>(null);  // Nuevo BehaviorSubject para el nombre del usuario
+  public nombreUsuarioSubject = new BehaviorSubject<string | null>(null);  
 
   constructor(private http: HttpClient) {}
 
@@ -22,9 +22,8 @@ export class AuthService {
       tap((response: any) => {
         if (response.status === 'success') {
           this.tokenSubject.next(response.token);
-          this.storeTokenInSession(response.token); // Almacenar el token en sessionStorage
+          this.storeTokenInSession(response.token); 
           console.log('Token almacenado en memoria:', response.token);
-          // Obtener y almacenar el nombre del usuario
           this.obtenerUsuarioLogueado(response.token).subscribe(usuario => {
             this.nombreUsuarioSubject.next(usuario.nombre);
           });
@@ -33,7 +32,6 @@ export class AuthService {
     );
   }
 
-// Servicio AuthService ya configurado correctamente
 obtenerUsuarioLogueado(token: string): Observable<any> {
   return this.http.get<any>(`${this.apiUrl}/usuario.php`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -50,7 +48,7 @@ obtenerUsuarioLogueado(token: string): Observable<any> {
   }
   logout(): void {
     this.tokenSubject.next(null);
-    this.nombreUsuarioSubject.next(null); // Limpiar el nombre del usuario al cerrar sesión
+    this.nombreUsuarioSubject.next(null); 
     this.removeTokenFromSession();
     console.log('Token eliminado');
   }
@@ -71,7 +69,6 @@ obtenerUsuarioLogueado(token: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/register.php`, data);
   }
 
-  // Método para obtener el nombre del usuario como un Observable
   getNombreUsuario(): Observable<string | null> {
     return this.nombreUsuarioSubject.asObservable();
   }

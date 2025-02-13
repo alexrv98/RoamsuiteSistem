@@ -35,8 +35,8 @@ export class ComentariosComponent implements OnInit {
 
   ngOnInit(): void {
     this.verificarUsuario();
-    console.log("Estado de autenticación:", this.estaAutenticado);  // Verifica si el estado de autenticación es correcto
-    console.log("Hotel recibido:", this.hotelId); // Verifica si el hotelId llega correctamente
+    console.log("Estado de autenticación:", this.estaAutenticado); 
+    console.log("Hotel recibido:", this.hotelId); 
 
     if (this.hotelId) {
       this.nuevoComentario.hotelId = this.hotelId;
@@ -55,8 +55,8 @@ export class ComentariosComponent implements OnInit {
       next: (response) => {
         if (response.status === 'success' && response.usuario) {
           this.estaAutenticado = true;
-          console.log("Usuario autenticado:", response.usuario);  // Confirma que el usuario está autenticado
-          this.cargarHotelesReservados();  // Cargar hoteles basados en reservas
+          console.log("Usuario autenticado:", response.usuario);  
+          this.cargarHotelesReservados();  
         } else {
           this.estaAutenticado = false;
           console.log("Usuario no autenticado: respuesta inválida");
@@ -77,7 +77,7 @@ export class ComentariosComponent implements OnInit {
             id: reserva.hotel_id,
             nombre: reserva.nombre_hotel
           }));
-          console.log("Hoteles Reservados", this.hotelesReservados);  // Verifica si los hoteles están cargados correctamente
+          console.log("Hoteles Reservados", this.hotelesReservados); 
         } else {
           console.warn('No se encontraron reservas o formato incorrecto.');
           this.hotelesReservados = [];
