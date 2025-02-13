@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core'; // Importa Input
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../../services/auth.service';  // Importa el AuthService
+import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { ComentariosService } from '../../../services/comentarios.service';  // Importa ComentariosService
+import { ComentariosService } from '../../../services/comentarios.service';
 import { RouterLink } from '@angular/router';
+import { ReservaService } from '../../../services/reserva.service';  // Importa correctamente el servicio de reservas
 
 @Component({
   selector: 'app-comentarios',
@@ -13,89 +14,107 @@ import { RouterLink } from '@angular/router';
 })
 export class ComentariosComponent implements OnInit {
 
-  comentarios: any[] = [];
-  nuevoComentario = { nombre: '', texto: '', calificacion: 0 };
-  estrellas = [1, 2, 3, 4, 5];
-  comentariosMostrados = 2;
-  nombreUsuario: string = '';  // Variable para almacenar el nombre del usuario
-  estaAutenticado: boolean = false;
-  @Input() hotelId: number | null = null;
+  @Input() hotelId: number | null = null;  // Recibe el ID del hotel desde el padre
 
-  constructor(private authService: AuthService, private comentariosService: ComentariosService) {}
+  comentarios: any[] = [];
+  nuevoComentario: { texto: string; calificacion: number; hotelId: number | null } = {
+    texto: '',
+    calificacion: 0,
+    hotelId: null
+  };
+    estrellas = [1, 2, 3, 4, 5];
+  comentariosMostrados = 2;
+  estaAutenticado: boolean = false;
+  hotelesReservados: any[] = [];
+
+  constructor(
+    private authService: AuthService,
+    private comentariosService: ComentariosService,
+    private reservaService: ReservaService  // Usa el servicio correcto
+  ) {}
 
   ngOnInit(): void {
-    this.cargarComentarios();
-    this.setUsuarioLogueado();  // Establecer el nombre del usuario logueado
-  }
+    this.verificarUsuario();
+    console.log("Estado de autenticación:", this.estaAutenticado);  // Verifica si el estado de autenticación es correcto
+    console.log("Hotel recibido:", this.hotelId); // Verifica si el hotelId llega correctamente
 
-  cargarComentarios(): void {
-    if (this.hotelId !== null) {
-      this.comentariosService.getComentarios(this.hotelId).subscribe({
-        next: (response) => {
-          if (response.status === 'success') {
-            this.comentarios = response.data;
-          } else {
-            console.error('Error al cargar los comentarios');
-          }
-        },
-        error: (error) => {
-          console.error('Error al cargar los comentarios:', error);
-        }
-      });
+    if (this.hotelId) {
+      this.nuevoComentario.hotelId = this.hotelId;
     }
   }
 
-  setUsuarioLogueado(): void {
-    const token = this.authService.getToken(); // Obtener el token almacenado
-    if (token) {
-      this.authService.obtenerUsuarioLogueado(token).subscribe({
-        next: (response) => {
-          if (response.status === 'success' && response.usuario) {
-            this.nombreUsuario = response.usuario.nombre;  // Asignar el nombre del usuario logueado
-            this.estaAutenticado = true;  // Confirmar que está autenticado
-          } else {
-            console.error('Usuario no encontrado');
-            this.estaAutenticado = false;  // Marcar como no autenticado si no se encuentra el usuario
-          }
-        },
-        error: (error) => {
-          console.error('Error al obtener los datos del usuario:', error);
-          this.estaAutenticado = false;  // Marcar como no autenticado si hay error
-        }
-      });
-    } else {
-      this.estaAutenticado = false;  // Marcar como no autenticado si no hay token
+  verificarUsuario(): void {
+    const token = this.authService.getToken();
+    if (!token) {
+      this.estaAutenticado = false;
+      console.log("Usuario no autenticado: no hay token");
+      return;
     }
+
+    this.authService.obtenerUsuarioLogueado(token).subscribe({
+      next: (response) => {
+        if (response.status === 'success' && response.usuario) {
+          this.estaAutenticado = true;
+          console.log("Usuario autenticado:", response.usuario);  // Confirma que el usuario está autenticado
+          this.cargarHotelesReservados();  // Cargar hoteles basados en reservas
+        } else {
+          this.estaAutenticado = false;
+          console.log("Usuario no autenticado: respuesta inválida");
+        }
+      },
+      error: (error) => {
+        this.estaAutenticado = false;
+        console.error('Error al verificar usuario:', error);
+      }
+    });
+  }
+
+  cargarHotelesReservados(): void {
+    this.reservaService.obtenerReservacionesUsuario().subscribe({
+      next: (response) => {
+        if (response.status === 'success' && Array.isArray(response.data)) {
+          this.hotelesReservados = response.data.map((reserva: any) => ({
+            id: reserva.hotel_id,
+            nombre: reserva.nombre_hotel
+          }));
+          console.log("Hoteles Reservados", this.hotelesReservados);  // Verifica si los hoteles están cargados correctamente
+        } else {
+          console.warn('No se encontraron reservas o formato incorrecto.');
+          this.hotelesReservados = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error al obtener reservas:', error);
+        this.hotelesReservados = [];
+      }
+    });
   }
 
   agregarComentario(): void {
-    if (this.nuevoComentario.nombre && this.nuevoComentario.texto) {
-      if (this.hotelId !== null) {
-        this.comentariosService.agregarComentario(this.hotelId, this.nuevoComentario.calificacion, this.nuevoComentario.texto)
-          .subscribe({
-            next: (response) => {
-              if (response.status === 'success') {
-                this.cargarComentarios();
-                this.nuevoComentario = { nombre: '', texto: '', calificacion: 0 };  // Limpiar formulario
-              } else {
-                console.error('Error al agregar comentario');
-              }
-            },
-            error: (error) => {
-              console.error('Error al agregar comentario:', error);
-            }
-          });
-      }
-    } else {
-      alert('Por favor completa todos los campos.');
+    if (!this.nuevoComentario.texto || !this.nuevoComentario.calificacion || !this.nuevoComentario.hotelId) {
+      alert('Por favor, completa todos los campos.');
+      return;
     }
+
+    this.comentariosService.agregarComentario(
+      this.nuevoComentario.hotelId,
+      this.nuevoComentario.calificacion,
+      this.nuevoComentario.texto
+    ).subscribe({
+      next: (response) => {
+        if (response.status === 'success') {
+          this.nuevoComentario = { texto: '', calificacion: 0, hotelId: null };
+        } else {
+          console.error('Error al agregar comentario.');
+        }
+      },
+      error: (error) => {
+        console.error('Error al agregar comentario:', error);
+      }
+    });
   }
 
   seleccionarCalificacion(valor: number): void {
     this.nuevoComentario.calificacion = valor;
-  }
-
-  verMas(): void {
-    this.comentariosMostrados += 2;
   }
 }

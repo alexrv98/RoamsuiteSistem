@@ -2,41 +2,13 @@
   <div class="card shadow-sm border-0 rounded-4 p-4">
     <h4 class="mb-4"><i class="fa-solid fa-comments"></i> Deja tu comentario</h4>
 
-    <!-- Mostrar comentarios -->
-    <div class="mt-4">
-      <h5>Comentarios:</h5>
-      <div *ngFor="let comentario of comentarios | slice:0:comentariosMostrados" class="border p-3 mb-2 rounded-3">
-        <h6 class="ml-3">{{ comentario.usuario }}</h6>
-
-        <div class="d-flex align-items-center">
-          <!-- Mostrar estrellas en lugar de texto -->
-          <div *ngFor="let star of estrellas; let i = index">
-            <i class="fa-star" [ngClass]="i < comentario.calificacion ? 'fa-solid text-warning' : 'fa-regular'"></i>
-          </div>
-        </div>
-        <p>{{ comentario.comentario }}</p>
-        <!-- Mostrar la fecha -->
-        <small class="text-muted">{{ comentario.fecha | date:'short' }}</small>
-      </div>
-
-      <!-- Botón para ver más comentarios -->
-      <button *ngIf="comentarios.length > comentariosMostrados" class="btn btn-link" (click)="verMas()">
-        Ver más
-      </button>
+    <!-- Selección de hotel basado en reservas -->
+    <div class="mb-3" *ngIf="estaAutenticado && hotelesReservados.length > 0">
+      <label for="hotel" class="form-label"><i class="fa-solid fa-hotel"></i> Selecciona el hotel</label>
+      <select class="form-select rounded-3" id="hotel" [(ngModel)]="nuevoComentario.hotelId" required>
+        <option *ngFor="let hotel of hotelesReservados" [value]="hotel.id">{{ hotel.nombre }}</option>
+      </select>
     </div>
-
-   <!-- Formulario para agregar un comentario -->
-<div class="mb-3" *ngIf="estaAutenticado; else noUsuario">
-  <label for="nombre" class="form-label"><i class="fa-solid fa-user"></i> Nombre</label>
-  <!-- Mostrar nombre del usuario como texto -->
-  <p id="nombre" class="form-control rounded-3">{{ nombreUsuario }}</p>
-</div>
-
-<ng-template #noUsuario>
-  <!-- Mensaje o contenido para cuando no esté autenticado -->
-  <p class="text-muted">Por favor, inicia sesión para dejar un comentario.</p>
-</ng-template>
-
 
     <div class="mb-3">
       <label for="comentario" class="form-label"><i class="fa-solid fa-pen"></i> Comentario</label>
@@ -52,16 +24,8 @@
       </div>
     </div>
 
-    <button class="btn btn-primary w-100" (click)="agregarComentario()" [disabled]="!estaAutenticado">
+    <button class="btn btn-primary w-100" (click)="agregarComentario()" [disabled]="!estaAutenticado || !nuevoComentario.hotelId">
       <i class="fa-solid fa-paper-plane"></i> Enviar comentario
     </button>
-
-    <a
-      [routerLink]="['/comentarios', hotelId]"
-      class="ms-2 text-primary fw-bold"
-      style="cursor: pointer"
-    >
-      Ver reseñas
-    </a>
   </div>
 </div>
