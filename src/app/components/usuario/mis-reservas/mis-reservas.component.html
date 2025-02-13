@@ -3,39 +3,100 @@
   <div class="row">
     <h2 class="mb-4">Mis Reservaciones</h2>
 
-    <div class="col-md-4 mb-3 d-flex" *ngFor="let reservacion of reservaciones">
-      <div class="card p-5 ticket-card text-center">
-        <img
-          class="mb-4"
-          src="\assets\logo.png"
-          alt="logo"
-          height="50"
-          width="200"
-        />
-        <h4 class="text-center text-primary">Detalles de tu reserva</h4>
-        <div class="text-center ticket-line"></div>
+    <ng-container *ngIf="isLoading; else mostrarReservaciones">
+      <div class="col-md-4 mb-3" *ngFor="let _ of [1, 2, 3]">
+        <div class="card p-5 ticket-card text-center">
+          <!-- Placeholder para el logo -->
+          <span
+            class="placeholder col-6 mb-4"
+            style="height: 50px; background-color: #ddd; display: inline-block"
+          ></span>
 
-        <div class="ticket-info">
-          <p><strong>Hotel:</strong> {{ reservacion.nombre_hotel }}</p>
-          <p><strong>Habitación:</strong> {{ reservacion.tipo_habitacion }}</p>
-          <p>
-            <strong>Capacidad:</strong> {{ reservacion.capacidad }} personas
-          </p>
-          <p>
-            <strong>Dias de hospedaje:</strong>
-            {{ reservacion.total_dias_hospedaje }}
-          </p>
-          <p><strong>Fecha Inicio:</strong> {{ reservacion.fecha_inicio }}</p>
-          <p><strong>Fecha Fin:</strong> {{ reservacion.fecha_fin }}</p>
-          <h4 class="text-success fw-bold">
-            <strong class="text-success">Total de pago:</strong> MXN ${{
-              reservacion.total_a_pagar
-            }}
+          <!-- Placeholder para el título -->
+          <h4 class="text-center text-primary">
+            <span class="placeholder col-8 placeholder-glow"></span>
           </h4>
+
+          <div class="text-center ticket-line"></div>
+
+          <div class="ticket-info">
+            <!-- Placeholders para los detalles -->
+            <p>
+              <span class="placeholder col-8 placeholder-wave"></span>
+            </p>
+
+            <p>
+              <span class="placeholder col-8 placeholder-glow"></span>
+            </p>
+
+            <p>
+              <span class="placeholder col-8 placeholder-wave"></span>
+            </p>
+
+            <p>
+              <span class="placeholder col-8 placeholder-glow"></span>
+            </p>
+
+            <p>
+              <span class="placeholder col-8 placeholder-wave"></span>
+            </p>
+
+            <p>
+              <span class="placeholder col-8 placeholder-glow"></span>
+            </p>
+
+            <!-- Placeholder para el total a pagar -->
+            <h4 class="text-success fw-bold">
+              <span class="placeholder col-3 placeholder-wave"></span>
+            </h4>
+          </div>
+
+          <div class="text-center ticket-line"></div>
         </div>
-        <div class="text-center ticket-line"></div>
       </div>
-    </div>
+    </ng-container>
+
+    <!-- Mostrar las reservaciones cuando cargue -->
+    <ng-template #mostrarReservaciones>
+      <div
+        class="col-md-4 mb-3 d-flex"
+        *ngFor="let reservacion of reservaciones"
+      >
+        <div class="card p-5 ticket-card text-center">
+          <img
+            class="mb-4"
+            src="\assets\logo.png"
+            alt="logo"
+            height="50"
+            width="200"
+          />
+          <h4 class="text-center text-primary">Detalles de tu reserva</h4>
+          <div class="text-center ticket-line"></div>
+
+          <div class="ticket-info">
+            <p><strong>Hotel:</strong> {{ reservacion.nombre_hotel }}</p>
+            <p>
+              <strong>Habitación:</strong> {{ reservacion.tipo_habitacion }}
+            </p>
+            <p>
+              <strong>Capacidad:</strong> {{ reservacion.capacidad }} personas
+            </p>
+            <p>
+              <strong>Días de hospedaje:</strong>
+              {{ reservacion.total_dias_hospedaje }}
+            </p>
+            <p><strong>Fecha Inicio:</strong> {{ reservacion.fecha_inicio }}</p>
+            <p><strong>Fecha Fin:</strong> {{ reservacion.fecha_fin }}</p>
+            <h4 class="text-success fw-bold">
+              <strong class="text-success">Total de pago:</strong> MXN ${{
+                reservacion.total_a_pagar
+              }}
+            </h4>
+          </div>
+          <div class="text-center ticket-line"></div>
+        </div>
+      </div>
+    </ng-template>
   </div>
 </div>
 
