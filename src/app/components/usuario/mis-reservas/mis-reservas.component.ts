@@ -4,10 +4,18 @@ import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { ComentariosService } from '../../../services/comentarios.service';
 import { RouterLink } from '@angular/router';
+import { NavbarComponent } from '../../navbar/navbar.component';
+import { FooterComponent } from '../../footer/footer.component';
 
 @Component({
   selector: 'app-misreservas',
-  imports: [CommonModule,FormsModule, RouterLink],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterLink,
+    NavbarComponent,
+    FooterComponent,
+  ],
   templateUrl: './mis-reservas.component.html',
   styleUrl: './mis-reservas.component.css',
 })
@@ -18,6 +26,8 @@ export class MisReservasComponent implements OnInit {
   comentariosMostrados = 2;
   estaAutenticado: boolean = false;
   hotelesReservados: any[] = [];
+  reservaciones: any[] = [];
+  isLoading: boolean = true; // Indicador de carga
 
   constructor(
     private authService: AuthService,
@@ -32,7 +42,7 @@ export class MisReservasComponent implements OnInit {
     const token = this.authService.getToken();
     if (!token) {
       this.estaAutenticado = false;
-      console.log("Usuario no autenticado: no hay token");
+      console.log('Usuario no autenticado: no hay token');
       return;
     }
 
@@ -40,17 +50,17 @@ export class MisReservasComponent implements OnInit {
       next: (response) => {
         if (response.status === 'success' && response.usuario) {
           this.estaAutenticado = true;
-          console.log("Usuario autenticado:", response.usuario);
+          console.log('Usuario autenticado:', response.usuario);
           this.cargarHotelesReservados();
         } else {
           this.estaAutenticado = false;
-          console.log("Usuario no autenticado: respuesta inválida");
+          console.log('Usuario no autenticado: respuesta inválida');
         }
       },
       error: (error) => {
         this.estaAutenticado = false;
         console.error('Error al verificar usuario:', error);
-      }
+      },
     });
   }
 
@@ -60,9 +70,9 @@ export class MisReservasComponent implements OnInit {
         if (response.status === 'success' && Array.isArray(response.data)) {
           this.hotelesReservados = response.data.map((reserva: any) => ({
             id: reserva.hotel_id,
-            nombre: reserva.hotel_nombre
+            nombre: reserva.hotel_nombre,
           }));
-          console.log("Hoteles Reservados", this.hotelesReservados);
+          console.log('Hoteles Reservados', this.hotelesReservados);
         } else {
           console.warn('No se encontraron reservas o formato incorrecto.');
           this.hotelesReservados = [];
@@ -71,32 +81,43 @@ export class MisReservasComponent implements OnInit {
       error: (error) => {
         console.error('Error al obtener reservas:', error);
         this.hotelesReservados = [];
-      }
+      },
     });
+    this.isLoading = false;
   }
 
   agregarComentario(): void {
-    if (!this.nuevoComentario.texto || !this.nuevoComentario.calificacion || !this.nuevoComentario.hotelId) {
+    if (
+      !this.nuevoComentario.texto ||
+      !this.nuevoComentario.calificacion ||
+      !this.nuevoComentario.hotelId
+    ) {
       alert('Por favor, completa todos los campos.');
       return;
     }
 
-    this.comentariosService.agregarComentario(
-      this.nuevoComentario.hotelId,
-      this.nuevoComentario.calificacion,
-      this.nuevoComentario.texto
-    ).subscribe({
-      next: (response) => {
-        if (response.status === 'success') {
-          this.nuevoComentario = { texto: '', calificacion: 0, hotelId: null };
-        } else {
-          console.error('Error al agregar comentario.');
-        }
-      },
-      error: (error) => {
-        console.error('Error al agregar comentario:', error);
-      }
-    });
+    this.comentariosService
+      .agregarComentario(
+        this.nuevoComentario.hotelId,
+        this.nuevoComentario.calificacion,
+        this.nuevoComentario.texto
+      )
+      .subscribe({
+        next: (response) => {
+          if (response.status === 'success') {
+            this.nuevoComentario = {
+              texto: '',
+              calificacion: 0,
+              hotelId: null,
+            };
+          } else {
+            console.error('Error al agregar comentario.');
+          }
+        },
+        error: (error) => {
+          console.error('Error al agregar comentario:', error);
+        },
+      });
   }
 
   seleccionarCalificacion(valor: number): void {
