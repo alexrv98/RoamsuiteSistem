@@ -37,8 +37,11 @@ export class AuthService {
 obtenerUsuarioLogueado(token: string): Observable<any> {
   return this.http.get<any>(`${this.apiUrl}/usuario.php`, {
     headers: { Authorization: `Bearer ${token}` },
-  });
+  }).pipe(
+    tap(response => console.log('Respuesta de usuario.php:', response)) // Debug
+  );
 }
+
 
 
   getToken(): string | null {
