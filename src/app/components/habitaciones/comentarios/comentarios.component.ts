@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core'; // Importa Input
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -13,15 +13,8 @@ import { ReservaService } from '../../../services/reserva.service';  // Importa 
   styleUrls: ['./comentarios.component.css']
 })
 export class ComentariosComponent implements OnInit {
-
-  @Input() hotelId: number | null = null;  // Recibe el ID del hotel desde el padre
-
   comentarios: any[] = [];
-  nuevoComentario: { texto: string; calificacion: number; hotelId: number | null } = {
-    texto: '',
-    calificacion: 0,
-    hotelId: null
-  };
+  nuevoComentario = { texto: '', calificacion: 0, hotelId: null };
   estrellas = [1, 2, 3, 4, 5];
   comentariosMostrados = 2;
   estaAutenticado: boolean = false;
@@ -35,14 +28,6 @@ export class ComentariosComponent implements OnInit {
 
   ngOnInit(): void {
     this.verificarUsuario();
-    console.log("Estado de autenticación:", this.estaAutenticado);
-    console.log("Hotel recibido:", this.hotelId);
-
-    // Asegurarse de que hotelId se recibe y asigna correctamente
-    if (this.hotelId) {
-      this.nuevoComentario.hotelId = this.hotelId;
-      console.log("Nuevo comentario con hotelId:", this.nuevoComentario);
-    }
   }
 
   verificarUsuario(): void {
@@ -57,8 +42,8 @@ export class ComentariosComponent implements OnInit {
       next: (response) => {
         if (response.status === 'success' && response.usuario) {
           this.estaAutenticado = true;
-          console.log("Usuario autenticado:", response.usuario);
-          this.cargarHotelesReservados();
+          console.log("Usuario autenticado:", response.usuario);  // Confirma que el usuario está autenticado
+          this.cargarHotelesReservados();  // Cargar hoteles basados en reservas
         } else {
           this.estaAutenticado = false;
           console.log("Usuario no autenticado: respuesta inválida");
@@ -79,7 +64,7 @@ export class ComentariosComponent implements OnInit {
             id: reserva.hotel_id,
             nombre: reserva.nombre_hotel
           }));
-          console.log("Hoteles Reservados:", this.hotelesReservados);  // Verifica si los hoteles están cargados correctamente
+          console.log("Hoteles Reservados", this.hotelesReservados);  // Verifica si los hoteles están cargados correctamente
         } else {
           console.warn('No se encontraron reservas o formato incorrecto.');
           this.hotelesReservados = [];
@@ -92,18 +77,10 @@ export class ComentariosComponent implements OnInit {
     });
   }
 
+
   agregarComentario(): void {
     if (!this.nuevoComentario.texto || !this.nuevoComentario.calificacion || !this.nuevoComentario.hotelId) {
       alert('Por favor, completa todos los campos.');
-      return;
-    }
-
-    const token = this.authService.getToken();
-    console.log("Token enviado:", token); // Verifica el token
-    console.log("Datos del nuevo comentario:", this.nuevoComentario); // Verifica los datos que se enviarán
-
-    if (!token) {
-      console.error("Error: No hay token disponible. El usuario no está autenticado.");
       return;
     }
 
@@ -113,11 +90,10 @@ export class ComentariosComponent implements OnInit {
       this.nuevoComentario.texto
     ).subscribe({
       next: (response) => {
-        console.log("Comentario agregado con éxito:", response);
         if (response.status === 'success') {
           this.nuevoComentario = { texto: '', calificacion: 0, hotelId: null };
         } else {
-          console.error('Error al agregar comentario:', response);
+          console.error('Error al agregar comentario.');
         }
       },
       error: (error) => {
