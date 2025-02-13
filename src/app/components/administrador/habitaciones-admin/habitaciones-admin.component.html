@@ -1,1 +1,28 @@
-<p>habitaciones-admin works!</p>
+<div *ngIf="habitaciones.length > 0; else sinHabitaciones">
+    <h4>Habitaciones disponibles</h4>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Tipo</th>
+          <th>Capacidad</th>
+          <th>Camas</th>
+          <th>Precio</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let habitacion of habitaciones">
+          <td>{{ habitacion.numero_habitacion }}</td>
+          <td>{{ habitacion.tipo_nombre }}</td>
+          <td>{{ habitacion.capacidad }} personas</td>
+          <td>{{ habitacion.camas }}</td>
+          <td>${{ habitacion.precio }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <ng-template #sinHabitaciones>
+    <p class="text-muted">No hay habitaciones registradas para este hotel.</p>
+  </ng-template>
+  

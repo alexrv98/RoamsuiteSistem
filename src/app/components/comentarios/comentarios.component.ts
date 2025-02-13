@@ -25,29 +25,32 @@ export class ComentariosComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Obtener el parámetro hotelId de la ruta
     this.route.paramMap.subscribe(params => {
       const id = params.get('hotelId');
       if (id) {
-        this.hotelId = Number(id);  // Convertir el id a número
+        this.hotelId = Number(id);  
         this.cargarComentarios();
       }
     });
   }
 
-  cargarComentarios() {
+  cargarComentarios(): void {
     if (this.hotelId) {
-      this.comentarioService.getComentarios(this.hotelId).subscribe(
-        (data: any) => {
+      this.comentarioService.getComentarios(this.hotelId).subscribe({
+        next: (data: any) => {
           if (data.status === 'success') {
             this.comentarios = data.data;
           }
         },
-        error => {
+        error: (error) => {
           console.error('Error al cargar comentarios', error);
+        },
+        complete: () => {
+          console.log('Carga de comentarios completada');
         }
-      );
+      });
     }
   }
+  
 
 }

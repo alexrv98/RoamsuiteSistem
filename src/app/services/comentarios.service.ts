@@ -20,6 +20,12 @@ export class ComentariosService {
       return throwError('Usuario no autenticado');
     }
 
+agregarComentario(hotel_id: number, calificacion: number, comentario: string): Observable<any> {
+  const token = this.authService.getToken();
+  if (!token) {
+    return throwError(() => new Error('Usuario no autenticado'));
+  }
+
     return this.authService.obtenerUsuarioLogueado(token).pipe(
       switchMap((usuario) => {
         const nombreUsuario = usuario.nombre;
@@ -40,7 +46,22 @@ export class ComentariosService {
     );
   }
 
-  // Método para obtener los comentarios de un hotel
+  return this.authService.obtenerUsuarioLogueado(token).pipe(
+    switchMap((usuario) => {
+      const nombreUsuario = usuario.nombre;
+      const body = {
+        hotel_id,
+        calificacion,
+        comentario,
+        nombre_usuario: nombreUsuario,
+      };
+
+      return this.http.post(`${this.apiUrl}/comentarios.php`, body);
+    })
+  );
+}
+
+
   getComentarios(hotel_id: number): Observable<any> {
     const token = this.authService.getToken();
     if (!token) {

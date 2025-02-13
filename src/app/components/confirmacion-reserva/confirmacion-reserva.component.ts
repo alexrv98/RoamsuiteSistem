@@ -32,46 +32,48 @@ export class ConfirmarReservaComponent implements OnInit {
   ) {}
 
 
-  ngOnInit() {
+  ngOnInit(): void {
     document.body.classList.remove('modal-open');
     document.querySelector('.modal-backdrop')?.remove();
     document.body.style.overflow = 'auto';
-
+  
     const state = history.state;
-
+  
     if (state.reserva) {
       this.reserva = state.reserva;
       this.location.replaceState('/confirmar-reserva', '');
-
+  
       if (!this.paypal) {
         this.cargarPaypalScript();
       }
-
+  
       // Obtener el token y los datos del usuario logueado
       const token = this.authService.getToken();
       if (token) {
-        this.authService.obtenerUsuarioLogueado(token).subscribe(
-          (response) => {
-            console.log('Respuesta de la API:', response); // Verifica si el correo está presente
+        this.authService.obtenerUsuarioLogueado(token).subscribe({
+          next: (response) => {
+            console.log('Respuesta de la API:', response);
             if (response.status === 'success') {
               this.cliente = response.usuario;
             } else {
               console.error('No se pudo obtener la información del usuario');
             }
           },
-          (error) => {
+          error: (error) => {
             console.error('Error al obtener los datos del usuario:', error);
+          },
+          complete: () => {
+            console.log('Solicitud de datos del usuario completada');
           }
-        );
-        
+        });
       } else {
-        this.router.navigate(['/login']); 
+        this.router.navigate(['/login']);
       }
     } else {
       this.router.navigate(['/']);
     }
   }
-
+  
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any): void {
@@ -132,11 +134,12 @@ export class ConfirmarReservaComponent implements OnInit {
     }
   }
 
-  confirmarReserva() {
+  
+  confirmarReserva(): void {
     if (
       this.pagoRealizado &&
       this.cliente.nombre &&
-      this.cliente.correo 
+      this.cliente.correo
     ) {
       const datosReserva = {
         usuario_id: this.cliente.id,
@@ -148,8 +151,8 @@ export class ConfirmarReservaComponent implements OnInit {
         email: this.cliente.correo,
       };
   
-      this.reservaService.realizarReserva(datosReserva).subscribe(
-        (res) => {
+      this.reservaService.realizarReserva(datosReserva).subscribe({
+        next: (res) => {
           if (res.status === 'success') {
             alert('Reserva confirmada con éxito');
             sessionStorage.removeItem('reservaValida');
@@ -158,15 +161,19 @@ export class ConfirmarReservaComponent implements OnInit {
             alert('Error al realizar la reserva');
           }
         },
-        (error) => {
+        error: (error) => {
           console.error('Error en la reserva:', error);
+        },
+        complete: () => {
+          console.log('Proceso de confirmación de reserva completado');
         }
-      );
+      });
     } else {
       alert(
         'Por favor, completa todos los campos y realiza el pago antes de confirmar.'
       );
     }
   }
+  
 
   }

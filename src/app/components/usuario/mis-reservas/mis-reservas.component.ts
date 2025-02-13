@@ -21,10 +21,10 @@ export class MisReservasComponent implements OnInit {
   ngOnInit(): void {
     this.obtenerReservaciones();
   }
-
+  
   obtenerReservaciones(): void {
-    this.reservaService.obtenerReservacionesUsuario().subscribe(
-      (response) => {
+    this.reservaService.obtenerReservacionesUsuario().subscribe({
+      next: (response) => {
         if (response.status === 'success') {
           this.reservaciones = response.data;
         } else {
@@ -32,9 +32,14 @@ export class MisReservasComponent implements OnInit {
         }
         this.isLoading = false;
       },
-      (error) => {
+      error: (error) => {
         console.error('Error de conexión con la API', error);
+        this.isLoading = false; 
+      },
+      complete: () => {
+        console.log('Petición de reservaciones completada');
       }
-    );
+    });
   }
+  
 }
