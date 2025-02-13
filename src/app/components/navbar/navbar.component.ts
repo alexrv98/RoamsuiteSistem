@@ -7,12 +7,12 @@ import { OnInit } from '@angular/core';
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  imports:[RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule],
   styleUrl: './navbar.component.css',
 })
 export class NavbarComponent implements OnInit {
   isAuthenticated: boolean = false;
-  nombreUsuario: string = '';  // Variable para almacenar el nombre del usuario
+  nombreUsuario: string = ''; // Variable para almacenar el nombre del usuario
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -23,17 +23,17 @@ export class NavbarComponent implements OnInit {
       this.authService.obtenerUsuarioLogueado(token!).subscribe({
         next: (response) => {
           if (response.status === 'success') {
-            this.nombreUsuario = response.usuario.nombre;  // Obtener el nombre del usuario
+            this.nombreUsuario = response.usuario.nombre; // Obtener el nombre del usuario
           } else {
             console.error('Error al obtener el usuario');
           }
         },
         error: (error) => {
           console.error('Error al obtener los datos del usuario:', error);
-        }
+        },
       });
     }
-    this.authService.tokenSubject.subscribe(token => {
+    this.authService.tokenSubject.subscribe((token) => {
       this.isAuthenticated = token !== null;
     });
   }
