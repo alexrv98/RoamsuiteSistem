@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { API_CONFIG } from '../api.config';
-import { tap, switchMap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -60,6 +59,6 @@ export class ComentariosService {
       url += `?hotel_id=${hotel_id}`;
     }
 
-    return this.http.get(url, { headers });
+    return this.http.get<any>(url, { headers });  // Asegúrate de especificar <any> aquí
   }
 }
