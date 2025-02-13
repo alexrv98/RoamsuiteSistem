@@ -2,13 +2,21 @@
 <div class="container m-3">
   <div *ngIf="hoteles.length > 0; else sinHoteles">
     <div class="row">
-      <div class="col-md-4" *ngFor="let hotel of hoteles">
+      <div class="col-md-3" *ngFor="let hotel of hoteles">
         <!-- Columna para el hotel -->
         <div class="card shadow-sm lugar-card w-100">
-          <img *ngIf="hotel.imagenes" [src]="hotel.imagenes" alt="Imagen del hotel" class="card-img-top"
-            style="height: 300px; object-fit: cover" />
+          <img
+            *ngIf="hotel.imagenes"
+            [src]="hotel.imagenes"
+            alt="Imagen del hotel"
+            class="card-img-top"
+            style="height: 150px; object-fit: cover"
+          />
           <div class="card-body d-flex flex-column">
-            <h1 class="card-title">{{ hotel.lugar_nombre }} <br> {{ hotel.lugar_ubicacion }}</h1>
+            <h5 class="card-title">
+              {{ hotel.lugar_nombre }} <br />
+              {{ hotel.lugar_ubicacion }}
+            </h5>
             <h5 class="card-title">{{ hotel.nombre }}</h5>
             <p class="card-text">{{ hotel.descripcion }}</p>
             <p><strong>Dirección:</strong> {{ hotel.direccion }}</p>
@@ -18,7 +26,7 @@
         </div>
       </div>
 
-      <div class="col-md-8 " *ngFor="let hotel of hoteles">
+      <div class="col-md-9" *ngFor="let hotel of hoteles">
         <!-- Columna para la tabla de habitaciones -->
         <app-habitaciones-admin [hotelId]="hotel.id"></app-habitaciones-admin>
       </div>
@@ -29,3 +37,5 @@
     <p class="text-center text-muted">No hay hoteles disponibles.</p>
   </ng-template>
 </div>
+
+<app-footer></app-footer>
