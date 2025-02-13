@@ -22,7 +22,7 @@ export class ComentariosComponent implements OnInit {
     calificacion: 0,
     hotelId: null
   };
-    estrellas = [1, 2, 3, 4, 5];
+  estrellas = [1, 2, 3, 4, 5];
   comentariosMostrados = 2;
   estaAutenticado: boolean = false;
   hotelesReservados: any[] = [];
@@ -37,9 +37,12 @@ export class ComentariosComponent implements OnInit {
     this.verificarUsuario();
     console.log("Estado de autenticación:", this.estaAutenticado);  // Verifica si el estado de autenticación es correcto
     console.log("Hotel recibido:", this.hotelId); // Verifica si el hotelId llega correctamente
+    console.log("Hotel ID recibido en ComentariosComponent:", this.hotelId);
 
+    // Asegurarse de que hotelId se recibe y asigna correctamente
     if (this.hotelId) {
       this.nuevoComentario.hotelId = this.hotelId;
+      console.log("Nuevo comentario con hotelId:", this.nuevoComentario);
     }
   }
 
@@ -77,7 +80,7 @@ export class ComentariosComponent implements OnInit {
             id: reserva.hotel_id,
             nombre: reserva.nombre_hotel
           }));
-          console.log("Hoteles Reservados", this.hotelesReservados);  // Verifica si los hoteles están cargados correctamente
+          console.log("Hoteles Reservados:", this.hotelesReservados);  // Verifica si los hoteles están cargados correctamente
         } else {
           console.warn('No se encontraron reservas o formato incorrecto.');
           this.hotelesReservados = [];
@@ -96,16 +99,26 @@ export class ComentariosComponent implements OnInit {
       return;
     }
 
+    const token = this.authService.getToken();
+    console.log("Token enviado:", token); // Verifica el token
+    console.log("Datos del nuevo comentario:", this.nuevoComentario); // Verifica los datos que se enviarán
+
+    if (!token) {
+      console.error("Error: No hay token disponible. El usuario no está autenticado.");
+      return;
+    }
+
     this.comentariosService.agregarComentario(
       this.nuevoComentario.hotelId,
       this.nuevoComentario.calificacion,
       this.nuevoComentario.texto
     ).subscribe({
       next: (response) => {
+        console.log("Comentario agregado con éxito:", response);
         if (response.status === 'success') {
           this.nuevoComentario = { texto: '', calificacion: 0, hotelId: null };
         } else {
-          console.error('Error al agregar comentario.');
+          console.error('Error al agregar comentario:', response);
         }
       },
       error: (error) => {
