@@ -18,13 +18,8 @@ import { ReservaService } from '../../../services/reserva.service';
   styleUrl: './mis-reservas.component.css',
 })
 export class MisReservasComponent implements OnInit {
-  comentarios: any[] = [];
-  nuevoComentario = { texto: '', calificacion: 0, hotelId: null };
-  estrellas = [1, 2, 3, 4, 5];
-  comentariosMostrados = 2;
   estaAutenticado: boolean = false;
   reservaciones: any[] = [];
-  
   isLoading: boolean = true; 
 
   constructor(
