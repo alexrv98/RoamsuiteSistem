@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { HabitacionesService } from '../../services/habitacion.service';
 import { CommonModule } from '@angular/common';
 import { FiltroHotelesComponent } from './../filtro-hoteles/filtro-hoteles.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { ModalReservaComponent } from './modal-reserva/modal-reserva.component';
 import { ComentariosComponent } from './comentarios/comentarios.component';
 import { FooterComponent } from '../footer/footer.component';
+import { HabitacionesClienteService } from '../../services/habitacionesCliente.service';
 @Component({
   selector: 'app-habitaciones',
   standalone: true,
@@ -35,7 +35,7 @@ export class HabitacionesComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private habitacionesService: HabitacionesService
+    private habitacionesService: HabitacionesClienteService
   ) {}
 
   ngOnInit() {

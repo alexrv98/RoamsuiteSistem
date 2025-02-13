@@ -49,12 +49,9 @@ export class ListaHotelesComponent implements OnInit {
 
   verHabitaciones(hotelId: number) {
     this.router.navigate(['/habitaciones', hotelId], {
-      state: { filtros: this.filtros }, // 🔥 Pasamos los filtros de forma oculta
+      state: { filtros: this.filtros }, 
     });
   }
 
-  // Función para convertir el número de estrellas en un array de estrellas para mostrar en el HTML
-  getStarArray(promedio: number): number[] {
-    return Array(Math.round(promedio)).fill(1);
-  }
+
 }

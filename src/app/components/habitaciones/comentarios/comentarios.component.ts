@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core'; // Importa Input
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -13,16 +13,9 @@ import { ReservaService } from '../../../services/reserva.service';  // Importa 
   styleUrls: ['./comentarios.component.css']
 })
 export class ComentariosComponent implements OnInit {
-
-  @Input() hotelId: number | null = null;  // Recibe el ID del hotel desde el padre
-
   comentarios: any[] = [];
-  nuevoComentario: { texto: string; calificacion: number; hotelId: number | null } = {
-    texto: '',
-    calificacion: 0,
-    hotelId: null
-  };
-    estrellas = [1, 2, 3, 4, 5];
+  nuevoComentario = { texto: '', calificacion: 0, hotelId: null };
+  estrellas = [1, 2, 3, 4, 5];
   comentariosMostrados = 2;
   estaAutenticado: boolean = false;
   hotelesReservados: any[] = [];
@@ -35,12 +28,6 @@ export class ComentariosComponent implements OnInit {
 
   ngOnInit(): void {
     this.verificarUsuario();
-    console.log("Estado de autenticación:", this.estaAutenticado);  // Verifica si el estado de autenticación es correcto
-    console.log("Hotel recibido:", this.hotelId); // Verifica si el hotelId llega correctamente
-
-    if (this.hotelId) {
-      this.nuevoComentario.hotelId = this.hotelId;
-    }
   }
 
   verificarUsuario(): void {
@@ -89,6 +76,7 @@ export class ComentariosComponent implements OnInit {
       }
     });
   }
+
 
   agregarComentario(): void {
     if (!this.nuevoComentario.texto || !this.nuevoComentario.calificacion || !this.nuevoComentario.hotelId) {

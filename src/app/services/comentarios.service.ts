@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { API_CONFIG } from '../api.config';
 import { tap, switchMap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
@@ -13,30 +13,64 @@ export class ComentariosService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  // Método para agregar un comentario
   agregarComentario(hotel_id: number, calificacion: number, comentario: string): Observable<any> {
     const token = this.authService.getToken();
+    console.log("Token enviado en agregarComentario:", token);
+
     if (!token) {
-      return throwError('Usuario no autenticado'); // Usar throwError en lugar de Observable.throw
+      return throwError(() => new Error('Usuario no autenticado'));
     }
 
     return this.authService.obtenerUsuarioLogueado(token).pipe(
       switchMap((usuario) => {
-        const nombreUsuario = usuario.nombre;
+        console.log("Usuario recibido:", usuario);
+        if (!usuario || !usuario.id) {
+          return throwError(() => new Error('ID de usuario no disponible'));
+        }
+
+        const usuarioId = usuario.id;
         const body = {
           hotel_id,
           calificacion,
           comentario,
-          nombre_usuario: nombreUsuario,
+          usuario_id: usuarioId,
         };
 
-        return this.http.post(`${this.apiUrl}/comentarios.php`, body);
+        return this.http.post(`${this.apiUrl}/comentReserva.php`, body);
       })
     );
   }
 
-  // Método para obtener los comentarios de un hotel
   getComentarios(hotel_id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/comentarios.php?hotel_id=${hotel_id}`);
+    const token = this.authService.getToken();
+    if (!token) {
+      return throwError(() => new Error('Usuario no autenticado'));
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get(`${this.apiUrl}/comentarios.php?hotel_id=${hotel_id}`, { headers });
+  }
+
+  getReservaciones(hotel_id?: number): Observable<any> {
+    const token = this.authService.getToken();
+    if (!token) {
+      return throwError(() => new Error('Usuario no autenticado'));
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/reservaciones.php`;
+    if (hotel_id) {
+      url += `?hotel_id=${hotel_id}`;
+    }
+
+    return this.http.get(url, { headers });
   }
 }

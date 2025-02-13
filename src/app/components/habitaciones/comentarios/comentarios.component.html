@@ -57,7 +57,12 @@
     <button
       class="btn btn-primary w-100"
       (click)="agregarComentario()"
-      [disabled]="!estaAutenticado || !nuevoComentario.hotelId"
+      [disabled]="
+        !estaAutenticado ||
+        !nuevoComentario.hotelId ||
+        !nuevoComentario.texto ||
+        nuevoComentario.calificacion === 0
+      "
     >
       <i class="fa-solid fa-paper-plane"></i> Enviar comentario
     </button>

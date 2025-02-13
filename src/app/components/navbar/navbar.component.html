@@ -9,17 +9,13 @@
       <!-- Si el usuario ESTÁ autenticado -->
       <ng-container *ngIf="isAuthenticated">
         <div class="d-flex align-items-center me-3">
-          <!-- Icono de usuario -->
           <i
             class="fa-solid fa-user me-2"
             style="font-size: 1.2rem; color: #6c757d"
           ></i>
-          <!-- Nombre del usuario -->
           <span class="me-3 text-dark fw-semibold" style="font-size: 1rem"
             >Bienvenido, {{ nombreUsuario }}</span
           >
-
-          <!-- Enlace a mis reservaciones -->
           <a [routerLink]="['/mis-reservaciones']">
             <button
               class="btn btn-outline-primary me-2 d-flex align-items-center rounded-pill px-4"
@@ -27,8 +23,6 @@
               Mis reservaciones
             </button>
           </a>
-
-          <!-- Botón de cerrar sesión con icono -->
           <button
             class="btn btn-outline-danger d-flex align-items-center rounded-pill px-4"
             (click)="logout()"

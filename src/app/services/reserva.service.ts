@@ -15,7 +15,7 @@ export class ReservaService {
 
   realizarReserva(datosReserva: any): Observable<any> {
     const token = this.authService.getToken();
-    
+
     if (!token) {
       return throwError(() => new Error('Token no disponible. Debes iniciar sesión.'));
     }

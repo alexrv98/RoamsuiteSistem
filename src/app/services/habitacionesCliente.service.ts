@@ -6,7 +6,7 @@ import { API_CONFIG } from '../api.config';
 @Injectable({
   providedIn: 'root',
 })
-export class HabitacionesService {
+export class HabitacionesClienteService {
   private apiUrl = API_CONFIG.baseUrl; 
 
   constructor(private http: HttpClient) {}

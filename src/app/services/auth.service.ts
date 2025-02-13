@@ -48,6 +48,7 @@ obtenerUsuarioLogueado(token: string): Observable<any> {
   estaAutenticado(): boolean {
     return this.tokenSubject.value !== null;
   }
+
   logout(): void {
     this.tokenSubject.next(null);
     this.nombreUsuarioSubject.next(null); // Limpiar el nombre del usuario al cerrar sesión
