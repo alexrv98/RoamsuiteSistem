@@ -1,18 +1,23 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { HabitacionService } from '../../../services/habitaciones.service';
+import { HabitacionesAdminService } from '../../../services/habitacionesAdmin.service';
 import { CommonModule } from '@angular/common';
+import { ModalAgregarHabitacionComponent } from './modal-agregar-habitacion/modal-agregar-habitacion.component';
+import { ModalEditarHabitacionComponent } from './modal-editar-habitacion/modal-editar-habitacion.component';
 
 @Component({
   selector: 'app-habitaciones-admin',
   templateUrl: './habitaciones-admin.component.html',
-  imports:[CommonModule],
+  imports:[CommonModule, ModalAgregarHabitacionComponent, ModalEditarHabitacionComponent],
   styleUrl: './habitaciones-admin.component.css',
 })
 export class HabitacionesAdminComponent implements OnInit {
   @Input() hotelId!: number;
   habitaciones: any[] = [];
+  mostrarModal = false;
+  mostrarModalEditar = false;
+  habitacionSeleccionada: any = null;
 
-  constructor(private habitacionService: HabitacionService) {}
+  constructor(private habitacionService: HabitacionesAdminService) {}
 
   ngOnInit(): void {
     if (this.hotelId) {
@@ -25,17 +30,27 @@ export class HabitacionesAdminComponent implements OnInit {
       next: (response) => {
         if (response.status === 'success') {
           this.habitaciones = response.data;
-        } else {
-          console.error('Error al obtener habitaciones:', response.message);
         }
       },
-      error: (error) => {
-        console.error('Error al cargar habitaciones:', error);
-      },
-      complete: () => {
-        console.log('Carga de habitaciones completada');
-      }
+      error: (error) => console.error('Error al cargar habitaciones:', error)
     });
   }
+
+  abrirModal(): void {
+    this.mostrarModal = true;
+  }
+
+  cerrarModal(): void {
+    this.mostrarModal = false;
+  }
+
+  abrirModalEditar(habitacion: any): void {
+    this.habitacionSeleccionada = habitacion;
+    this.mostrarModalEditar = true;
+  }
   
+
+  cerrarModalEditar(): void {
+    this.mostrarModalEditar = false;
+  }
 }

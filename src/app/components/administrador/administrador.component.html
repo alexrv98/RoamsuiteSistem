@@ -2,7 +2,7 @@
 <div class="container m-3">
   <div *ngIf="hoteles.length > 0; else sinHoteles">
     <div class="row">
-      <div class="col-md-6" *ngFor="let hotel of hoteles">
+      <div class="col-md-4" *ngFor="let hotel of hoteles">
         <!-- Columna para el hotel -->
         <div class="card shadow-sm lugar-card w-100">
           <img *ngIf="hotel.imagenes" [src]="hotel.imagenes" alt="Imagen del hotel" class="card-img-top"
@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <div class="col-md-6" *ngFor="let hotel of hoteles">
+      <div class="col-md-8 " *ngFor="let hotel of hoteles">
         <!-- Columna para la tabla de habitaciones -->
         <app-habitaciones-admin [hotelId]="hotel.id"></app-habitaciones-admin>
       </div>

@@ -26,11 +26,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     try {
         $query = "SELECT h.id, h.numero_habitacion, h.precio,
-                         t.id AS tipo_habitacion_id, t.nombre AS tipo_nombre, 
-                         t.capacidad, t.camas 
-                  FROM habitaciones h
-                  INNER JOIN tipos_habitacion t ON h.tipo_habitacion_id = t.id
-                  WHERE h.hotel_id = :hotel_id";
+        t.id AS tipo_habitacion_id, t.nombre AS tipo_nombre, 
+        t.capacidad, t.camas 
+ FROM habitaciones h
+ INNER JOIN tipos_habitacion t ON h.tipo_habitacion_id = t.id
+ WHERE h.hotel_id = :hotel_id
+ ORDER BY h.id ASC"; 
+
 
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':hotel_id', $hotel_id, PDO::PARAM_INT);

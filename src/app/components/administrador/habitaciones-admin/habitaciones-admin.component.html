@@ -1,28 +1,55 @@
 <div *ngIf="habitaciones.length > 0; else sinHabitaciones">
-    <h4>Habitaciones disponibles</h4>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Número</th>
-          <th>Tipo</th>
-          <th>Capacidad</th>
-          <th>Camas</th>
-          <th>Precio</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let habitacion of habitaciones">
-          <td>{{ habitacion.numero_habitacion }}</td>
-          <td>{{ habitacion.tipo_nombre }}</td>
-          <td>{{ habitacion.capacidad }} personas</td>
-          <td>{{ habitacion.camas }}</td>
-          <td>${{ habitacion.precio }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div class="d-flex justify-content-end mb-3">
+    <button class="btn btn-success" (click)="abrirModal()">Agregar</button>
   </div>
   
-  <ng-template #sinHabitaciones>
-    <p class="text-muted">No hay habitaciones registradas para este hotel.</p>
-  </ng-template>
-  
+  <h4>Habitaciones</h4>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Número</th>
+        <th>Tipo</th>
+        <th>Capacidad</th>
+        <th>Camas</th>
+        <th>Precio</th>
+        <th>Editar</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let habitacion of habitaciones">
+        <td>{{ habitacion.numero_habitacion }}</td>
+        <td>{{ habitacion.tipo_nombre }}</td>
+        <td>{{ habitacion.capacidad }} personas</td>
+        <td>{{ habitacion.camas }}</td>
+        <td>${{ habitacion.precio }}</td>
+        <th>
+          
+            <button class="btn btn-warning btn-sm" (click)="abrirModalEditar(habitacion)">
+            Editar
+            </button>
+          
+        </th>
+
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #sinHabitaciones>
+  <p class="text-muted">No hay habitaciones registradas para este hotel.</p>
+</ng-template>
+
+<app-modal-agregar-habitacion
+*ngIf="mostrarModal"
+[hotelId]="hotelId"
+(habitacionAgregada)="cargarHabitaciones()"
+(cerrarModal)="cerrarModal()">
+</app-modal-agregar-habitacion>
+
+<app-modal-editar-habitacion 
+  *ngIf="mostrarModalEditar"
+  [habitacion]="habitacionSeleccionada"
+  (habitacionEditada)="cargarHabitaciones()"
+  (cerrarModal)="cerrarModalEditar()">
+</app-modal-editar-habitacion>
