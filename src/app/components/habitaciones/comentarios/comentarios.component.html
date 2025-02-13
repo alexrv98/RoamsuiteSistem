@@ -1,69 +1,54 @@
 <div class="container mt-5">
-  <div class="card shadow-sm border-0 rounded-4 p-4 w-100">
-    <h4 class="mb-4">
-      <i class="fa-solid fa-comments"></i> Deja tu comentario
-    </h4>
+  <div class="card shadow-sm border-0 rounded-4 p-4">
+    <h4 class="mb-4"><i class="fa-solid fa-comments"></i> Deja tu comentario</h4>
+
+    <!-- Campo oculto para ID de usuario -->
+    <input type="hidden" [(ngModel)]="nuevoComentario.usuarioId" />
+
+    <!-- Mostrar nombre del usuario autenticado -->
+    <div class="mb-3" *ngIf="estaAutenticado">
+      <label class="form-label"><i class="fa-solid fa-user"></i> Usuario</label>
+      <!-- Aquí mostramos el nombre del usuario autenticado -->
+      <input type="text" class="form-control" [value]="usuarioNombre" disabled />
+    </div>
+
+    <!-- Mostrar el nombre del hotel seleccionado -->
+    <div class="mb-3" *ngIf="nuevoComentario.nombreHotel">
+      <label class="form-label"><i class="fa-solid fa-hotel"></i> Hotel Seleccionado</label>
+      <input type="text" class="form-control" [value]="nuevoComentario.nombreHotel" disabled />
+    </div>
 
     <!-- Selección de hotel basado en reservas -->
     <div class="mb-3" *ngIf="estaAutenticado && hotelesReservados.length > 0">
-      <label for="hotel" class="form-label"
-        ><i class="fa-solid fa-hotel"></i> Selecciona el hotel</label
-      >
-      <select
-        class="form-select rounded-3"
-        id="hotel"
-        [(ngModel)]="nuevoComentario.hotelId"
-        required
-      >
-        <option *ngFor="let hotel of hotelesReservados" [value]="hotel.id">
-          {{ hotel.nombre }}
-        </option>
+      <label for="hotel" class="form-label"><i class="fa-solid fa-hotel"></i> Selecciona el hotel</label>
+      <select class="form-select rounded-3" id="hotel" [(ngModel)]="nuevoComentario.hotelId" (change)="onHotelChange()" required>
+        <option value="" disabled selected>Selecciona un hotel...</option>
+        <option *ngFor="let hotel of hotelesReservados" [value]="hotel.id">{{ hotel.nombre }}</option>
       </select>
     </div>
 
-    <div class="mb-3">
-      <label for="comentario" class="form-label"
-        ><i class="fa-solid fa-pen"></i> Comentario</label
-      >
-      <textarea
-        class="form-control rounded-3"
-        id="comentario"
-        [(ngModel)]="nuevoComentario.texto"
-        rows="3"
-        placeholder="Escribe tu comentario"
-        required
-      ></textarea>
+    <!-- Mensaje de error si no hay hoteles reservados -->
+    <div *ngIf="estaAutenticado && hotelesReservados.length === 0" class="alert alert-warning">
+      No tienes reservas de hoteles disponibles para dejar un comentario.
     </div>
 
     <div class="mb-3">
-      <label class="form-label"
-        ><i class="fa-solid fa-star"></i> Calificación</label
-      >
+      <label for="comentario" class="form-label"><i class="fa-solid fa-pen"></i> Comentario</label>
+      <textarea class="form-control rounded-3" id="comentario" [(ngModel)]="nuevoComentario.texto" rows="3" placeholder="Escribe tu comentario" required></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label"><i class="fa-solid fa-star"></i> Calificación</label>
       <div>
         <span *ngFor="let star of estrellas; let i = index">
-          <i
-            class="fa-star"
-            [ngClass]="
-              i < nuevoComentario.calificacion
-                ? 'fa-solid text-warning'
-                : 'fa-regular'
-            "
-            (click)="seleccionarCalificacion(i + 1)"
-          ></i>
+          <i class="fa-star" [ngClass]="i < nuevoComentario.calificacion ? 'fa-solid text-warning' : 'fa-regular'" (click)="seleccionarCalificacion(i+1)"></i>
         </span>
       </div>
     </div>
 
-    <button
-      class="btn btn-primary w-100"
-      (click)="agregarComentario()"
-      [disabled]="
-        !estaAutenticado ||
-        !nuevoComentario.hotelId ||
-        !nuevoComentario.texto ||
-        nuevoComentario.calificacion === 0
-      "
-    >
+    <!-- Botón de envío -->
+    <button class="btn btn-primary w-100" (click)="agregarComentario()"
+      [disabled]="!estaAutenticado || !nuevoComentario.hotelId || !nuevoComentario.texto || nuevoComentario.calificacion === 0">
       <i class="fa-solid fa-paper-plane"></i> Enviar comentario
     </button>
   </div>

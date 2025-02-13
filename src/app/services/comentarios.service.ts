@@ -13,33 +13,22 @@ export class ComentariosService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
-  agregarComentario(hotel_id: number, calificacion: number, comentario: string): Observable<any> {
+  agregarComentario(hotel_id: number, calificacion: number, comentario: string, usuario_id: number): Observable<any> {
     const token = this.authService.getToken();
-    console.log("Token enviado en agregarComentario:", token);
-
     if (!token) {
       return throwError(() => new Error('Usuario no autenticado'));
     }
 
-    return this.authService.obtenerUsuarioLogueado(token).pipe(
-      switchMap((usuario) => {
-        console.log("Usuario recibido:", usuario);
-        if (!usuario || !usuario.id) {
-          return throwError(() => new Error('ID de usuario no disponible'));
-        }
+    const body = {
+      hotel_id,
+      calificacion,
+      comentario,
+      usuario_id,  // Agregar el ID del usuario
+    };
 
-        const usuarioId = usuario.id;
-        const body = {
-          hotel_id,
-          calificacion,
-          comentario,
-          usuario_id: usuarioId,
-        };
-
-        return this.http.post(`${this.apiUrl}/comentReserva.php`, body);
-      })
-    );
+    return this.http.post(`${this.apiUrl}/comentReserva.php`, body);
   }
+
 
   getComentarios(hotel_id: number): Observable<any> {
     const token = this.authService.getToken();
