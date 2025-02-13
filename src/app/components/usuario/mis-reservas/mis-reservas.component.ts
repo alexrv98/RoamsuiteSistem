@@ -14,6 +14,7 @@ export class MisReservasComponent implements OnInit {
   reservaciones: any[] = [];
   reservacionSeleccionada: any;
   estados = ['pendiente', 'confirmada', 'cancelada'];
+  isLoading: boolean = true; // Indicador de carga
 
   constructor(private reservaService: ReservaService) {}
 
@@ -29,6 +30,7 @@ export class MisReservasComponent implements OnInit {
         } else {
           console.error('Error al obtener las reservaciones', response.message);
         }
+        this.isLoading = false;
       },
       (error) => {
         console.error('Error de conexión con la API', error);
