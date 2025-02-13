@@ -32,6 +32,7 @@ export class ComentariosComponent implements OnInit {
   ngOnInit(): void {
     this.verificarUsuario();
     this.cargarDatosDesdeRuta();
+    this.cargarHotelesReservados();  // Llamada para cargar los hoteles reservados
   }
 
   verificarUsuario(): void {
@@ -68,6 +69,33 @@ export class ComentariosComponent implements OnInit {
       console.log("Datos cargados desde la ruta:", queryParams);
     }
   }
+
+  cargarHotelesReservados(): void {
+    if (!this.estaAutenticado) {
+      console.log("Usuario no autenticado. No se pueden cargar las reservas.");
+      return;
+    }
+
+    this.reservaService.getReservaciones().subscribe({
+      next: (response) => {
+        console.log("Respuesta de la API:", response); // Depura la respuesta completa
+        if (response && response.status === 'success' && response.data && Array.isArray(response.data)) {
+          // Si los datos son válidos, los asignas
+          this.hotelesReservados = response.data.map((reserva: any) => ({
+            id: reserva.hotel_id,
+            nombre: reserva.hotel_nombre
+          }));
+        } else {
+          console.log("No se encontraron reservas o la respuesta es inválida.");
+        }
+      },
+      error: (error) => {
+        console.error("Error al cargar las reservas:", error);
+      }
+    });
+
+  }
+
 
   agregarComentario(): void {
     if (!this.nuevoComentario.texto || !this.nuevoComentario.calificacion || !this.nuevoComentario.hotelId || !this.nuevoComentario.usuarioId) {
