@@ -26,13 +26,11 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  
   ngOnInit() {
     document.body.classList.remove('modal-open');
     document.querySelector('.modal-backdrop')?.remove();
     document.body.style.overflow = 'auto';
   }
-
 
   onLogin(): void {
     this.authService.login(this.correo, this.password).subscribe({

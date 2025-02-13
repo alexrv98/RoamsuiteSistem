@@ -19,7 +19,9 @@ export const routes: Routes = [
   { path: 'confirmar-reserva', component: ConfirmarReservaComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'comentarios/:hotelId', component: ComentariosComponent },
-  { path: 'mis-reservaciones', component: MisReservasComponent, canActivate: [AuthGuard],
+  {
+    path: 'mis-reservaciones',
+    component: MisReservasComponent,
+    canActivate: [AuthGuard],
   },
-
 ];
