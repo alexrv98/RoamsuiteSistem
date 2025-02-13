@@ -3,12 +3,12 @@ require_once 'cors.php';
 require_once 'db.php';
 require_once 'jwt_verify.php';
 
-$usuario = verificarToken(); 
+$usuario = verificarToken();
 
 if ($usuario) {
-    $id = $usuario['id']; 
+    $id = $usuario['id'];
     try {
-        
+
         $stmt = $conn->prepare("SELECT id, nombre, correo FROM Usuarios WHERE id = :id AND activo = 1");
         $stmt->bindParam(':id', $id);
         $stmt->execute();

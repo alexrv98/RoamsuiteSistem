@@ -3,107 +3,64 @@
 
 <div class="container">
   <div class="row">
+    <!-- Columna de habitaciones disponibles -->
     <div class="col-12 col-md-8">
       <h4 class="text-secondary">Habitaciones disponibles</h4>
 
       <!-- Mejores opciones de habitaciones -->
-      <ng-container *ngIf="isLoading; else mostrarMejoresOpciones">
+      <div *ngIf="habitaciones.mejorOpcion.length > 0">
         <h5 class="fw-bold text-primary">Mejores opciones</h5>
-        <div class="card shadow-sm mb-3" *ngFor="let _ of [1, 2, 3]">
+        <div
+          class="card shadow-sm mb-3"
+          *ngFor="let habitacion of habitaciones.mejorOpcion"
+        >
           <div class="card-body d-flex align-items-center">
-            <span
-              class="placeholder placeholder-wave col-4 me-3 rounded-top"
-              style="height: 200px"
-            ></span>
-
+            <img
+              src="assets/habitacion.jpg"
+              alt="Imagen de la habitación"
+              class="room-image me-3"
+              width="100%"
+              height="auto"
+              style="max-width: 300px"
+            />
             <div class="flex-grow-1">
-              <h5 class="card-title">
-                <span class="placeholder col-6 placeholder-glow"></span>
+              <h5 class="card-title text-secondary">
+                {{ habitacion.tipo_habitacion }}
               </h5>
-
               <p class="card-text mb-1">
-                <span class="placeholder col-3 placeholder-wave"></span>
+                <strong>No. Habitación:</strong>
+                {{ habitacion.numero_habitacion }}
               </p>
-
               <p class="card-text mb-1">
-                <span class="placeholder col-2 placeholder-glow"></span>
+                <strong>Capacidad:</strong>
+                {{ habitacion.capacidad }} persona(s)
               </p>
-
               <p class="card-text fw-bold">
-                <span class="placeholder col-2 placeholder-wave"></span>
+                <strong>Numero de camas:</strong> {{ habitacion.camas }}
               </p>
-
               <p class="card-text fw-bold">
-                <span class="placeholder col-3 placeholder-glow"></span>
+                <strong>Precio por noche:</strong> MXN ${{ habitacion.precio }}
               </p>
-
               <button
-                class="btn btn-primary btn-lg mt-2 w-100 rounded-0 disabled"
-                disabled
+                type="button"
+                class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
+                data-bs-toggle="modal"
+                data-bs-target="#reserva"
+                (click)="seleccionarHabitacion(habitacion)"
               >
-                <span class="placeholder placeholder-wave col-6"></span>
+                Reservar
               </button>
             </div>
           </div>
         </div>
-      </ng-container>
-
-      <!-- Mostrar las habitaciones cuando cargue -->
-      <ng-template #mostrarMejoresOpciones>
-        <div *ngIf="habitaciones.mejorOpcion.length > 0">
-          <h5 class="fw-bold text-primary">Mejores opciones</h5>
-          <div
-            class="card shadow-sm mb-3"
-            *ngFor="let habitacion of habitaciones.mejorOpcion"
-          >
-            <div class="card-body d-flex align-items-center">
-              <img
-                src="assets/habitacion.jpg"
-                alt="Imagen de la habitación"
-                class="room-image me-3"
-                width="100%"
-                height="auto"
-                style="max-width: 300px"
-              />
-              <div class="flex-grow-1">
-                <h5 class="card-title text-secondary">
-                  {{ habitacion.tipo_habitacion }}
-                </h5>
-                <p class="card-text mb-1">
-                  <strong>No. Habitación:</strong>
-                  {{ habitacion.numero_habitacion }}
-                </p>
-                <p class="card-text mb-1">
-                  <strong>Capacidad:</strong>
-                  {{ habitacion.capacidad }} persona(s)
-                </p>
-                <p class="card-text fw-bold">
-                  <strong>Número de camas:</strong> {{ habitacion.camas }}
-                </p>
-                <p class="card-text fw-bold">
-                  <strong>Precio por noche:</strong> MXN ${{
-                    habitacion.precio
-                  }}
-                </p>
-                <button
-                  type="button"
-                  class="btn btn-primary btn-lg mt-2 w-100 rounded-0"
-                  data-bs-toggle="modal"
-                  data-bs-target="#reserva"
-                  (click)="seleccionarHabitacion(habitacion)"
-                >
-                  Reservar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ng-template>
+      </div>
     </div>
 
     <!-- Columna de comentarios -->
     <div class="col-12 col-md-4 mt-3 mt-md-0">
-      <app-comentarios [hotelId]="hotelId"></app-comentarios>
+
+      <app-comentarios ></app-comentarios>
+
     </div>
   </div>
 

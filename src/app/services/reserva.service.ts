@@ -4,7 +4,6 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { API_CONFIG } from '../api.config';
 import { AuthService } from './auth.service';
-import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -43,11 +42,7 @@ export class ReservaService {
       catchError((error) => {
         console.error('Error al obtener reservaciones:', error);
         return throwError(() => new Error('Error al obtener reservaciones.'));
-      }),
-      tap((response) => {
-        console.log('Respuesta de las reservaciones:', response);  // Muestra la respuesta aquí
       })
     );
   }
-
 }
