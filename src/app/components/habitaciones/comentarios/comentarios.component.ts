@@ -43,6 +43,9 @@ export class ComentariosComponent implements OnInit {
       return;
     }
 
+
+    
+
     this.authService.obtenerUsuarioLogueado(token).subscribe({
       next: (response) => {
         if (response.status === 'success' && response.usuario) {
