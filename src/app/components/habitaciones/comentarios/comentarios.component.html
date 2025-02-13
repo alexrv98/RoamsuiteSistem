@@ -22,8 +22,14 @@
     <div class="mb-3" *ngIf="estaAutenticado && hotelesReservados.length > 0">
       <label for="hotel" class="form-label"><i class="fa-solid fa-hotel"></i> Selecciona el hotel</label>
       <select class="form-select rounded-3" id="hotel" [(ngModel)]="nuevoComentario.hotelId" (change)="onHotelChange()" required>
+        <option value="" disabled selected>Selecciona un hotel...</option>
         <option *ngFor="let hotel of hotelesReservados" [value]="hotel.id">{{ hotel.nombre }}</option>
       </select>
+    </div>
+
+    <!-- Mensaje de error si no hay hoteles reservados -->
+    <div *ngIf="estaAutenticado && hotelesReservados.length === 0" class="alert alert-warning">
+      No tienes reservas de hoteles disponibles para dejar un comentario.
     </div>
 
     <div class="mb-3">
