@@ -27,12 +27,15 @@
             "styles": [
               "src/styles.css",
               "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css",
-              "node_modules/leaflet/dist/leaflet.css"
-
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css"
             ],
-            "scripts": ["src/app.js", "node_modules/jquery/dist/jquery.min.js"
-]
-
+            "scripts": [
+              "src/app.js",
+              "node_modules/jquery/dist/jquery.min.js",
+              "node_modules/datatables.net/js/dataTables.min.js",
+              "node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js"
+            ]
           },
           "configurations": {
             "production": {
