@@ -25,6 +25,7 @@ export class HabitacionesComponent implements OnInit {
   hotelId!: number;
   filtros: any = {};
   habitaciones: any = { mejorOpcion: [], otrasHabitaciones: [] };
+  isLoading: boolean = true; // Indicador de carga
 
   habitacionSeleccionada: any = null;
 
@@ -64,6 +65,7 @@ export class HabitacionesComponent implements OnInit {
       } else {
         console.error('Error al obtener habitaciones:', res.message);
       }
+      this.isLoading = false;
     });
   }
 

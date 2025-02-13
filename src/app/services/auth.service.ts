@@ -3,15 +3,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { API_CONFIG } from '../api.config'; 
+import { API_CONFIG } from '../api.config';
 
 @Injectable({
   providedIn: 'root',
 })
 
 export class AuthService {
-  private apiUrl = API_CONFIG.baseUrl; 
-  
+  private apiUrl = API_CONFIG.baseUrl;
+
   public tokenSubject = new BehaviorSubject<string | null>(this.getTokenFromSessionStorage());
   public nombreUsuarioSubject = new BehaviorSubject<string | null>(null);  // Nuevo BehaviorSubject para el nombre del usuario
 
@@ -48,7 +48,6 @@ obtenerUsuarioLogueado(token: string): Observable<any> {
   estaAutenticado(): boolean {
     return this.tokenSubject.value !== null;
   }
-
   logout(): void {
     this.tokenSubject.next(null);
     this.nombreUsuarioSubject.next(null); // Limpiar el nombre del usuario al cerrar sesión
