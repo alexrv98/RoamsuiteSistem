@@ -2,17 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
-import { ComentariosService } from '../../../services/comentarios.service';
-import { RouterLink } from '@angular/router';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { FooterComponent } from '../../footer/footer.component';
+import { ReservaService } from '../../../services/reserva.service';
 
 @Component({
   selector: 'app-misreservas',
   imports: [
     CommonModule,
     FormsModule,
-    RouterLink,
     NavbarComponent,
     FooterComponent,
   ],
@@ -25,13 +23,13 @@ export class MisReservasComponent implements OnInit {
   estrellas = [1, 2, 3, 4, 5];
   comentariosMostrados = 2;
   estaAutenticado: boolean = false;
-  hotelesReservados: any[] = [];
   reservaciones: any[] = [];
-  isLoading: boolean = true; // Indicador de carga
+  
+  isLoading: boolean = true; 
 
   constructor(
     private authService: AuthService,
-    private comentariosService: ComentariosService
+    private reservaService: ReservaService
   ) {}
 
   ngOnInit(): void {
@@ -50,11 +48,9 @@ export class MisReservasComponent implements OnInit {
       next: (response) => {
         if (response.status === 'success' && response.usuario) {
           this.estaAutenticado = true;
-          console.log('Usuario autenticado:', response.usuario);
-          this.cargarHotelesReservados();
+          this.cargarReservaciones();
         } else {
           this.estaAutenticado = false;
-          console.log('Usuario no autenticado: respuesta inválida');
         }
       },
       error: (error) => {
@@ -64,63 +60,24 @@ export class MisReservasComponent implements OnInit {
     });
   }
 
-  cargarHotelesReservados(): void {
-    this.comentariosService.getReservaciones().subscribe({
+  cargarReservaciones(): void {
+    this.isLoading = true;
+    this.reservaService.obtenerReservacionesUsuario().subscribe({
       next: (response) => {
         if (response.status === 'success' && Array.isArray(response.data)) {
-          this.hotelesReservados = response.data.map((reserva: any) => ({
-            id: reserva.hotel_id,
-            nombre: reserva.hotel_nombre,
-          }));
-          console.log('Hoteles Reservados', this.hotelesReservados);
+          this.reservaciones = response.data;
         } else {
           console.warn('No se encontraron reservas o formato incorrecto.');
-          this.hotelesReservados = [];
+          this.reservaciones = [];
         }
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error al obtener reservas:', error);
-        this.hotelesReservados = [];
+        this.reservaciones = [];
+        this.isLoading = false;
       },
     });
-    this.isLoading = false;
   }
-
-  agregarComentario(): void {
-    if (
-      !this.nuevoComentario.texto ||
-      !this.nuevoComentario.calificacion ||
-      !this.nuevoComentario.hotelId
-    ) {
-      alert('Por favor, completa todos los campos.');
-      return;
-    }
-
-    this.comentariosService
-      .agregarComentario(
-        this.nuevoComentario.hotelId,
-        this.nuevoComentario.calificacion,
-        this.nuevoComentario.texto
-      )
-      .subscribe({
-        next: (response) => {
-          if (response.status === 'success') {
-            this.nuevoComentario = {
-              texto: '',
-              calificacion: 0,
-              hotelId: null,
-            };
-          } else {
-            console.error('Error al agregar comentario.');
-          }
-        },
-        error: (error) => {
-          console.error('Error al agregar comentario:', error);
-        },
-      });
-  }
-
-  seleccionarCalificacion(valor: number): void {
-    this.nuevoComentario.calificacion = valor;
-  }
+  
 }
