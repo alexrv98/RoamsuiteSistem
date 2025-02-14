@@ -11,7 +11,5 @@ export class HotelService {
 
   constructor(private http: HttpClient) {}
 
-  obtenerHotelesDisponibles(filtros: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/buscarHoteles.php`, filtros);  
-  }
+  
 }

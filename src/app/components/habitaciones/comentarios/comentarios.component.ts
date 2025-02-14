@@ -83,7 +83,6 @@ export class ComentariosComponent implements OnInit {
 
     this.comentariosService.getReservaciones().subscribe({
       next: (response) => {
-        console.log("Respuesta de la API:", response);
         if (response && response.status === 'success' && response.data && Array.isArray(response.data)) {
           this.hotelesReservados = response.data.map((reserva: any) => ({
             id: reserva.hotel_id,

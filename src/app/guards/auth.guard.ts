@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
       return of(false);
     }
 
-    if (state.url === '/admin') {
+    if (state.url === '/admin' || state.url === '/reservaciones-admin') {
       const token = this.authService.getToken();
       return this.authService.obtenerUsuarioLogueado(token!).pipe(
         map((response) => {

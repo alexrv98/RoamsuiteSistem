@@ -13,6 +13,10 @@ export class HotelService {
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 
+  obtenerHotelesDisponibles(filtros: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/buscarHoteles.php`, filtros);  
+  }
+
   obtenerHoteles(): Observable<any> {
     const token = this.authService.getToken();
 

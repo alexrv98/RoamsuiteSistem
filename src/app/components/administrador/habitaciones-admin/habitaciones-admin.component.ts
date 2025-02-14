@@ -22,14 +22,11 @@ export class HabitacionesAdminComponent implements OnInit {
   mostrarModal = false;
   mostrarModalEditar = false;
   habitacionSeleccionada: any = null;
-
   dtOptions: any = {};
-  // ✅ Agregado para evitar errores
 
   constructor(private habitacionService: HabitacionesAdminService) {}
 
   ngOnInit(): void {
-    // ✅ Configuración de DataTables
     this.dtOptions = {
       pagingType: 'full_numbers',
       pageLength: 10,
@@ -37,8 +34,8 @@ export class HabitacionesAdminComponent implements OnInit {
       paging: true,
       dom: 'Pfrtip',
       select: {
-        style: 'multi', // o 'single' si solo quieres seleccionar uno a la vez
-        selector: 'td:first-child', // Asegurar que el selector funciona bien
+        style: 'multi',
+        selector: 'td:first-child',
       },
 
       language: {
@@ -68,6 +65,7 @@ export class HabitacionesAdminComponent implements OnInit {
 
   cerrarModal(): void {
     this.mostrarModal = false;
+    window.location.reload(); 
   }
 
   abrirModalEditar(habitacion: any): void {
@@ -77,5 +75,27 @@ export class HabitacionesAdminComponent implements OnInit {
 
   cerrarModalEditar(): void {
     this.mostrarModalEditar = false;
+    window.location.reload();
   }
+
+  eliminarHabitacion(idHabitacion: number): void {
+    if (confirm('¿Estás seguro de que quieres eliminar esta habitación? Esta acción no se puede deshacer.')) {
+      this.habitacionService.eliminarHabitacion(idHabitacion).subscribe({
+        next: (response) => {
+          if (response.status === 'success') {
+            alert('Habitación eliminada correctamente.');
+            window.location.reload(); // 🔄 Recargar la página
+          } else {
+            alert(response.message);
+          }
+        },
+        error: (error) => {
+          console.error('Error al eliminar la habitación:', error);
+          alert('No se pudo eliminar la habitación.');
+        },
+      });
+    }
+  }
+  
+  
 }

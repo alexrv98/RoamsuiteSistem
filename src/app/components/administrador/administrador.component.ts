@@ -37,6 +37,13 @@ export class AdministradorComponent implements OnInit {
       next: (response) => {
         if (response.status === 'success') {
           this.hoteles = response.data;
+  
+          // Verificar si el usuario tiene un hotel asignado
+          if (this.hoteles.length === 0) {
+            console.warn('Este administrador no tiene un hotel asignado.');
+          } else {
+            console.log('Hoteles asignados al admin:', this.hoteles);
+          }
         } else {
           console.error('Error al obtener hoteles:', response.message);
         }
@@ -44,15 +51,16 @@ export class AdministradorComponent implements OnInit {
       error: (error) => {
         console.error('Error al cargar hoteles:', error);
       },
-      complete: () => {
-        console.log('Carga de hoteles completada');
-      },
     });
   }
+  
 
   logout(): void {
     this.authService.logout();
     console.log('Sesión cerrada correctamente');
     this.router.navigate(['/login']);
   }
+
+
+  
 }

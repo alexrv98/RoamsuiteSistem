@@ -14,8 +14,11 @@ export class AuthService {
 
   public tokenSubject = new BehaviorSubject<string | null>(this.getTokenFromSessionStorage());
   public nombreUsuarioSubject = new BehaviorSubject<string | null>(null); 
+  public rolUsuarioSubject = new BehaviorSubject<string | null>(null);
+
 
   constructor(private http: HttpClient) {}
+
 
   login(correo: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/login.php`, { correo, password }).pipe(
@@ -23,24 +26,27 @@ export class AuthService {
         if (response.status === 'success') {
           this.tokenSubject.next(response.token);
           this.storeTokenInSession(response.token);
-          //console.log('Token almacenado en memoria:', response.token);
-          // Obtener y almacenar el nombre del usuario
+  
+          
           this.obtenerUsuarioLogueado(response.token).subscribe(usuario => {
             this.nombreUsuarioSubject.next(usuario.nombre);
+            this.rolUsuarioSubject.next(usuario.rol);
           });
-          
         }
       })
     );
   }
+  
+  getRolUsuario(): Observable<string | null> {
+    return this.rolUsuarioSubject.asObservable();
+  }
+  
 
 
   obtenerUsuarioLogueado(token: string): Observable<any> {
   return this.http.get<any>(`${this.apiUrl}/usuario.php`, {
     headers: { Authorization: `Bearer ${token}` },
-  }).pipe(
-    tap(response => console.log('Respuesta de usuario.php:', response)) // Debug
-  );
+  })
 }
 
   getToken(): string | null {

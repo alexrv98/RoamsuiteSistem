@@ -1,0 +1,40 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+  <h2>Reservaciones del Hotel</h2>
+  <div *ngIf="reservaciones.length > 0; else sinReservaciones">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Habitación</th>
+          <th>Tipo</th>
+          <th>Capacidad</th>
+          <th>Precio</th>
+          <th>Fecha Inicio</th>
+          <th>Fecha Fin</th>
+          <th>Estado</th>
+          <th>Total a Pagar</th>
+          <th>Reservado por</th> 
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let reserva of reservaciones">
+          <td>{{ reserva.reservacion_id }}</td>
+          <td>{{ reserva.numero_habitacion }}</td>
+          <td>{{ reserva.tipo_habitacion }}</td>
+          <td>{{ reserva.capacidad }}</td>
+          <td>{{ reserva.precio }}</td>
+          <td>{{ reserva.fecha_inicio }}</td>
+          <td>{{ reserva.fecha_fin }}</td>
+          <td>{{ reserva.estado }}</td>
+          <td>{{ reserva.total_a_pagar }}</td>
+          <td>{{ reserva.nombre_usuario }} <br> {{ reserva.correo_usuario }}</td> <!-- Muestra el nombre del usuario que hizo la reservación -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <ng-template #sinReservaciones>
+    <p class="text-center text-muted">No hay reservaciones para este hotel.</p>
+  </ng-template>
+</div>
