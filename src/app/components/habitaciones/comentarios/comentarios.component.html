@@ -13,10 +13,12 @@
     </div>
 
     <!-- Mostrar el nombre del hotel seleccionado -->
-    <div class="mb-3" *ngIf="nuevoComentario.nombreHotel">
-      <label class="form-label"><i class="fa-solid fa-hotel"></i> Hotel Seleccionado</label>
-      <input type="text" class="form-control" [value]="nuevoComentario.nombreHotel" disabled />
-    </div>
+<!-- Mostrar el nombre del hotel seleccionado -->
+<div class="mb-3" *ngIf="nuevoComentario.nombreHotel">
+  <label class="form-label"><i class="fa-solid fa-hotel"></i> Hotel Seleccionado</label>
+  <input type="text" class="form-control" [value]="nuevoComentario.nombreHotel" disabled />
+</div>
+
 
     <!-- Selección de hotel basado en reservas -->
     <div class="mb-3" *ngIf="estaAutenticado && hotelesReservados.length > 0">

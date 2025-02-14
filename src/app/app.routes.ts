@@ -3,12 +3,12 @@ import { HomeComponent } from './components/home/home.component';
 import { ListaHotelesComponent } from './components/lista-hoteles/lista-hoteles.component';
 import { HabitacionesComponent } from './components/habitaciones/habitaciones.component';
 import { ConfirmarReservaComponent } from './components/confirmacion-reserva/confirmacion-reserva.component';
-import { ComentariosComponent } from './components/comentarios/comentarios.component';
 import { LoginComponent } from './components/login/login.component';
 import { AdministradorComponent } from './components/administrador/administrador.component';
 import { MisReservasComponent } from './components/usuario/mis-reservas/mis-reservas.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RegisterComponent } from './components/register/register.component';
+import { ComentariosComponent } from './components/habitaciones/comentarios/comentarios.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -19,9 +19,11 @@ export const routes: Routes = [
   { path: 'confirmar-reserva', component: ConfirmarReservaComponent, canActivate: [AuthGuard] },
   { path: 'register', component: RegisterComponent },
   { path: 'comentarios/:hotelId', component: ComentariosComponent },
+  { path: 'comentarios', component: ComentariosComponent ,
+  },
   {
     path: 'mis-reservaciones',
-    component: MisReservasComponent, 
+    component: MisReservasComponent,
     canActivate: [AuthGuard],
   },
 ];

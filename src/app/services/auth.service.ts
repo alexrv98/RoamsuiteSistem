@@ -13,7 +13,7 @@ export class AuthService {
   private apiUrl = API_CONFIG.baseUrl;
 
   public tokenSubject = new BehaviorSubject<string | null>(this.getTokenFromSessionStorage());
-  public nombreUsuarioSubject = new BehaviorSubject<string | null>(null); 
+  public nombreUsuarioSubject = new BehaviorSubject<string | null>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -28,7 +28,7 @@ export class AuthService {
           this.obtenerUsuarioLogueado(response.token).subscribe(usuario => {
             this.nombreUsuarioSubject.next(usuario.nombre);
           });
-          
+
         }
       })
     );
@@ -53,7 +53,7 @@ export class AuthService {
 
   logout(): void {
     this.tokenSubject.next(null);
-    this.nombreUsuarioSubject.next(null); 
+    this.nombreUsuarioSubject.next(null);
     this.removeTokenFromSession();
     console.log('Token eliminado');
   }
