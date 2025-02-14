@@ -8,6 +8,7 @@ import { ReservaService } from '../../../services/reserva.service';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { MigajaComponent } from "./migaja/migaja.component";
 
 @Component({
   selector: 'app-misreservas',
