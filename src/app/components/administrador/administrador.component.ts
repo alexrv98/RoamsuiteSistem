@@ -21,6 +21,7 @@ import { HabitacionesAdminComponent } from './habitaciones-admin/habitaciones-ad
 })
 export class AdministradorComponent implements OnInit {
   hoteles: any[] = [];
+  isLoading: boolean = true; // Indicador de carga
 
   constructor(
     private authService: AuthService,
@@ -40,6 +41,7 @@ export class AdministradorComponent implements OnInit {
         } else {
           console.error('Error al obtener hoteles:', response.message);
         }
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Error al cargar hoteles:', error);

@@ -22,6 +22,7 @@ export class HabitacionesAdminComponent implements OnInit {
   mostrarModal = false;
   mostrarModalEditar = false;
   habitacionSeleccionada: any = null;
+  isLoading: boolean = true; // Indicador de carga
 
   dtOptions: any = {};
   // ✅ Agregado para evitar errores
@@ -57,6 +58,7 @@ export class HabitacionesAdminComponent implements OnInit {
         if (response.status === 'success') {
           this.habitaciones = response.data;
         }
+        this.isLoading = false;
       },
       error: (error) => console.error('Error al cargar habitaciones:', error),
     });
