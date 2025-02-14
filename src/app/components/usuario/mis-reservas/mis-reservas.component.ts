@@ -6,6 +6,7 @@ import { NavbarComponent } from '../../navbar/navbar.component';
 import { FooterComponent } from '../../footer/footer.component';
 import { ReservaService } from '../../../services/reserva.service';
 import { Router } from '@angular/router';
+import { MigajaComponent } from "./migaja/migaja.component";
 
 @Component({
   selector: 'app-misreservas',
@@ -14,7 +15,8 @@ import { Router } from '@angular/router';
     FormsModule,
     NavbarComponent,
     FooterComponent,
-  ],
+    MigajaComponent
+],
   templateUrl: './mis-reservas.component.html',
   styleUrl: './mis-reservas.component.css',
 })

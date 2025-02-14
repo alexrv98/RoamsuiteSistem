@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import { ComentariosService } from '../../../services/comentarios.service';
 import { Router } from '@angular/router';
 import { ReservaService } from '../../../services/reserva.service';
+import { MigajaComponent } from '../../usuario/mis-reservas/migaja/migaja.component';
 
 @Component({
   selector: 'app-comentarios',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, MigajaComponent],
   templateUrl: './comentarios.component.html',
   styleUrls: ['./comentarios.component.css']
 })
