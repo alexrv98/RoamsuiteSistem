@@ -11,10 +11,9 @@
           <th>Habitación</th>
           <th>Tipo</th>
           <th>Capacidad</th>
-          <th>Precio</th>
+          <th>Precio por noche</th>
           <th>Fecha Inicio</th>
           <th>Fecha Fin</th>
-          <th>Estado</th>
           <th>Total a Pagar</th>
           <th>Reservado por</th> 
         </tr>
@@ -28,7 +27,6 @@
           <td>{{ reserva.precio | currency: 'USD' }}</td>
           <td>{{ reserva.fecha_inicio | date: 'dd/MM/yyyy' }}</td>
           <td>{{ reserva.fecha_fin | date: 'dd/MM/yyyy' }}</td>
-          <td>{{ reserva.estado }}</td>
           <td>{{ reserva.total_a_pagar | currency: 'USD' }}</td>
           <td>{{ reserva.nombre_usuario }} <br> {{ reserva.correo_usuario }}</td>
         </tr>
