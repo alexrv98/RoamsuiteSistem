@@ -20,7 +20,7 @@ export const routes: Routes = [
   { path: 'confirmar-reserva', component: ConfirmarReservaComponent, canActivate: [AuthGuard] },
   { path: 'register', component: RegisterComponent },
   { path: 'comentarios/:hotelId', component: ComentariosComponent },
-  { path: 'reservaciones-admin', component: ReservacionesAdminComponent, canActivate: [AuthGuard] }
+  { path: 'reservaciones-admin', component: ReservacionesAdminComponent, canActivate: [AuthGuard] },
   { path: 'comentarios', component: ComentariosComponent ,
   },
   {

@@ -62,6 +62,9 @@ export class AuthService {
     this.nombreUsuarioSubject.next(null);
     this.removeTokenFromSession();
     console.log('Token eliminado');
+    window.location.reload();
+
+    
   }
 
   private storeTokenInSession(token: string): void {

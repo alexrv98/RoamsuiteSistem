@@ -44,9 +44,6 @@ ngOnInit(): void {
     });
   }
 }
-
-  
-
   logout(): void {
     this.authService.logout();
     console.log('Sesión cerrada correctamente');
