@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FiltroHotelesComponent } from '../filtro-hoteles/filtro-hoteles.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
 import { HotelService } from '../../services/hoteles.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-lista-hoteles',
@@ -17,10 +20,12 @@ import { HotelService } from '../../services/hoteles.service';
   ],
   styleUrls: ['./lista-hoteles.component.css'],
 })
-export class ListaHotelesComponent implements OnInit {
+export class ListaHotelesComponent implements OnInit, OnDestroy {
   hoteles: any[] = [];
   filtros: any = {};
-  isLoading: boolean = true; // Indicador de carga
+  isLoading: boolean = true; 
+
+  private unsubscribe$ = new Subject<void>();
 
   constructor(private router: Router, private hotelService: HotelService) {}
 
@@ -37,6 +42,7 @@ export class ListaHotelesComponent implements OnInit {
   cargarHoteles() {
     this.hotelService
       .obtenerHotelesDisponibles(this.filtros)
+      .pipe(takeUntil(this.unsubscribe$))  
       .subscribe((res) => {
         if (res.status === 'success') {
           this.hoteles = res.data;
@@ -51,6 +57,13 @@ export class ListaHotelesComponent implements OnInit {
     this.router.navigate(['/habitaciones', hotelId], {
       state: { filtros: this.filtros }, 
     });
+  }
+
+
+
+  ngOnDestroy() {
+    this.unsubscribe$.next(); 
+    this.unsubscribe$.complete();  
   }
 
 

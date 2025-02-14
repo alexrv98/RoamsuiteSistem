@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterLink, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -19,10 +21,12 @@ import { FooterComponent } from '../footer/footer.component';
   ],
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
   correo: string = '';
   password: string = '';
   errorMessage: string = '';
+
+  private unsubscribe$ = new Subject<void>();
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -33,26 +37,33 @@ export class LoginComponent {
   }
 
   onLogin(): void {
-    this.authService.login(this.correo, this.password).subscribe({
-      next: (response) => {
-        if (response.status === 'success') {
-          const userRole = response.rol;
-          const state = history.state;
+    this.authService.login(this.correo, this.password)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response) => {
+          if (response.status === 'success') {
+            const userRole = response.rol;
+            const state = history.state;
 
-          if (state.reserva) {
-            this.router.navigate(['/confirmar-reserva'], {
-              state: { reserva: state.reserva },
-            });
+            if (state.reserva) {
+              this.router.navigate(['/confirmar-reserva'], {
+                state: { reserva: state.reserva },
+              });
+            } else {
+              this.router.navigate([userRole === 'admin' ? '/admin' : '/']);
+            }
           } else {
-            this.router.navigate([userRole === 'admin' ? '/admin' : '/']);
+            this.errorMessage = response.message;
           }
-        } else {
-          this.errorMessage = response.message;
-        }
-      },
-      error: () => {
-        this.errorMessage = 'Error en el servidor. Intente nuevamente.';
-      },
-    });
+        },
+        error: () => {
+          this.errorMessage = 'Error en el servidor. Intente nuevamente.';
+        },
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(); 
+    this.unsubscribe$.complete();
   }
 }

@@ -25,7 +25,7 @@ export class HabitacionesComponent implements OnInit {
   hotelId!: number;
   filtros: any = {};
   habitaciones: any = { mejorOpcion: [], otrasHabitaciones: [] };
-  isLoading: boolean = true; // Indicador de carga
+  isLoading: boolean = true; 
 
   habitacionSeleccionada: any = null;
 

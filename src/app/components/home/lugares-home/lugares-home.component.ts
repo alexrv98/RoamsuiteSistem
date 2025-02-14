@@ -12,6 +12,8 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import * as L from 'leaflet';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-lugares-home',
@@ -44,6 +46,7 @@ export class LugaresHomeComponent implements OnInit {
   lugaresService: LugarService = inject(LugarService);
   router: Router = inject(Router);
   map: any;
+  private unsubscribe$ = new Subject<void>();
 
   ngOnInit(): void {
     this.obtenerCategorias();
