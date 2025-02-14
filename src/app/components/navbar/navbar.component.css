@@ -1,0 +1,14 @@
+/* Aseguramos que el texto esté debajo del logo */
+.logo-container {
+    text-align: center; /* Centra el logo dentro de su contenedor */
+  }
+  
+  .brand-logo {
+    margin-bottom: 5px; /* Añadimos un pequeño espacio entre el logo y el texto */
+  }
+  
+  .logo-text {
+    display: block; /* Hace que el texto y el ícono estén en línea vertical */
+    text-align: center; /* Alinea el texto al centro debajo del logo */
+  }
+  

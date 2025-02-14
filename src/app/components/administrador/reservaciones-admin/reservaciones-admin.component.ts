@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
 import { ReservaService } from '../../../services/reserva.service';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../navbar/navbar.component';
@@ -12,9 +11,10 @@ import { NavbarComponent } from '../../navbar/navbar.component';
 })
 export class ReservacionesAdminComponent implements OnInit {
   reservaciones: any[] = [];
+  nombreHotel: string = '';
+
 
   constructor(
-    private authService: AuthService,
     private reservacionService: ReservaService
   ) {}
 
@@ -23,6 +23,10 @@ export class ReservacionesAdminComponent implements OnInit {
       next: (response) => {
         if (response.status === 'success') {
           this.reservaciones = response.data;
+
+          if (this.reservaciones.length > 0) {
+            this.nombreHotel = this.reservaciones[0].nombre_hotel;
+          }
         } else {
           console.error('No se encontraron reservaciones:', response.message);
         }

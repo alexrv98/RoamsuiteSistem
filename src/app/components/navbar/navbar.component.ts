@@ -16,7 +16,6 @@ export class NavbarComponent implements OnInit {
   nombreUsuario: string = '';
   rolUsuario: string | null = null;
 
-
   constructor(private authService: AuthService, private router: Router, private route: ActivatedRoute, private reservacionesService: ReservaService) {}
 
   hotelId!: number;

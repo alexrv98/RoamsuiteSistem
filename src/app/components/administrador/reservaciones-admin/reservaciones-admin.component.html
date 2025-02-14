@@ -1,7 +1,8 @@
 <app-navbar></app-navbar>
 
 <div class="container mt-4">
-  <h2>Reservaciones del Hotel</h2>
+  <h2>Reservaciones de {{ nombreHotel }}</h2> 
+  
   <div *ngIf="reservaciones.length > 0; else sinReservaciones">
     <table class="table table-bordered table-hover">
       <thead>

@@ -22,10 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $admin_id = $usuario['id'];
 
     try {
-        // Debug para verificar el usuario ID
         error_log("Usuario Admin ID: " . $admin_id);
 
-        // Obtener el hotel asignado al administrador
         $stmt = $conn->prepare("SELECT id FROM hoteles WHERE usuario_id = :admin_id LIMIT 1");
         $stmt->bindParam(':admin_id', $admin_id, PDO::PARAM_INT);
         $stmt->execute();
@@ -38,10 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $hotel_id = $hotel['id'];
 
-        // Debug para verificar el hotel ID
         error_log("Hotel ID encontrado: " . $hotel_id);
 
-        // Obtener las reservaciones del hotel asignado con el nombre del usuario que hizo la reservación
         $stmt = $conn->prepare(
             "SELECT r.id as reservacion_id,
                     h.numero_habitacion,
