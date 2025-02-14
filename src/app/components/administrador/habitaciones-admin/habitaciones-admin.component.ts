@@ -22,6 +22,8 @@ export class HabitacionesAdminComponent implements OnInit {
   mostrarModal = false;
   mostrarModalEditar = false;
   habitacionSeleccionada: any = null;
+  isLoading: boolean = true; // Indicador de carga
+
   dtOptions: any = {};
 
   constructor(private habitacionService: HabitacionesAdminService) {}
@@ -54,6 +56,7 @@ export class HabitacionesAdminComponent implements OnInit {
         if (response.status === 'success') {
           this.habitaciones = response.data;
         }
+        this.isLoading = false;
       },
       error: (error) => console.error('Error al cargar habitaciones:', error),
     });
@@ -65,7 +68,7 @@ export class HabitacionesAdminComponent implements OnInit {
 
   cerrarModal(): void {
     this.mostrarModal = false;
-    window.location.reload(); 
+    window.location.reload();
   }
 
   abrirModalEditar(habitacion: any): void {
@@ -79,7 +82,11 @@ export class HabitacionesAdminComponent implements OnInit {
   }
 
   eliminarHabitacion(idHabitacion: number): void {
-    if (confirm('¿Estás seguro de que quieres eliminar esta habitación? Esta acción no se puede deshacer.')) {
+    if (
+      confirm(
+        '¿Estás seguro de que quieres eliminar esta habitación? Esta acción no se puede deshacer.'
+      )
+    ) {
       this.habitacionService.eliminarHabitacion(idHabitacion).subscribe({
         next: (response) => {
           if (response.status === 'success') {
@@ -96,6 +103,4 @@ export class HabitacionesAdminComponent implements OnInit {
       });
     }
   }
-  
-  
 }
