@@ -2,23 +2,37 @@ import { Component, OnInit } from '@angular/core';
 import { ReservaService } from '../../../services/reserva.service';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { CommonModule } from '@angular/common';
+import { DataTablesModule } from 'angular-datatables';
 
 @Component({
   selector: 'app-reservaciones-admin',
   templateUrl: './reservaciones-admin.component.html',
-  imports:[CommonModule, NavbarComponent],
-  styleUrls: ['./reservaciones-admin.component.css']
+  imports: [CommonModule, NavbarComponent, DataTablesModule],
+  styleUrls: ['./reservaciones-admin.component.css'],
 })
 export class ReservacionesAdminComponent implements OnInit {
   reservaciones: any[] = [];
   nombreHotel: string = '';
+  dtOptions: any = {};
 
-
-  constructor(
-    private reservacionService: ReservaService
-  ) {}
+  constructor(private reservacionService: ReservaService) {}
 
   ngOnInit(): void {
+    this.dtOptions = {
+      pagingType: 'full_numbers',
+      pageLength: 10,
+      processing: true,
+      paging: true,
+      dom: 'Pfrtip',
+      select: {
+        style: 'multi',
+        selector: 'td:first-child',
+      },
+
+      language: {
+        url: 'https://cdn.datatables.net/plug-ins/1.13.4/i18n/es-ES.json',
+      },
+    };
     this.reservacionService.obtenerReservacionesAdmin().subscribe({
       next: (response) => {
         if (response.status === 'success') {
@@ -33,7 +47,7 @@ export class ReservacionesAdminComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar las reservaciones:', error);
-      }
+      },
     });
   }
 }
