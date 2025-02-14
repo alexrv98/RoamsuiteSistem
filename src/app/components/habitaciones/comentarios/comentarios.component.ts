@@ -43,9 +43,6 @@ export class ComentariosComponent implements OnInit {
       return;
     }
 
-
-    
-
     this.authService.obtenerUsuarioLogueado(token).subscribe({
       next: (response) => {
         if (response.status === 'success' && response.usuario) {
@@ -53,6 +50,9 @@ export class ComentariosComponent implements OnInit {
           this.nuevoComentario.usuarioId = response.usuario.id;
           this.usuarioNombre = response.usuario.nombre;
           console.log("Usuario autenticado:", response.usuario);
+
+          // Llamar a cargarHotelesReservados() solo después de verificar la autenticación
+          this.cargarHotelesReservados();
         } else {
           this.estaAutenticado = false;
         }
@@ -64,6 +64,7 @@ export class ComentariosComponent implements OnInit {
     });
   }
 
+
   cargarDatosDesdeRuta(): void {
     const queryParams = this.router.routerState.snapshot.root.queryParams;
     if (queryParams['hotelId'] && queryParams['nombreHotel']) {
@@ -74,7 +75,6 @@ export class ComentariosComponent implements OnInit {
       console.log("Parámetros de la ruta faltantes o incorrectos.");
     }
   }
-
   cargarHotelesReservados(): void {
     if (!this.estaAutenticado) {
       console.log("Usuario no autenticado. No se pueden cargar las reservas.");
@@ -83,10 +83,9 @@ export class ComentariosComponent implements OnInit {
 
     this.comentariosService.getReservaciones().subscribe({
       next: (response) => {
-        console.log("Respuesta de la API:", response);
         if (response && response.status === 'success' && response.data && Array.isArray(response.data)) {
           this.hotelesReservados = response.data.map((reserva: any) => ({
-            id: reserva.hotel_id,
+            id: reserva.hotel_id, // Asegurar que este es el ID correcto del hotel
             nombre: reserva.hotel_nombre
           }));
         } else {
@@ -98,6 +97,7 @@ export class ComentariosComponent implements OnInit {
       }
     });
   }
+
 
 
   agregarComentario(): void {
@@ -113,7 +113,8 @@ export class ComentariosComponent implements OnInit {
       this.nuevoComentario.usuarioId
     ).subscribe({
       next: (response) => {
-        if (response.status === 'success') {
+        console.log('Respuesta de la API:', response); // Imprimir la respuesta
+        if (response && response.status === 'success') {
           this.nuevoComentario = { texto: '', calificacion: 0, hotelId: null, usuarioId: this.nuevoComentario.usuarioId, nombreHotel: '' };
         } else {
           console.error('Error al agregar comentario.');
@@ -125,17 +126,19 @@ export class ComentariosComponent implements OnInit {
     });
   }
 
+
   seleccionarCalificacion(valor: number): void {
     this.nuevoComentario.calificacion = valor;
   }
 
   onHotelChange(): void {
-    const selectedHotel = this.hotelesReservados.find(hotel => hotel.id === this.nuevoComentario.hotelId);
+    const selectedHotel = this.hotelesReservados.find(hotel => hotel.id == this.nuevoComentario.hotelId);
     if (selectedHotel) {
       this.nuevoComentario.nombreHotel = selectedHotel.nombre;
     } else {
       console.error('Hotel no encontrado en la lista de reservas');
     }
   }
+
 
 }

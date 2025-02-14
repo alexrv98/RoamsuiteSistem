@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../navbar/navbar.component';
 import { FooterComponent } from '../../footer/footer.component';
 import { ReservaService } from '../../../services/reserva.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-misreservas',
@@ -20,11 +21,12 @@ import { ReservaService } from '../../../services/reserva.service';
 export class MisReservasComponent implements OnInit {
   estaAutenticado: boolean = false;
   reservaciones: any[] = [];
-  isLoading: boolean = true; 
+  isLoading: boolean = true;
 
   constructor(
     private authService: AuthService,
-    private reservaService: ReservaService
+    private reservaService: ReservaService,
+    private router: Router // Agregado para la navegación
   ) {}
 
   ngOnInit(): void {
@@ -74,5 +76,14 @@ export class MisReservasComponent implements OnInit {
       },
     });
   }
-  
+
+  irAComentarios(reservacion: any): void {
+    this.router.navigate(['/comentarios/:hotelId'], {
+      queryParams: {
+        hotel_id: reservacion.hotel_id,
+        habitacion_id: reservacion.habitacion_id,
+        usuario_id: reservacion.usuario_id,
+      },
+    });
+  }
 }

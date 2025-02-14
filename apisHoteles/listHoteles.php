@@ -24,9 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                   INNER JOIN lugares_turisticos l ON h.lugar_id = l.id
                   WHERE h.usuario_id = :usuario_id";
 
-        if ($lugar_id) {
-            $query .= " AND h.lugar_id = :lugar_id";
-        }
+      
 
         $stmt = $conn->prepare($query);
         $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);

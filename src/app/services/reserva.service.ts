@@ -45,4 +45,22 @@ export class ReservaService {
       })
     );
   }
+
+  obtenerReservacionesAdmin(): Observable<any> {
+    const token = this.authService.getToken();
+    if (!token) {
+      return throwError(() => new Error('No hay sesión iniciada.'));
+    }
+  
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  
+    return this.http.post(`${this.apiUrl}/listaReservasHoteles.php`, {}, { headers }).pipe(
+      catchError((error) => {
+        console.error('Error al obtener reservaciones del hotel:', error);
+        return throwError(() => new Error('Error al obtener las reservaciones.'));
+      })
+    );
+  }
+  
+  
 }

@@ -69,6 +69,30 @@ export class HabitacionesAdminService {
       })
     );
   }
+
+  eliminarHabitacion(idHabitacion: number): Observable<any> {
+    const token = this.authService.getToken();
+    if (!token) {
+      return throwError(() => new Error('No hay sesión iniciada.'));
+    }
+  
+    const headers = new HttpHeaders()
+      .set('Authorization', `Bearer ${token}`)
+      .set('Content-Type', 'application/json');
+  
+    return this.http.request('DELETE', `${this.apiUrl}/delete_habitacion.php`, {
+      headers,
+      body: { id: idHabitacion }, // Enviar el ID en el cuerpo de la solicitud
+    }).pipe(
+      catchError((error) => {
+        console.error('Error al eliminar la habitación:', error);
+        return throwError(() => new Error('Error al eliminar la habitación.'));
+      })
+    );
+  }
+  
+  
+  
   
   
 }
