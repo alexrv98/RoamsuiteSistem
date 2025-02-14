@@ -43,7 +43,7 @@ export class ComentariosService {
     return this.http.get(`${this.apiUrl}/comentarios.php?hotel_id=${hotel_id}`, { headers });
   }
 
-  getReservaciones(hotel_id?: number): Observable<any> {
+  getReservaciones(): Observable<any> {
     const token = this.authService.getToken();
     if (!token) {
       return throwError(() => new Error('Usuario no autenticado'));
@@ -54,11 +54,7 @@ export class ComentariosService {
       'Content-Type': 'application/json',
     });
 
-    let url = `${this.apiUrl}/reservaciones.php`;
-    if (hotel_id) {
-      url += `?hotel_id=${hotel_id}`;
-    }
-
-    return this.http.get<any>(url, { headers });  // Asegúrate de especificar <any> aquí
+    return this.http.get<any>(`${this.apiUrl}/comentReserva.php`, { headers }); // Usamos comentReserva.php
   }
+
 }

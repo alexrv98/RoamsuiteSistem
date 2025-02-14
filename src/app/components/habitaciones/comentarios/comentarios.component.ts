@@ -97,6 +97,7 @@ export class ComentariosComponent implements OnInit {
   }
 
 
+
   agregarComentario(): void {
     if (!this.nuevoComentario.texto || !this.nuevoComentario.calificacion || !this.nuevoComentario.hotelId || !this.nuevoComentario.usuarioId) {
       alert('Por favor, completa todos los campos.');
