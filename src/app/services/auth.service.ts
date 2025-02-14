@@ -59,7 +59,7 @@ export class AuthService {
 
   logout(): void {
     this.tokenSubject.next(null);
-    this.nombreUsuarioSubject.next(null); 
+    this.nombreUsuarioSubject.next(null);
     this.removeTokenFromSession();
     console.log('Token eliminado');
   }
