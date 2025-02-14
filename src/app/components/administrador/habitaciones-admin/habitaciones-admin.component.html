@@ -7,10 +7,10 @@
 
     <div class="card-body">
       <table
-      class="table table-bordered row-border"
-      datatable
-      [dtOptions]="dtOptions"
-    >
+        class="table table-bordered row-border hover center"
+        datatable
+        [dtOptions]="dtOptions"
+      >
         <thead class="table-light">
           <tr>
             <th>Número</th>
@@ -29,14 +29,19 @@
             <td>{{ habitacion.camas }}</td>
             <td>${{ habitacion.precio }}</td>
             <td>
-              <button class="btn btn-warning btn-sm" (click)="abrirModalEditar(habitacion)">
+              <button
+                class="btn btn-warning btn-sm"
+                (click)="abrirModalEditar(habitacion)"
+              >
                 Editar
               </button>
-              <button class="btn btn-danger btn-sm ms-2" (click)="eliminarHabitacion(habitacion.id)">
+              <button
+                class="btn btn-danger btn-sm ms-2"
+                (click)="eliminarHabitacion(habitacion.id)"
+              >
                 Eliminar
               </button>
             </td>
-            
           </tr>
         </tbody>
       </table>

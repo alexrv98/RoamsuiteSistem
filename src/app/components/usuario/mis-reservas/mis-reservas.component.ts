@@ -16,7 +16,8 @@ import { takeUntil } from 'rxjs/operators';
     FormsModule,
     NavbarComponent,
     FooterComponent,
-  ],
+    MigajaComponent
+],
   templateUrl: './mis-reservas.component.html',
   styleUrl: './mis-reservas.component.css',
 })

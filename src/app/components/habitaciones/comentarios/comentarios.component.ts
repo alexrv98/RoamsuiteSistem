@@ -5,16 +5,31 @@ import { CommonModule } from '@angular/common';
 import { ComentariosService } from '../../../services/comentarios.service';
 import { Router } from '@angular/router';
 import { ReservaService } from '../../../services/reserva.service';
+import { MigajaComponent } from '../../usuario/mis-reservas/migaja/migaja.component';
+import { NavbarComponent } from '../../navbar/navbar.component';
+import { FooterComponent } from '../../footer/footer.component';
 
 @Component({
   selector: 'app-comentarios',
-  imports: [FormsModule, CommonModule],
+  imports: [
+    FormsModule,
+    CommonModule,
+    MigajaComponent,
+    NavbarComponent,
+    FooterComponent,
+  ],
   templateUrl: './comentarios.component.html',
-  styleUrls: ['./comentarios.component.css']
+  styleUrls: ['./comentarios.component.css'],
 })
 export class ComentariosComponent implements OnInit {
   comentarios: any[] = [];
-  nuevoComentario = { texto: '', calificacion: 0, hotelId: null, usuarioId: null, nombreHotel: '' };
+  nuevoComentario = {
+    texto: '',
+    calificacion: 0,
+    hotelId: null,
+    usuarioId: null,
+    nombreHotel: '',
+  };
   estrellas = [1, 2, 3, 4, 5];
   comentariosMostrados = 2;
   estaAutenticado: boolean = false;
@@ -32,14 +47,14 @@ export class ComentariosComponent implements OnInit {
   ngOnInit(): void {
     this.verificarUsuario();
     this.cargarDatosDesdeRuta();
-    this.cargarHotelesReservados();  
+    this.cargarHotelesReservados(); 
   }
 
   verificarUsuario(): void {
     const token = this.authService.getToken();
     if (!token) {
       this.estaAutenticado = false;
-      console.log("Usuario no autenticado: no hay token");
+      console.log('Usuario no autenticado: no hay token');
       return;
     }
 
@@ -49,7 +64,7 @@ export class ComentariosComponent implements OnInit {
           this.estaAutenticado = true;
           this.nuevoComentario.usuarioId = response.usuario.id;
           this.usuarioNombre = response.usuario.nombre;
-          console.log("Usuario autenticado:", response.usuario);
+          console.log('Usuario autenticado:', response.usuario);
 
           this.cargarHotelesReservados();
         } else {
@@ -59,86 +74,103 @@ export class ComentariosComponent implements OnInit {
       error: (error) => {
         this.estaAutenticado = false;
         console.error('Error al verificar usuario:', error);
-      }
+      },
     });
   }
-
 
   cargarDatosDesdeRuta(): void {
     const queryParams = this.router.routerState.snapshot.root.queryParams;
     if (queryParams['hotelId'] && queryParams['nombreHotel']) {
       this.nuevoComentario.hotelId = queryParams['hotelId'];
       this.nuevoComentario.nombreHotel = queryParams['nombreHotel'];
-      console.log("Datos cargados desde la ruta:", queryParams);
+      console.log('Datos cargados desde la ruta:', queryParams);
     } else {
-      console.log("Parámetros de la ruta faltantes o incorrectos.");
+      console.log('Parámetros de la ruta faltantes o incorrectos.');
     }
   }
 
 
   cargarHotelesReservados(): void {
     if (!this.estaAutenticado) {
-      console.log("Usuario no autenticado. No se pueden cargar las reservas.");
+      console.log('Usuario no autenticado. No se pueden cargar las reservas.');
       return;
     }
 
     this.comentariosService.getReservaciones().subscribe({
       next: (response) => {
-        if (response && response.status === 'success' && response.data && Array.isArray(response.data)) {
+        if (
+          response &&
+          response.status === 'success' &&
+          response.data &&
+          Array.isArray(response.data)
+        ) {
           this.hotelesReservados = response.data.map((reserva: any) => ({
             id: reserva.hotel_id, // Asegurar que este es el ID correcto del hotel
-            nombre: reserva.hotel_nombre
+            nombre: reserva.hotel_nombre,
           }));
         } else {
-          console.log("No se encontraron reservas o la respuesta es inválida.");
+          console.log('No se encontraron reservas o la respuesta es inválida.');
         }
       },
       error: (error) => {
-        console.error("Error al cargar las reservas:", error);
-      }
+        console.error('Error al cargar las reservas:', error);
+      },
     });
   }
 
 
+
   agregarComentario(): void {
-    if (!this.nuevoComentario.texto || !this.nuevoComentario.calificacion || !this.nuevoComentario.hotelId || !this.nuevoComentario.usuarioId) {
+    if (
+      !this.nuevoComentario.texto ||
+      !this.nuevoComentario.calificacion ||
+      !this.nuevoComentario.hotelId ||
+      !this.nuevoComentario.usuarioId
+    ) {
       alert('Por favor, completa todos los campos.');
       return;
     }
 
-    this.comentariosService.agregarComentario(
-      this.nuevoComentario.hotelId,
-      this.nuevoComentario.calificacion,
-      this.nuevoComentario.texto,
-      this.nuevoComentario.usuarioId
-    ).subscribe({
-      next: (response) => {
-        console.log('Respuesta de la API:', response); // Imprimir la respuesta
-        if (response && response.status === 'success') {
-          this.nuevoComentario = { texto: '', calificacion: 0, hotelId: null, usuarioId: this.nuevoComentario.usuarioId, nombreHotel: '' };
-        } else {
-          console.error('Error al agregar comentario.');
-        }
-      },
-      error: (error) => {
-        console.error('Error al agregar comentario:', error);
-      }
-    });
+    this.comentariosService
+      .agregarComentario(
+        this.nuevoComentario.hotelId,
+        this.nuevoComentario.calificacion,
+        this.nuevoComentario.texto,
+        this.nuevoComentario.usuarioId
+      )
+      .subscribe({
+        next: (response) => {
+          console.log('Respuesta de la API:', response); // Imprimir la respuesta
+          if (response && response.status === 'success') {
+            this.nuevoComentario = {
+              texto: '',
+              calificacion: 0,
+              hotelId: null,
+              usuarioId: this.nuevoComentario.usuarioId,
+              nombreHotel: '',
+            };
+          } else {
+            console.error('Error al agregar comentario.');
+          }
+        },
+        error: (error) => {
+          console.error('Error al agregar comentario:', error);
+        },
+      });
   }
-
 
   seleccionarCalificacion(valor: number): void {
     this.nuevoComentario.calificacion = valor;
   }
 
   onHotelChange(): void {
-    const selectedHotel = this.hotelesReservados.find(hotel => hotel.id == this.nuevoComentario.hotelId);
+    const selectedHotel = this.hotelesReservados.find(
+      (hotel) => hotel.id == this.nuevoComentario.hotelId
+    );
     if (selectedHotel) {
       this.nuevoComentario.nombreHotel = selectedHotel.nombre;
     } else {
       console.error('Hotel no encontrado en la lista de reservas');
     }
   }
-
-
 }
