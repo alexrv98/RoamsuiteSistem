@@ -52,8 +52,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
   logout(): void {
     this.authService.logout();
     console.log('Sesión cerrada correctamente');
-    this.router.navigate(['/']);
+    this.router.navigate(['/']).then(() => {
+      if (this.router.url === '/') {
+        window.location.reload();
+      }
+    });
   }
+  
 
 
   verReservaciones(): void {

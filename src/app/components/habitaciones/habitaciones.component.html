@@ -1,5 +1,31 @@
 <app-navbar></app-navbar>
 <app-filtro-hoteles [filtros]="filtros"></app-filtro-hoteles>
+<div class="container my-3">
+  <div class="row">
+    <div class="col-md-4">
+      <label for="precioMin" class="form-label">Precio mínimo:</label>
+      <input
+        type="number"
+        id="precioMin"
+        class="form-control"
+        [(ngModel)]="filtroPrecioMin"
+        (input)="filtrarPorPrecio()"
+      />
+    </div>
+    <div class="col-md-4">
+      <label for="precioMax" class="form-label">Precio máximo:</label>
+      <input
+        type="number"
+        id="precioMax"
+        class="form-control"
+        [(ngModel)]="filtroPrecioMax"
+        (input)="filtrarPorPrecio()"
+      />
+    </div>
+  </div>
+</div>
+
+
 
 <div class="container">
   <div *ngIf="isLoading; else mostrarHabitaciones">
