@@ -47,7 +47,7 @@ export class ComentariosComponent implements OnInit {
   ngOnInit(): void {
     this.verificarUsuario();
     this.cargarDatosDesdeRuta();
-    this.cargarHotelesReservados(); 
+    this.cargarHotelesReservados();
   }
 
   verificarUsuario(): void {
