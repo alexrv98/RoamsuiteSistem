@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -6,6 +6,8 @@ import { NavbarComponent } from '../../navbar/navbar.component';
 import { FooterComponent } from '../../footer/footer.component';
 import { ReservaService } from '../../../services/reserva.service';
 import { Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { MigajaComponent } from "./migaja/migaja.component";
 
 @Component({
@@ -20,21 +22,22 @@ import { MigajaComponent } from "./migaja/migaja.component";
   templateUrl: './mis-reservas.component.html',
   styleUrl: './mis-reservas.component.css',
 })
-export class MisReservasComponent implements OnInit {
+export class MisReservasComponent implements OnInit, OnDestroy {
   estaAutenticado: boolean = false;
   reservaciones: any[] = [];
   isLoading: boolean = true;
 
+  private unsubscribe$ = new Subject<void>();
+
   constructor(
     private authService: AuthService,
     private reservaService: ReservaService,
-    private router: Router // Agregado para la navegación
+    private router: Router 
   ) {}
 
   ngOnInit(): void {
     this.verificarUsuario();
   }
-
   verificarUsuario(): void {
     const token = this.authService.getToken();
     if (!token) {
@@ -43,7 +46,7 @@ export class MisReservasComponent implements OnInit {
       return;
     }
 
-    this.authService.obtenerUsuarioLogueado(token).subscribe({
+    this.authService.obtenerUsuarioLogueado(token).pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (response) => {
         if (response.status === 'success' && response.usuario) {
           this.estaAutenticado = true;
@@ -61,7 +64,7 @@ export class MisReservasComponent implements OnInit {
 
   cargarReservaciones(): void {
     this.isLoading = true;
-    this.reservaService.obtenerReservacionesUsuario().subscribe({
+    this.reservaService.obtenerReservacionesUsuario().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (response) => {
         if (response.status === 'success' && Array.isArray(response.data)) {
           this.reservaciones = response.data;
@@ -87,5 +90,10 @@ export class MisReservasComponent implements OnInit {
         usuario_id: reservacion.usuario_id,
       },
     });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next(); 
+    this.unsubscribe$.complete();  
   }
 }

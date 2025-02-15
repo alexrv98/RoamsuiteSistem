@@ -47,7 +47,7 @@ export class ComentariosComponent implements OnInit {
   ngOnInit(): void {
     this.verificarUsuario();
     this.cargarDatosDesdeRuta();
-    this.cargarHotelesReservados(); // Llamada para cargar los hoteles reservados
+    this.cargarHotelesReservados(); 
   }
 
   verificarUsuario(): void {
@@ -66,7 +66,6 @@ export class ComentariosComponent implements OnInit {
           this.usuarioNombre = response.usuario.nombre;
           console.log('Usuario autenticado:', response.usuario);
 
-          // Llamar a cargarHotelesReservados() solo después de verificar la autenticación
           this.cargarHotelesReservados();
         } else {
           this.estaAutenticado = false;
@@ -89,6 +88,8 @@ export class ComentariosComponent implements OnInit {
       console.log('Parámetros de la ruta faltantes o incorrectos.');
     }
   }
+
+
   cargarHotelesReservados(): void {
     if (!this.estaAutenticado) {
       console.log('Usuario no autenticado. No se pueden cargar las reservas.');
@@ -116,6 +117,8 @@ export class ComentariosComponent implements OnInit {
       },
     });
   }
+
+
 
   agregarComentario(): void {
     if (

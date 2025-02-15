@@ -4,10 +4,8 @@
       <i class="fa-solid fa-comments"></i> Deja tu comentario
     </h4>
 
-    <!-- Campo oculto para ID de usuario -->
     <input type="hidden" [(ngModel)]="nuevoComentario.usuarioId" />
 
-    <!-- Mostrar nombre del usuario autenticado -->
     <div class="mb-3" *ngIf="estaAutenticado">
       <label class="form-label"><i class="fa-solid fa-user"></i> Usuario</label>
       <!-- Aquí mostramos el nombre del usuario autenticado -->

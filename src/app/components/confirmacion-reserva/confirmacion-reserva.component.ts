@@ -20,7 +20,7 @@ export class ConfirmarReservaComponent implements OnInit {
 
   reserva: any;
   paypal: any;
-  cliente = {id: '', nombre: '', correo: '' }; 
+  cliente = { id: '', nombre: '', correo: '' };
   pagoRealizado: boolean = false;
 
   constructor(
@@ -29,25 +29,24 @@ export class ConfirmarReservaComponent implements OnInit {
     private location: Location,
     private authService: AuthService
 
-  ) {}
+  ) { }
 
 
   ngOnInit(): void {
     document.body.classList.remove('modal-open');
     document.querySelector('.modal-backdrop')?.remove();
     document.body.style.overflow = 'auto';
-  
+
     const state = history.state;
-  
+
     if (state.reserva) {
       this.reserva = state.reserva;
       this.location.replaceState('/confirmar-reserva', '');
-  
+
       if (!this.paypal) {
         this.cargarPaypalScript();
       }
-  
-      // Obtener el token y los datos del usuario logueado
+
       const token = this.authService.getToken();
       if (token) {
         this.authService.obtenerUsuarioLogueado(token).subscribe({
@@ -73,7 +72,7 @@ export class ConfirmarReservaComponent implements OnInit {
       this.router.navigate(['/']);
     }
   }
-  
+
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any): void {
@@ -134,7 +133,7 @@ export class ConfirmarReservaComponent implements OnInit {
     }
   }
 
-  
+
   confirmarReserva(): void {
     if (
       this.pagoRealizado &&
@@ -144,13 +143,13 @@ export class ConfirmarReservaComponent implements OnInit {
       const datosReserva = {
         usuario_id: this.cliente.id,
         habitacion_id: this.reserva.habitacion_id,
-        fechaInicio: this.reserva.fechaInicio, 
-        fechaFin: this.reserva.fechaFin, 
-        totalReserva: this.reserva.totalReserva, 
+        fechaInicio: this.reserva.fechaInicio,
+        fechaFin: this.reserva.fechaFin,
+        totalReserva: this.reserva.totalReserva,
         nombre: this.cliente.nombre,
         email: this.cliente.correo,
       };
-  
+
       this.reservaService.realizarReserva(datosReserva).subscribe({
         next: (res) => {
           if (res.status === 'success') {
@@ -174,6 +173,6 @@ export class ConfirmarReservaComponent implements OnInit {
       );
     }
   }
-  
 
-  }
+
+}

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -6,6 +6,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FooterComponent } from '../footer/footer.component';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-register',
@@ -20,9 +22,10 @@ import { NavbarComponent } from '../navbar/navbar.component';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnDestroy{
   registroForm: FormGroup;
   errorMessage: string = '';
+  private unsubscribe$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -44,7 +47,7 @@ export class RegisterComponent {
         rol: 'usuario',
       };
 
-      this.authService.register(formData).subscribe({
+      this.authService.register(formData).pipe(takeUntil(this.unsubscribe$)).subscribe({
         next: (response) => {
           if (response.status === 'success') {
             alert('Usuario registrado con éxito');
@@ -59,5 +62,10 @@ export class RegisterComponent {
         },
       });
     }
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next(); 
+    this.unsubscribe$.complete(); 
   }
 }

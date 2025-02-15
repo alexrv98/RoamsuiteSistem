@@ -3,6 +3,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LugarService } from '../../services/lugar.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-filtro-hoteles',
@@ -21,6 +24,8 @@ export class FiltroHotelesComponent implements OnInit {
     huespedes: 1,
   };
 
+  private unsubscribe$ = new Subject<void>();
+
   constructor(private lugarService: LugarService, private router: Router) {}
 
   ngOnInit() {
@@ -29,7 +34,7 @@ export class FiltroHotelesComponent implements OnInit {
   }
 
   cargarDestinos() {
-    this.lugarService.obtenerLugares().subscribe({
+    this.lugarService.obtenerLugares().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (response) => {
         if (response.status === 'success') {
           this.destinos = response.data;
@@ -40,6 +45,12 @@ export class FiltroHotelesComponent implements OnInit {
       error: (error) => console.error('Error en la API:', error),
     });
   }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
 
   buscarHoteles() {
     const { destino, fechaInicio, fechaFin, huespedes } = this.filtros;
@@ -63,6 +74,8 @@ export class FiltroHotelesComponent implements OnInit {
     this.fechaMinima = hoy.toISOString().split('T')[0];
     this.fechaMaxima = maxFecha.toISOString().split('T')[0];
   }
+
+
   validarFechas(): boolean {
     const fechaInicio = new Date(this.filtros.fechaInicio);
     const fechaFin = new Date(this.filtros.fechaFin);
