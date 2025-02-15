@@ -2,6 +2,8 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { LugarService } from '../../../services/lugar.service';
 import { AuthService } from '../../../services/auth.service';
+import { take } from 'rxjs';
+
 
 @Component({
   selector: 'app-modal-reserva',
@@ -46,32 +48,30 @@ export class ModalReservaComponent implements OnChanges {
 
   continuarReserva() {
     const reserva = {
-      tipo_habitacion: this.habitacion.tipo_habitacion,
-      capacidad: this.habitacion.capacidad,
-      fechaInicio: this.filtros.fechaInicio,
-      fechaFin: this.filtros.fechaFin,
+      tipo_habitacion: this.habitacion?.tipo_habitacion,
+      capacidad: this.habitacion?.capacidad,
+      fechaInicio: this.filtros?.fechaInicio,
+      fechaFin: this.filtros?.fechaFin,
       totalReserva: this.calcularPrecioTotal(),
-      habitacion_id: this.habitacion.numero_habitacion,
-      destino_id: this.filtros.destino,
+      habitacion_id: this.habitacion?.numero_habitacion,
+      destino_id: this.filtros?.destino,
       destino: '',
     };
-  
-    this.lugarService.obtenerDestinoPorId(this.filtros.destino).subscribe((response) => {
-      if (response.status === 'success') {
-        reserva.destino = response.nombre;
-  
-        // Verificar si el usuario está autenticado
-        const usuarioAutenticado = this.authService.estaAutenticado(); // Debes implementar esta función en `AuthService`
-  
-        if (usuarioAutenticado) {
-          this.router.navigate(['/confirmar-reserva'], { state: { reserva }, replaceUrl: true });
+
+    this.lugarService.obtenerDestinoPorId(this.filtros?.destino)
+      .pipe(take(1)) 
+      .subscribe((response) => {
+        if (response.status === 'success') {
+          reserva.destino = response.nombre;
+
+          const usuarioAutenticado = this.authService.estaAutenticado();
+          const ruta = usuarioAutenticado ? '/confirmar-reserva' : '/login';
+          
+          this.router.navigate([ruta], { state: { reserva }, replaceUrl: usuarioAutenticado });
         } else {
-          this.router.navigate(['/login'], { state: { reserva } }); // Pasar la reserva al login
+          alert('Error al obtener el destino');
         }
-      } else {
-        alert('Error al obtener el destino');
-      }
-    });
+      });
   }
   
 }

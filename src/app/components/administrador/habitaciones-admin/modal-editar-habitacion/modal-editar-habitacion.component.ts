@@ -1,7 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HabitacionesAdminService } from '../../../../services/habitacionesAdmin.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-modal-editar-habitacion',
@@ -10,7 +12,7 @@ import { HabitacionesAdminService } from '../../../../services/habitacionesAdmin
   styleUrls: ['./modal-editar-habitacion.component.css'],
   imports: [CommonModule, ReactiveFormsModule]
 })
-export class ModalEditarHabitacionComponent implements OnInit {
+export class ModalEditarHabitacionComponent implements OnInit, OnDestroy {
   @Input() habitacion: any;
   @Output() habitacionEditada = new EventEmitter<void>();
   @Output() cerrarModal = new EventEmitter<void>();
@@ -19,6 +21,7 @@ export class ModalEditarHabitacionComponent implements OnInit {
   tiposHabitacion: any[] = [];
   mensaje: string = '';
   tipoMensaje: 'success' | 'error' | '' = '';
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -36,14 +39,16 @@ export class ModalEditarHabitacionComponent implements OnInit {
   }
 
   cargarTiposHabitacion(): void {
-    this.habitacionService.obtenerTiposHabitacion().subscribe({
-      next: (response) => {
-        if (response.status === 'success') {
-          this.tiposHabitacion = response.data;
-        }
-      },
-      error: () => this.mostrarMensaje('Error al obtener tipos de habitación.', 'error')
-    });
+    this.habitacionService.obtenerTiposHabitacion()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (response.status === 'success') {
+            this.tiposHabitacion = response.data;
+          }
+        },
+        error: () => this.mostrarMensaje('Error al obtener tipos de habitación.', 'error')
+      });
   }
 
   editarHabitacion(): void {
@@ -57,20 +62,22 @@ export class ModalEditarHabitacionComponent implements OnInit {
       ...this.habitacionForm.value
     };
 
-    this.habitacionService.editarHabitacion(habitacionEditada).subscribe({
-      next: (response) => {
-        if (response.status === 'success') {
-          this.mostrarMensaje(response.message, 'success');
-          setTimeout(() => {
-            this.habitacionEditada.emit();
-            this.cerrarModal.emit();
-          }, 1500);
-        } else {
-          this.mostrarMensaje(response.message, 'error');
-        }
-      },
-      error: () => this.mostrarMensaje('Error al editar habitación.', 'error')
-    });
+    this.habitacionService.editarHabitacion(habitacionEditada)
+      .pipe(takeUntil(this.destroy$)) 
+      .subscribe({
+        next: (response) => {
+          if (response.status === 'success') {
+            this.mostrarMensaje(response.message, 'success');
+            setTimeout(() => {
+              this.habitacionEditada.emit();
+              this.cerrarModal.emit();
+            }, 1500);
+          } else {
+            this.mostrarMensaje(response.message, 'error');
+          }
+        },
+        error: () => this.mostrarMensaje('Error al editar habitación.', 'error')
+      });
   }
 
   mostrarMensaje(mensaje: string, tipo: 'success' | 'error'): void {
@@ -80,5 +87,10 @@ export class ModalEditarHabitacionComponent implements OnInit {
       this.mensaje = '';
       this.tipoMensaje = '';
     }, 3000);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(); 
+    this.destroy$.complete(); 
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { HotelService } from '../../services/hoteles.service';
@@ -7,6 +7,9 @@ import { FormsModule } from '@angular/forms';
 import { FooterComponent } from '../footer/footer.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { HabitacionesAdminComponent } from './habitaciones-admin/habitaciones-admin.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 @Component({
   selector: 'app-administrador',
   templateUrl: './administrador.component.html',
@@ -17,11 +20,12 @@ import { HabitacionesAdminComponent } from './habitaciones-admin/habitaciones-ad
     NavbarComponent,
     HabitacionesAdminComponent,
   ],
-  styleUrl: './administrador.component.css',
+  styleUrls: ['./administrador.component.css'],
 })
-export class AdministradorComponent implements OnInit {
+export class AdministradorComponent implements OnInit, OnDestroy {
   hoteles: any[] = [];
-  isLoading: boolean = true; // Indicador de carga
+  isLoading: boolean = true;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private authService: AuthService,
@@ -34,35 +38,31 @@ export class AdministradorComponent implements OnInit {
   }
 
   cargarHoteles(): void {
-    this.hotelService.obtenerHoteles().subscribe({
-      next: (response) => {
-        if (response.status === 'success') {
-          this.hoteles = response.data;
-  
-          // Verificar si el usuario tiene un hotel asignado
-          if (this.hoteles.length === 0) {
-            console.warn('Este administrador no tiene un hotel asignado.');
+    this.hotelService.obtenerHoteles()
+      .pipe(takeUntil(this.destroy$)) 
+      .subscribe({
+        next: (response) => {
+          if (response.status === 'success') {
+            this.hoteles = response.data;
+
+            if (this.hoteles.length === 0) {
+              console.warn('Este administrador no tiene un hotel asignado.');
+            } else {
+              console.log('Hoteles asignados al admin:', this.hoteles);
+            }
           } else {
-            console.log('Hoteles asignados al admin:', this.hoteles);
+            console.error('Error al obtener hoteles:', response.message);
           }
-        } else {
-          console.error('Error al obtener hoteles:', response.message);
-        }
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error al cargar hoteles:', error);
-      },
-    });
-  }
-  
-
-  logout(): void {
-    this.authService.logout();
-    console.log('Sesión cerrada correctamente');
-    this.router.navigate(['/login']);
+          this.isLoading = false;
+        },
+        error: (error) => {
+          console.error('Error al cargar hoteles:', error);
+        },
+      });
   }
 
-
-  
+  ngOnDestroy(): void {
+    this.destroy$.next(); 
+    this.destroy$.complete(); 
+  }
 }

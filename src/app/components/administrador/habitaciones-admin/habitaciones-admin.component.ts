@@ -1,9 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { HabitacionesAdminService } from '../../../services/habitacionesAdmin.service';
 import { CommonModule } from '@angular/common';
 import { ModalAgregarHabitacionComponent } from './modal-agregar-habitacion/modal-agregar-habitacion.component';
 import { ModalEditarHabitacionComponent } from './modal-editar-habitacion/modal-editar-habitacion.component';
 import { DataTablesModule } from 'angular-datatables';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-habitaciones-admin',
@@ -14,17 +16,18 @@ import { DataTablesModule } from 'angular-datatables';
     ModalEditarHabitacionComponent,
     DataTablesModule,
   ],
-  styleUrl: './habitaciones-admin.component.css',
+  styleUrls: ['./habitaciones-admin.component.css'],
 })
-export class HabitacionesAdminComponent implements OnInit {
+export class HabitacionesAdminComponent implements OnInit, OnDestroy {
   @Input() hotelId!: number;
   habitaciones: any[] = [];
   mostrarModal = false;
   mostrarModalEditar = false;
   habitacionSeleccionada: any = null;
-  isLoading: boolean = true; // Indicador de carga
+  isLoading: boolean = true;
 
   dtOptions: any = {};
+  private destroy$ = new Subject<void>();
 
   constructor(private habitacionService: HabitacionesAdminService) {}
 
@@ -51,15 +54,17 @@ export class HabitacionesAdminComponent implements OnInit {
   }
 
   cargarHabitaciones(): void {
-    this.habitacionService.obtenerHabitaciones(this.hotelId).subscribe({
-      next: (response) => {
-        if (response.status === 'success') {
-          this.habitaciones = response.data;
-        }
-        this.isLoading = false;
-      },
-      error: (error) => console.error('Error al cargar habitaciones:', error),
-    });
+    this.habitacionService.obtenerHabitaciones(this.hotelId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          if (response.status === 'success') {
+            this.habitaciones = response.data;
+          }
+          this.isLoading = false;
+        },
+        error: (error) => console.error('Error al cargar habitaciones:', error),
+      });
   }
 
   abrirModal(): void {
@@ -87,20 +92,27 @@ export class HabitacionesAdminComponent implements OnInit {
         '¿Estás seguro de que quieres eliminar esta habitación? Esta acción no se puede deshacer.'
       )
     ) {
-      this.habitacionService.eliminarHabitacion(idHabitacion).subscribe({
-        next: (response) => {
-          if (response.status === 'success') {
-            alert('Habitación eliminada correctamente.');
-            window.location.reload(); // 🔄 Recargar la página
-          } else {
-            alert(response.message);
-          }
-        },
-        error: (error) => {
-          console.error('Error al eliminar la habitación:', error);
-          alert('No se pudo eliminar la habitación.');
-        },
-      });
+      this.habitacionService.eliminarHabitacion(idHabitacion)
+        .pipe(takeUntil(this.destroy$)) 
+        .subscribe({
+          next: (response) => {
+            if (response.status === 'success') {
+              alert('Habitación eliminada correctamente.');
+              window.location.reload();
+            } else {
+              alert(response.message);
+            }
+          },
+          error: (error) => {
+            console.error('Error al eliminar la habitación:', error);
+            alert('No se pudo eliminar la habitación.');
+          },
+        });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next(); 
+    this.destroy$.complete(); // Completa el subject
   }
 }

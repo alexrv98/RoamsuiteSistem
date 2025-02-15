@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FiltroHotelesComponent } from './../filtro-hoteles/filtro-hoteles.component';
@@ -7,6 +7,10 @@ import { ModalReservaComponent } from './modal-reserva/modal-reserva.component';
 import { ComentariosComponent } from './comentarios/comentarios.component';
 import { FooterComponent } from '../footer/footer.component';
 import { HabitacionesClienteService } from '../../services/habitacionesCliente.service';
+
+import { Subject, takeUntil } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-habitaciones',
   standalone: true,
@@ -17,17 +21,25 @@ import { HabitacionesClienteService } from '../../services/habitacionesCliente.s
     ModalReservaComponent,
     ComentariosComponent,
     FooterComponent,
+    FormsModule
   ],
   templateUrl: './habitaciones.component.html',
   styleUrls: ['./habitaciones.component.css'],
 })
-export class HabitacionesComponent implements OnInit {
+export class HabitacionesComponent implements OnInit, OnDestroy {
   hotelId!: number;
   filtros: any = {};
   habitaciones: any = { mejorOpcion: [], otrasHabitaciones: [] };
-  isLoading: boolean = true; 
+  isLoading: boolean = true;
 
   habitacionSeleccionada: any = null;
+  habitacionesOriginales: any = { mejorOpcion: [], otrasHabitaciones: [] };
+filtroPrecioMin: number | null = null;
+filtroPrecioMax: number | null = null;
+
+
+  private unsubscribe$ = new Subject<void>();
+
 
   seleccionarHabitacion(habitacion: any) {
     this.habitacionSeleccionada = habitacion;
@@ -36,7 +48,7 @@ export class HabitacionesComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private habitacionesService: HabitacionesClienteService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.hotelId = Number(this.route.snapshot.paramMap.get('hotelId'));
@@ -59,14 +71,41 @@ export class HabitacionesComponent implements OnInit {
       huespedes: this.filtros.huespedes,
     };
 
-    this.habitacionesService.obtenerHabitaciones(filtros).subscribe((res) => {
-      if (res.status === 'success') {
-        this.habitaciones = res.data;
-      } else {
-        console.error('Error al obtener habitaciones:', res.message);
-      }
-      this.isLoading = false;
-    });
+    this.habitacionesService
+  .obtenerHabitaciones(filtros)
+  .pipe(takeUntil(this.unsubscribe$))
+  .subscribe((res) => {
+    if (res.status === 'success') {
+      this.habitacionesOriginales = res.data; // Guardamos el original
+      this.habitaciones = { ...res.data }; // Creamos una copia
+      this.filtrarPorPrecio(); // Aplicar el filtro de precios
+    } else {
+      console.error('Error al obtener habitaciones:', res.message);
+    }
+    this.isLoading = false;
+  });
+
+
+  }
+
+  filtrarPorPrecio() {
+    const min = this.filtroPrecioMin ?? 0;
+    const max = this.filtroPrecioMax ?? Number.MAX_SAFE_INTEGER;
+  
+    this.habitaciones.mejorOpcion = this.habitacionesOriginales.mejorOpcion.filter(
+      (habitacion: any) => habitacion.precio >= min && habitacion.precio <= max
+    );
+  
+    this.habitaciones.otrasHabitaciones = this.habitacionesOriginales.otrasHabitaciones.filter(
+      (habitacion: any) => habitacion.precio >= min && habitacion.precio <= max
+    );
+  }
+  
+
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   // Botones para scroll horizontal
