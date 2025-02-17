@@ -3,17 +3,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NavbarComponent } from '../navbar/navbar.component';
 import { ComentariosService } from '../../services/comentarios.service';
 
 @Component({
-  selector: 'app-comentarios',
-  standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, NavbarComponent],
-  templateUrl: './comentarios.component.html',
-  styleUrls: ['./comentarios.component.css']
+  selector: 'app-list-comentarios',
+  imports: [CommonModule, FormsModule, RouterModule],
+  templateUrl: './list-comentarios.component.html',
+  styleUrl: './list-comentarios.component.css',
 })
-export class ComentariosComponent implements OnInit {
+export class ListComentariosComponent {
   comentarios: any[] = [];
   hotelId: number | null = null;
   calificacion: number = 5;
@@ -21,14 +19,14 @@ export class ComentariosComponent implements OnInit {
 
   constructor(
     private comentarioService: ComentariosService,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       const id = params.get('hotelId');
       if (id) {
-        this.hotelId = Number(id);  
+        this.hotelId = Number(id);
         this.cargarComentarios();
       }
     });
@@ -47,10 +45,8 @@ export class ComentariosComponent implements OnInit {
         },
         complete: () => {
           console.log('Carga de comentarios completada');
-        }
+        },
       });
     }
   }
-  
-
 }
