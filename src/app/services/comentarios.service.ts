@@ -22,11 +22,16 @@ export class ComentariosService {
       hotel_id,
       calificacion,
       comentario,
-      usuario_id,  // Agregar el ID del usuario
+      usuario_id,
     };
 
-    return this.http.post(`${this.apiUrl}/comentReserva.php`, body);
-  }
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,  // 🔹 Se añade el token aquí
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(`${this.apiUrl}/comentarios.php`, body, { headers });
+}
 
 
   getComentarios(hotel_id: number): Observable<any> {
