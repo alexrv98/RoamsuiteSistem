@@ -18,11 +18,6 @@ export class ComentariosService {
       return throwError(() => new Error('Usuario no autenticado'));
     }
 
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
-
     const body = {
       hotel_id,
       calificacion,
