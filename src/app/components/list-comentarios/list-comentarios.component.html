@@ -1,0 +1,36 @@
+<div class="card shadow-lg">
+  <div class="card-body">
+    <h4 class="text-center text-primary mb-4">Comentarios y Calificaciones</h4>
+
+    <div *ngFor="let comentario of comentarios" class="mb-3">
+      <div class="card border-0 shadow-sm p-3">
+        <div class="d-flex align-items-center mb-2">
+          <i
+            class="fa-solid fa-user-circle text-primary me-2"
+            style="font-size: 1.5rem"
+          ></i>
+          <h5 class="text-primary mb-0">{{ comentario.usuario }}</h5>
+        </div>
+
+        <p class="card-text">{{ comentario.comentario }}</p>
+
+        <div class="d-flex align-items-center">
+          <span class="me-2 text-muted">Calificación:</span>
+          <span class="star-rating">
+            <i
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              class="fa-solid fa-star"
+              [class.text-warning]="star <= comentario.calificacion"
+              [class.text-secondary]="star > comentario.calificacion"
+            ></i>
+          </span>
+        </div>
+
+        <p class="card-text text-muted mt-2">
+          <i class="fa-regular fa-calendar me-1"></i>
+          {{ comentario.fecha | date : "dd/MM/yyyy" }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

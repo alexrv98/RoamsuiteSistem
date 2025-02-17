@@ -7,7 +7,7 @@ import { ModalReservaComponent } from './modal-reserva/modal-reserva.component';
 import { ComentariosComponent } from './comentarios/comentarios.component';
 import { FooterComponent } from '../footer/footer.component';
 import { HabitacionesClienteService } from '../../services/habitacionesCliente.service';
-
+import { ListComentariosComponent } from '../list-comentarios/list-comentarios.component';
 import { Subject, takeUntil } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 
@@ -21,25 +21,25 @@ import { FormsModule } from '@angular/forms';
     ModalReservaComponent,
     ComentariosComponent,
     FooterComponent,
-    FormsModule
+    FormsModule,
+    ListComentariosComponent,
   ],
   templateUrl: './habitaciones.component.html',
   styleUrls: ['./habitaciones.component.css'],
 })
 export class HabitacionesComponent implements OnInit, OnDestroy {
   hotelId!: number;
+
   filtros: any = {};
   habitaciones: any = { mejorOpcion: [], otrasHabitaciones: [] };
   isLoading: boolean = true;
 
   habitacionSeleccionada: any = null;
   habitacionesOriginales: any = { mejorOpcion: [], otrasHabitaciones: [] };
-filtroPrecioMin: number | null = null;
-filtroPrecioMax: number | null = null;
-
+  filtroPrecioMin: number | null = null;
+  filtroPrecioMax: number | null = null;
 
   private unsubscribe$ = new Subject<void>();
-
 
   seleccionarHabitacion(habitacion: any) {
     this.habitacionSeleccionada = habitacion;
@@ -48,7 +48,7 @@ filtroPrecioMax: number | null = null;
   constructor(
     private route: ActivatedRoute,
     private habitacionesService: HabitacionesClienteService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.hotelId = Number(this.route.snapshot.paramMap.get('hotelId'));
@@ -72,36 +72,36 @@ filtroPrecioMax: number | null = null;
     };
 
     this.habitacionesService
-  .obtenerHabitaciones(filtros)
-  .pipe(takeUntil(this.unsubscribe$))
-  .subscribe((res) => {
-    if (res.status === 'success') {
-      this.habitacionesOriginales = res.data; // Guardamos el original
-      this.habitaciones = { ...res.data }; // Creamos una copia
-      this.filtrarPorPrecio(); // Aplicar el filtro de precios
-    } else {
-      console.error('Error al obtener habitaciones:', res.message);
-    }
-    this.isLoading = false;
-  });
-
-
+      .obtenerHabitaciones(filtros)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        if (res.status === 'success') {
+          this.habitacionesOriginales = res.data; // Guardamos el original
+          this.habitaciones = { ...res.data }; // Creamos una copia
+          this.filtrarPorPrecio(); // Aplicar el filtro de precios
+        } else {
+          console.error('Error al obtener habitaciones:', res.message);
+        }
+        this.isLoading = false;
+      });
   }
 
   filtrarPorPrecio() {
     const min = this.filtroPrecioMin ?? 0;
     const max = this.filtroPrecioMax ?? Number.MAX_SAFE_INTEGER;
-  
-    this.habitaciones.mejorOpcion = this.habitacionesOriginales.mejorOpcion.filter(
-      (habitacion: any) => habitacion.precio >= min && habitacion.precio <= max
-    );
-  
-    this.habitaciones.otrasHabitaciones = this.habitacionesOriginales.otrasHabitaciones.filter(
-      (habitacion: any) => habitacion.precio >= min && habitacion.precio <= max
-    );
-  }
-  
 
+    this.habitaciones.mejorOpcion =
+      this.habitacionesOriginales.mejorOpcion.filter(
+        (habitacion: any) =>
+          habitacion.precio >= min && habitacion.precio <= max
+      );
+
+    this.habitaciones.otrasHabitaciones =
+      this.habitacionesOriginales.otrasHabitaciones.filter(
+        (habitacion: any) =>
+          habitacion.precio >= min && habitacion.precio <= max
+      );
+  }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
