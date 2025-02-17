@@ -24,14 +24,14 @@ export class ListComentariosComponent {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      const id = params.get('hotelId');
+      const id = params.get('hotelId'); 
       if (id) {
         this.hotelId = Number(id);
         this.cargarComentarios();
       }
     });
   }
-
+  
   cargarComentarios(): void {
     if (this.hotelId) {
       this.comentarioService.getComentarios(this.hotelId).subscribe({

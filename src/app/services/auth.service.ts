@@ -40,7 +40,6 @@ export class AuthService {
   getRolUsuario(): Observable<string | null> {
     return this.rolUsuarioSubject.asObservable();
   }
-  
 
 
   obtenerUsuarioLogueado(token: string): Observable<any> {

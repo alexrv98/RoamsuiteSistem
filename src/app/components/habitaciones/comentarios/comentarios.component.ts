@@ -5,22 +5,17 @@ import { CommonModule } from '@angular/common';
 import { ComentariosService } from '../../../services/comentarios.service';
 import { Router } from '@angular/router';
 import { ReservaService } from '../../../services/reserva.service';
-import { MigajaComponent } from '../../usuario/mis-reservas/migaja/migaja.component';
-import { NavbarComponent } from '../../navbar/navbar.component';
-import { FooterComponent } from '../../footer/footer.component';
 
 @Component({
   selector: 'app-comentarios',
   imports: [
     FormsModule,
     CommonModule,
-    MigajaComponent,
-    NavbarComponent,
-    FooterComponent,
   ],
   templateUrl: './comentarios.component.html',
   styleUrls: ['./comentarios.component.css'],
 })
+
 export class ComentariosComponent implements OnInit {
   comentarios: any[] = [];
   nuevoComentario = {
@@ -116,8 +111,6 @@ export class ComentariosComponent implements OnInit {
       },
     });
   }
-
-
   agregarComentario(): void {
     if (
       !this.nuevoComentario.texto ||
@@ -128,7 +121,7 @@ export class ComentariosComponent implements OnInit {
       alert('Por favor, completa todos los campos.');
       return;
     }
-
+  
     this.comentariosService
       .agregarComentario(
         this.nuevoComentario.hotelId,
@@ -138,8 +131,9 @@ export class ComentariosComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          console.log('Respuesta de la API:', response); // Imprimir la respuesta
+          console.log('Respuesta de la API:', response);
           if (response && response.status === 'success') {
+            // Limpiar los campos de formulario
             this.nuevoComentario = {
               texto: '',
               calificacion: 0,
@@ -147,6 +141,12 @@ export class ComentariosComponent implements OnInit {
               usuarioId: this.nuevoComentario.usuarioId,
               nombreHotel: '',
             };
+  
+            // Mostrar mensaje de éxito
+            alert('Comentario agregado exitosamente.');
+  
+            // Recargar la página para actualizar la lista de comentarios
+            window.location.reload();
           } else {
             console.error('Error al agregar comentario.');
           }
@@ -156,7 +156,7 @@ export class ComentariosComponent implements OnInit {
         },
       });
   }
-
+  
   seleccionarCalificacion(valor: number): void {
     this.nuevoComentario.calificacion = valor;
   }
