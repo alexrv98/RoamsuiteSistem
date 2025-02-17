@@ -34,8 +34,8 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
 
   habitacionSeleccionada: any = null;
   habitacionesOriginales: any = { mejorOpcion: [], otrasHabitaciones: [] };
-filtroPrecioMin: number | null = null;
-filtroPrecioMax: number | null = null;
+  filtroPrecioMin: number | null = null;
+  filtroPrecioMax: number | null = null;
 
 
   private unsubscribe$ = new Subject<void>();
@@ -72,18 +72,18 @@ filtroPrecioMax: number | null = null;
     };
 
     this.habitacionesService
-  .obtenerHabitaciones(filtros)
-  .pipe(takeUntil(this.unsubscribe$))
-  .subscribe((res) => {
-    if (res.status === 'success') {
-      this.habitacionesOriginales = res.data; // Guardamos el original
-      this.habitaciones = { ...res.data }; // Creamos una copia
-      this.filtrarPorPrecio(); // Aplicar el filtro de precios
-    } else {
-      console.error('Error al obtener habitaciones:', res.message);
-    }
-    this.isLoading = false;
-  });
+      .obtenerHabitaciones(filtros)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((res) => {
+        if (res.status === 'success') {
+          this.habitacionesOriginales = res.data;
+          this.habitaciones = { ...res.data };
+          this.filtrarPorPrecio();
+        } else {
+          console.error('Error al obtener habitaciones:', res.message);
+        }
+        this.isLoading = false;
+      });
 
 
   }
@@ -91,16 +91,16 @@ filtroPrecioMax: number | null = null;
   filtrarPorPrecio() {
     const min = this.filtroPrecioMin ?? 0;
     const max = this.filtroPrecioMax ?? Number.MAX_SAFE_INTEGER;
-  
+
     this.habitaciones.mejorOpcion = this.habitacionesOriginales.mejorOpcion.filter(
       (habitacion: any) => habitacion.precio >= min && habitacion.precio <= max
     );
-  
+
     this.habitaciones.otrasHabitaciones = this.habitacionesOriginales.otrasHabitaciones.filter(
       (habitacion: any) => habitacion.precio >= min && habitacion.precio <= max
     );
   }
-  
+
 
 
   ngOnDestroy() {

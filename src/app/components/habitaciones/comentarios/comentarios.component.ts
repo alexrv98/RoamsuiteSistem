@@ -89,7 +89,6 @@ export class ComentariosComponent implements OnInit {
     }
   }
 
-
   cargarHotelesReservados(): void {
     if (!this.estaAutenticado) {
       console.log('Usuario no autenticado. No se pueden cargar las reservas.');
@@ -117,7 +116,6 @@ export class ComentariosComponent implements OnInit {
       },
     });
   }
-
 
 
   agregarComentario(): void {

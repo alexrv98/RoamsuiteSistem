@@ -24,7 +24,7 @@ export class ReservaService {
       .pipe(
         catchError((error) => {
           console.error('Error en la reserva:', error);
-          return throwError(error);
+          return throwError(() => error); 
         })
       );
   }

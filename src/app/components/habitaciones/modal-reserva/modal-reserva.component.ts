@@ -4,7 +4,6 @@ import { LugarService } from '../../../services/lugar.service';
 import { AuthService } from '../../../services/auth.service';
 import { take } from 'rxjs';
 
-
 @Component({
   selector: 'app-modal-reserva',
   templateUrl: './modal-reserva.component.html',
