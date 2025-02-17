@@ -18,6 +18,11 @@ export class ComentariosService {
       return throwError(() => new Error('Usuario no autenticado'));
     }
 
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    });
+
     const body = {
       hotel_id,
       calificacion,
@@ -35,18 +40,9 @@ export class ComentariosService {
 
 
   getComentarios(hotel_id: number): Observable<any> {
-    const token = this.authService.getToken();
-    if (!token) {
-      return throwError(() => new Error('Usuario no autenticado'));
-    }
-
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    });
-
-    return this.http.get(`${this.apiUrl}/comentarios.php?hotel_id=${hotel_id}`, { headers });
+    return this.http.get(`${this.apiUrl}/comentarios.php?hotel_id=${hotel_id}`);
   }
+
 
   getReservaciones(): Observable<any> {
     const token = this.authService.getToken();

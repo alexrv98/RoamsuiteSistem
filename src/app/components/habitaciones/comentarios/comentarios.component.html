@@ -11,26 +11,10 @@
       ></i
       >Usuario</label
     >
-    <!-- Aquí mostramos el nombre del usuario autenticado -->
     <input type="text" class="form-control" [value]="usuarioNombre" disabled />
   </div>
 
-  <!-- Mostrar el nombre del hotel seleccionado -->
-  <div class="mb-3" *ngIf="nuevoComentario.nombreHotel">
-    <label class="form-label">
-      <i
-        class="fa-solid fa-user-circle text-primary me-2"
-        style="font-size: 1.5rem"
-      ></i>
-      Hotel Seleccionado</label
-    >
-    <input
-      type="text"
-      class="form-control"
-      [value]="nuevoComentario.nombreHotel"
-      disabled
-    />
-  </div>
+ 
 
   <!-- Selección de hotel basado en reservas -->
   <div class="mb-3" *ngIf="estaAutenticado && hotelesReservados.length > 0">
