@@ -25,9 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             if ($imagenes) {
                 // Añadir la URL completa a las imágenes y eliminar saltos de línea o espacios en blanco innecesarios
                 foreach ($imagenes as &$imagen) {
-                    // Eliminar cualquier salto de línea o espacio en blanco adicional y concatenar la URL base
-                    $imagen['img_url'] = trim($base_url . $imagen['img_url']);
-                }
+                  // Eliminar cualquier salto de línea o espacio en blanco adicional
+                  $imagen['img_url'] = trim($base_url . $imagen['img_url']);
+              }
 
                 // Responder con las imágenes encontradas
                 echo json_encode(['status' => 'success', 'data' => $imagenes]);
