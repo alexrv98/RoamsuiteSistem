@@ -1,6 +1,12 @@
 <app-navbar></app-navbar>
 <app-filtro-hoteles [filtros]="filtros"></app-filtro-hoteles>
 
+<div class="container text-center mt-4">
+  <h2 class="fw-bold text-primary">
+    <i class="fa-solid fa-hotel"></i> {{ hotelNombre }}
+  </h2>
+</div>
+
 <div class="container">
   <div class="row">
     <ng-container *ngIf="isLoading; else mostrarHabitaciones">
@@ -29,17 +35,32 @@
 
           <div class="col-12 col-md-auto ms-auto d-flex gap-2 mt-2 mt-md-0">
             <div class="form-floating">
-              <input type="number" id="precioMin" class="form-control" [(ngModel)]="filtroPrecioMin" (input)="filtrarPorPrecio()" />
+              <input
+                type="number"
+                id="precioMin"
+                class="form-control"
+                [(ngModel)]="filtroPrecioMin"
+                (input)="filtrarPorPrecio()"
+              />
               <label for="precioMin">Precio mínimo:</label>
             </div>
             <div class="form-floating">
-              <input type="number" id="precioMax" class="form-control" [(ngModel)]="filtroPrecioMax" (input)="filtrarPorPrecio()" />
+              <input
+                type="number"
+                id="precioMax"
+                class="form-control"
+                [(ngModel)]="filtroPrecioMax"
+                (input)="filtrarPorPrecio()"
+              />
               <label for="precioMax">Precio máximo:</label>
             </div>
           </div>
         </div>
 
-        <div class="card shadow-sm mb-3" *ngFor="let habitacion of habitaciones.mejorOpcion">
+        <div
+          class="card shadow-sm mb-3"
+          *ngFor="let habitacion of habitaciones.mejorOpcion"
+        >
           <div class="card-body d-flex align-items-center">
             <img
               src="assets/habitacion.jpg"
@@ -54,17 +75,29 @@
                 <i class="fa-solid fa-bed"></i> {{ habitacion.tipo_habitacion }}
               </h5>
               <p class="card-text mb-1">
-                <strong><i class="fa-solid fa-hashtag"></i> No. Habitación:</strong> {{ habitacion.numero_habitacion }}
+                <strong
+                  ><i class="fa-solid fa-hashtag"></i> No. Habitación:</strong
+                >
+                {{ habitacion.numero_habitacion }}
               </p>
               <p class="card-text mb-1">
-                <strong><i class="fa-solid fa-user-group"></i> Capacidad:</strong> {{ habitacion.capacidad }} persona(s)
+                <strong
+                  ><i class="fa-solid fa-user-group"></i> Capacidad:</strong
+                >
+                {{ habitacion.capacidad }} persona(s)
               </p>
               <p class="card-text fw-bold">
-                <strong><i class="fa-solid fa-bed"></i> Número de camas:</strong> {{ habitacion.camas }}
+                <strong
+                  ><i class="fa-solid fa-bed"></i> Número de camas:</strong
+                >
+                {{ habitacion.camas }}
               </p>
 
               <p class="card-text fw-bold text-success">
-                <strong><i class="fa-solid fa-dollar-sign"></i> Precio por noche:</strong>
+                <strong
+                  ><i class="fa-solid fa-dollar-sign"></i> Precio por
+                  noche:</strong
+                >
                 MXN ${{ habitacion.precio_base }}
               </p>
 
@@ -72,18 +105,16 @@
                 {{ habitacion.mensaje }}
               </p>
 
-
               <p class="card-text text-warning">
                 {{ habitacion.extras }}
               </p>
 
-              
-
               <p class="card-text fw-bold text-success">
-                <strong><i class="fa-solid fa-dollar-sign"></i> Precio Total:</strong>
+                <strong
+                  ><i class="fa-solid fa-dollar-sign"></i> Precio Total:</strong
+                >
                 MXN ${{ habitacion.precio_calculado }}
               </p>
-              
 
               <button
                 type="button"
@@ -97,6 +128,19 @@
             </div>
           </div>
         </div>
+        <!-- Alerta si no hay habitaciones disponibles -->
+        <div
+          *ngIf="habitaciones.mejorOpcion.length === 0"
+          class="alert alert-warning text-center"
+          role="alert"
+        >
+          <div class="alert alert-danger" role="alert">
+            No hay habitaciones disponibles.
+            <a href="#" class="alert-link">an example link</a>. Give it a click
+            if you like.
+          </div>
+        </div>
+        <!-- ------------------------------------- -->
       </div>
 
       <!-- Comentarios -->
@@ -116,33 +160,50 @@
         </h4>
         <div class="position-relative">
           <div class="d-flex overflow-auto gap-3 p-2" id="scrollContainer">
-            <div class="col-md-4 mb-3 d-flex flex-shrink-0" *ngFor="let habitacion of habitaciones.otrasHabitaciones">
-              <div class="card lugar-card shadow-sm rounded-4" style="width: 25rem">
-                <img src="assets/habitacion2.jpg" alt="Habitación" height="200" class="w-100 rounded-top" />
+            <div
+              class="col-md-4 mb-3 d-flex flex-shrink-0"
+              *ngFor="let habitacion of habitaciones.otrasHabitaciones"
+            >
+              <div
+                class="card lugar-card shadow-sm rounded-4"
+                style="width: 25rem"
+              >
+                <img
+                  src="assets/habitacion2.jpg"
+                  alt="Habitación"
+                  height="200"
+                  class="w-100 rounded-top"
+                />
                 <div class="card-body d-flex flex-column">
                   <h5 class="card-title fw-bold text-secondary">
                     {{ habitacion.tipo_habitacion }}
                   </h5>
                   <p class="card-text mb-1">
-                    <strong>No. Habitación:</strong> {{ habitacion.numero_habitacion }}
+                    <strong>No. Habitación:</strong>
+                    {{ habitacion.numero_habitacion }}
                   </p>
                   <p class="card-text mb-1">
-                    <strong>Capacidad:</strong> {{ habitacion.capacidad }} persona(s)
+                    <strong>Capacidad:</strong>
+                    {{ habitacion.capacidad }} persona(s)
                   </p>
                   <p class="card-text fw-bold">
                     <strong>Número de camas:</strong> {{ habitacion.camas }}
                   </p>
                   <p class="card-text fw-bold text-success">
-                    <strong><i class="fa-solid fa-dollar-sign"></i> Precio por noche:</strong>
+                    <strong
+                      ><i class="fa-solid fa-dollar-sign"></i> Precio por
+                      noche:</strong
+                    >
                     MXN ${{ habitacion.precio_base }}
                   </p>
-                  
+
                   <p class="card-text text-warning">
                     <strong>Mensaje:</strong> {{ habitacion.mensaje }}
                   </p>
 
                   <p class="card-text fw-bold text-success">
-                    <strong>Precio calculado:</strong> MXN {{ habitacion.precio_calculado }}
+                    <strong>Precio calculado:</strong> MXN
+                    {{ habitacion.precio_calculado }}
                   </p>
 
                   <div class="mt-auto">
@@ -161,11 +222,17 @@
             </div>
           </div>
 
-          <button class="btn btn-primary btn-lg p-3 shadow position-absolute start-0 top-50 translate-middle-y" (click)="scrollLeft()">
+          <button
+            class="btn btn-primary btn-lg p-3 shadow position-absolute start-0 top-50 translate-middle-y"
+            (click)="scrollLeft()"
+          >
             <i class="fa-solid fa-angles-left"></i>
           </button>
 
-          <button class="btn btn-primary btn-lg p-3 shadow position-absolute end-0 top-50 translate-middle-y" (click)="scrollRight()">
+          <button
+            class="btn btn-primary btn-lg p-3 shadow position-absolute end-0 top-50 translate-middle-y"
+            (click)="scrollRight()"
+          >
             <i class="fa-solid fa-angles-right"></i>
           </button>
         </div>
@@ -174,5 +241,8 @@
   </div>
 </div>
 
-<app-modal-reserva [habitacion]="habitacionSeleccionada" [filtros]="filtros"></app-modal-reserva>
+<app-modal-reserva
+  [habitacion]="habitacionSeleccionada"
+  [filtros]="filtros"
+></app-modal-reserva>
 <app-footer></app-footer>

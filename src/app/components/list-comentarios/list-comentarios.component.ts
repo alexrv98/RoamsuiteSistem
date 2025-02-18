@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ComentariosService } from '../../services/comentarios.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-comentarios',
@@ -20,17 +21,31 @@ export class ListComentariosComponent implements OnInit {
 
   constructor(
     private comentarioService: ComentariosService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      const id = params.get('hotelId');
-      if (id) {
-        this.hotelId = Number(id);
-        this.cargarComentarios();
-      }
-    });
+    // Verifica si el hotelId se pasa desde el estado de navegación o parámetros
+    const state = history.state;
+    if (state.hotelId) {
+      this.hotelId = state.hotelId;
+    } else {
+      // Si no se pasa por estado, toma de la URL
+      this.route.paramMap.subscribe((params) => {
+        const id = params.get('hotelId');
+        if (id) {
+          this.hotelId = Number(id);
+        }
+      });
+    }
+
+    // Cargar los comentarios si hotelId está presente
+    if (this.hotelId) {
+      this.cargarComentarios();
+    } else {
+      console.warn('No se ha pasado un hotelId.');
+    }
   }
 
   cargarComentarios(): void {
