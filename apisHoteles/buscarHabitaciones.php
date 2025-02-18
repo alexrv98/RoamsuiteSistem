@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $camasSolicitadas = $data['camas'];
 
     try {
-        // Consulta todas las habitaciones disponibles ordenadas por cercanía en número de camas
+        // Consulta todas las habitaciones disponibles
         $stmt = $conn->prepare("
             SELECT 
                 ha.id AS habitacion_id,
@@ -32,12 +32,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 FROM reservaciones r
                 WHERE (r.fecha_inicio <= :fechaFin AND r.fecha_fin >= :fechaInicio)
             )
-            ORDER BY ABS(th.camas - :camasSolicitadas), ha.precio ASC
+            ORDER BY ABS(th.capacidad - :totalHuespedes), ABS(th.camas - :camasSolicitadas), ha.precio ASC
         ");
 
         $stmt->bindParam(':hotelId', $hotelId, PDO::PARAM_INT);
         $stmt->bindParam(':fechaInicio', $fechaInicio, PDO::PARAM_STR);
         $stmt->bindParam(':fechaFin', $fechaFin, PDO::PARAM_STR);
+        $stmt->bindParam(':totalHuespedes', $totalHuespedes, PDO::PARAM_INT);
         $stmt->bindParam(':camasSolicitadas', $camasSolicitadas, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -50,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $precioBase = $habitacion['precio'];
             $precioFinal = $precioBase;
             $mensaje = null;
+            $extras = null;
 
             // Si el número de huéspedes supera la capacidad de la habitación
             if ($totalHuespedes > $capacidadMaxima) {
@@ -107,3 +109,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
     }
 }
+?>

@@ -46,17 +46,21 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.hotelId = Number(this.route.snapshot.paramMap.get('hotelId'));
+  
     const state = history.state;
-    if (state.filtros) {
+    if (state.hotelId) {
+      this.hotelId = state.hotelId; 
+    }
+      if (state.filtros) {
       this.filtros = state.filtros;
-      console.log('Filtros cargados desde el estado de navegación:', this.filtros); // Imprime los filtros
+      console.log('Filtros cargados desde el estado de navegación:', this.filtros);
     } else {
       console.warn('No hay filtros en el estado de navegación.');
     }
-
+  
     this.obtenerHabitaciones();
   }
+  
   obtenerHabitaciones() {
     const filtros = {
       hotelId: this.hotelId,
