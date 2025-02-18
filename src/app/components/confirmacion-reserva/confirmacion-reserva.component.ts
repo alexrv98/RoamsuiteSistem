@@ -23,7 +23,6 @@ import { OpenpayComponent } from '../openpay/openpay.component';
   styleUrls: ['./confirmacion-reserva.component.css'],
 })
 export class ConfirmarReservaComponent implements OnInit {
-  @Input() filtros: any = null;
 
   reserva: any;
   paypal: any;
