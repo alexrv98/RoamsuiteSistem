@@ -23,7 +23,6 @@ import { OpenpayComponent } from '../openpay/openpay.component';
   styleUrls: ['./confirmacion-reserva.component.css'],
 })
 export class ConfirmarReservaComponent implements OnInit {
-
   reserva: any;
   paypal: any;
   cliente = { id: '', nombre: '', correo: '' };
@@ -129,21 +128,19 @@ export class ConfirmarReservaComponent implements OnInit {
         .render('#paypal-button-container');
     }
   }
-
   confirmarReserva(): void {
     if (this.pagoRealizado && this.cliente.nombre && this.cliente.correo) {
       const datosReserva = {
         usuario_id: this.cliente.id,
-        habitacion_id: this.reserva.habitacion.habitacion_id,
-        fechaInicio: this.reserva.habitacion.fechaInicio,
-        fechaFin: this.reserva.habitacion.fechaFin,
-        totalReserva: this.reserva.habitacion.totalReserva,
-        num_adultos: this.reserva.habitacion.adultosExtras,
-        num_ninos: this.reserva.habitacion.ninosExtras,
-        nombre: this.cliente.nombre,
-        email: this.cliente.correo,
+        habitacion_id: this.reserva.habitacion?.habitacion_id || null,
+        fechaInicio: this.reserva.filtros?.fechaInicio || null,
+        fechaFin: this.reserva.filtros?.fechaFin || null,
+        totalReserva: this.reserva.habitacion?.precio_calculado || 0,
+        num_adultos: this.reserva.habitacion?.adultosExtras || 0,
+        num_ninos: this.reserva.habitacion?.ninosExtras || 0,
       };
-
+  
+  
       this.reservaService
         .realizarReserva(datosReserva)
         .pipe(take(1))
@@ -161,9 +158,8 @@ export class ConfirmarReservaComponent implements OnInit {
           },
         });
     } else {
-      alert(
-        'Por favor, completa todos los campos y realiza el pago antes de confirmar.'
-      );
+      alert('Por favor, completa todos los campos y realiza el pago antes de confirmar.');
     }
   }
+  
 }

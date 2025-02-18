@@ -78,7 +78,7 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
       .obtenerHabitaciones(filtros)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
-  
+
         if (res.status === 'success') {
           this.mensajeBusqueda = res.mensaje_busqueda || null;
 
@@ -86,7 +86,7 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
             mejorOpcion: res.habitacionesExactas, // Habitaciones con el número exacto de camas
             otrasHabitaciones: res.otrasHabitaciones, // Habitaciones con diferente número de camas
           };
-  
+
         } else {
           console.error('Error al obtener habitaciones:', res.message);
           this.habitaciones = { mejorOpcion: [], otrasHabitaciones: [] };
