@@ -55,7 +55,7 @@ export class ConfirmarReservaComponent implements OnInit {
       if (token) {
         this.authService
           .obtenerUsuarioLogueado(token)
-          .pipe(take(1)) // Evita fugas de memoria
+          .pipe(take(1))
           .subscribe({
             next: (response) => {
               console.log('Respuesta de la API:', response);

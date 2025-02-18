@@ -16,7 +16,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'admin', component: AdministradorComponent, canActivate: [AuthGuard] },
   { path: 'buscar', component: ListaHotelesComponent },
-  { path: 'habitaciones/:hotelId', component: HabitacionesComponent },
+  { path: 'habitaciones', component: HabitacionesComponent },
   { path: 'confirmar-reserva', component: ConfirmarReservaComponent, canActivate: [AuthGuard] },
   { path: 'register', component: RegisterComponent },
   { path: 'comentarios/:hotelId', component: ComentariosComponent },
