@@ -151,7 +151,6 @@ export class ConfirmarReservaComponent implements OnInit {
           next: (res) => {
             if (res.status === 'success') {
               alert('Reserva confirmada con éxito');
-              sessionStorage.removeItem('reservaValida');
               this.router.navigate(['/'], { replaceUrl: true });
             } else {
               alert('Error al realizar la reserva');

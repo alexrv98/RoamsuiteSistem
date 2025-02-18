@@ -23,6 +23,7 @@ if ($usuario) {
         !isset($data['habitacion_id']) ||
         !isset($data['fechaInicio']) ||
         !isset($data['fechaFin']) ||
+
         !isset($data['totalReserva'])
     ) {
         echo json_encode(['status' => 'error', 'message' => 'Datos incompletos']);
