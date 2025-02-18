@@ -45,23 +45,23 @@
             </tr>
 
             <!-- Mostrar Adultos Extra solo si hay -->
-            <tr *ngIf="habitacion.adultosExtras && habitacion.adultosExtras > 0">
+            <tr *ngIf="habitacion?.adultosExtras && habitacion?.adultosExtras > 0">
               <td><strong>Adultos extra:</strong></td>
-              <td>{{ habitacion.adultosExtras }}</td>
+              <td>{{ habitacion?.adultosExtras }}</td>
             </tr>
-            <tr *ngIf="habitacion.costoFinalAdultos && habitacion.costoFinalAdultos > 0">
+            <tr *ngIf="habitacion?.costoFinalAdultos && habitacion?.costoFinalAdultos > 0">
               <td><strong>Costo Extra (30% por adulto):</strong></td>
-              <td>MXN ${{ habitacion.costoFinalAdultos }}</td>
+              <td>MXN ${{ habitacion?.costoFinalAdultos }}</td>
             </tr>
 
             <!-- Mostrar Niños Extra solo si hay -->
-            <tr *ngIf="habitacion.ninosExtras && habitacion.ninosExtras > 0">
+            <tr *ngIf="habitacion?.ninosExtras && habitacion?.ninosExtras > 0">
               <td><strong>Niños extra:</strong></td>
-              <td>{{ habitacion.ninosExtras }}</td>
+              <td>{{ habitacion?.ninosExtras }}</td>
             </tr>
-            <tr *ngIf="habitacion.costoFinalNinos && habitacion.costoFinalNinos > 0">
+            <tr *ngIf="habitacion?.costoFinalNinos && habitacion?.costoFinalNinos > 0">
               <td><strong>Costo Extra (15% por niño):</strong></td>
-              <td>MXN ${{ habitacion.costoFinalNinos }}</td>
+              <td>MXN ${{ habitacion?.costoFinalNinos }}</td>
             </tr>
 
             <!-- Precio Total -->
