@@ -52,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $precioFinal = $precioBase;
             $mensaje = null;
             $extras = null;
+            $extrasTotal = 0;
             $ninosExtras = 0;
             $adultosExtras = 0;
             $costoFinalAdultos = 0;
@@ -71,7 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $adultosExtras = max(0, $huespedesExtra - $ninosExtras);
 
                 $extras = $ninosExtras . " niños y " . $adultosExtras . " adultos";
-              
+                $extrasTotal = $ninosExtras + $adultosExtras;
+
                 $precioFinal = round($precioBase + ($costoExtraAdulto * $adultosExtras) + ($costoExtraNino * $ninosExtras), 2);
 
                 $costoFinalAdultos = round($costoExtraAdulto * $adultosExtras, 2);
@@ -91,7 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'ninosExtras' => $ninosExtras,
                 'adultosExtras' => $adultosExtras,
                 'costoFinalAdultos' => $costoFinalAdultos,
-                'costoFinalNinos' => $costoFinalNinos
+                'costoFinalNinos' => $costoFinalNinos,
+                'extrasTotal' => $extrasTotal
           
             ];
 

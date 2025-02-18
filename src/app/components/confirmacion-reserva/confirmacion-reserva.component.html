@@ -46,23 +46,45 @@
     <!-- Detalles de la reserva -->
     <div class="col-md-6">
       <div class="card p-4 ticket-card text-center">
-        <img
-          class="mb-4"
-          src="\assets\logo.png"
-          alt="logo"
-          height="50"
-          width="200"
-        />
+        <img class="mb-4" src="\assets\logo.png" alt="logo" height="50" width="200" />
         <h4 class="text-center text-primary">Detalles de la Reserva</h4>
         <div class="text-center ticket-line"></div>
 
         <div class="ticket-info">
           <p><strong>Hotel:</strong> {{ reserva.destino }}</p>
-          <p><strong>Habitación:</strong> {{ reserva.tipo_habitacion }}</p>
-          <p><strong>Capacidad:</strong> {{ reserva.capacidad }} personas</p>
-          <p><strong>Fecha Inicio:</strong> {{ reserva.fechaInicio }}</p>
-          <p><strong>Fecha Fin:</strong> {{ reserva.fechaFin }}</p>
-         
+          <p><strong>Num Habitación:</strong> {{ reserva?.habitacion?.numero_habitacion }}</p>
+          <p><strong>Tipo Habitación:</strong> {{ reserva?.habitacion?.tipo_habitacion }}</p>
+          <p><strong>Fecha Inicio:</strong> {{ reserva?.filtros?.fechaInicio }}</p>
+          <p><strong>Fecha Fin:</strong> {{ reserva?.filtros?.fechaFin }}</p>
+          <p><strong>Capacidad:</strong> {{ reserva?.habitacion?.capacidad }} personas</p>
+          <p><strong>Huespedes totales:</strong> {{ reserva?.habitacion?.extrasTotal }} personas <br>
+            {{ reserva?.habitacion?.extras }}
+          </p>
+          <p><strong>Precio por noche:</strong> {{ reserva?.habitacion?.precioBase }}</p>
+          <!-- Mostrar Adultos Extra solo si hay -->
+          <tr *ngIf="reserva?.habitacion?.adultosExtras && reserva?.habitacion?.adultosExtras > 0">
+            <td><strong>Adultos extra:</strong></td>
+            <td>{{ reserva?.habitacion?.adultosExtras }}</td>
+          </tr>
+          <tr *ngIf="reserva?.habitacion?.costoFinalAdultos && reserva?.habitacion?.costoFinalAdultos > 0">
+            <td><strong>Costo Extra (30% por adulto):</strong></td>
+            <td>MXN ${{ reserva?.habitacion?.costoFinalAdultos }}</td>
+          </tr>
+
+          <!-- Mostrar Niños Extra solo si hay -->
+          <tr *ngIf="reserva?.habitacion?.ninosExtras && reserva?.habitacion?.ninosExtras > 0">
+            <td><strong>Niños extra:</strong></td>
+            <td>{{ reserva?.habitacion?.ninosExtras }}</td>
+          </tr>
+          <tr *ngIf="reserva?.habitacion?.costoFinalNinos && reserva?.habitacion?.costoFinalNinos > 0">
+            <td><strong>Costo Extra (15% por niño):</strong></td>
+            <td>MXN ${{ reserva?.habitacion?.costoFinalNinos }}</td>
+          </tr>
+
+          <p><strong>Precio Total:</strong> MXN ${{ reserva?.habitacion?.precio_calculado }}</p>
+
+
+
         </div>
         <div class="text-center ticket-line"></div>
       </div>
@@ -71,3 +93,5 @@
 </div>
 
 <app-footer></app-footer>
+
+
