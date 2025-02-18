@@ -54,10 +54,11 @@ export class ListaHotelesComponent implements OnInit, OnDestroy {
   }
 
   verHabitaciones(hotelId: number) {
-    this.router.navigate(['/habitaciones', hotelId], {
-      state: { filtros: this.filtros }, 
+    this.router.navigate(['/habitaciones'], {
+      state: { hotelId: hotelId, filtros: this.filtros },
     });
   }
+  
   
 
   ngOnDestroy() {
