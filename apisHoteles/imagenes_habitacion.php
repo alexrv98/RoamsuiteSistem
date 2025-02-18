@@ -3,7 +3,7 @@ require_once 'cors.php';
 require_once 'db.php';
 
 // URL base configurable: Cambia esto según tu entorno
-$base_url = "http://localhost:4200/assets/";
+$base_url = "http://192.168.1.102/HOTELSAAJ/assets/";
 
 // Verificar el método de la solicitud
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
