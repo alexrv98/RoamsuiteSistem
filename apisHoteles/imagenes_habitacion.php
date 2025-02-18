@@ -2,9 +2,6 @@
 require_once 'cors.php';
 require_once 'db.php';
 
-// URL base configurable: Cambia esto según tu entorno
-$base_url = "http://192.168.1.102/HOTELSAAJ/assets/";
-
 // Verificar el método de la solicitud
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Verificar si se ha proporcionado el ID de la habitación
@@ -23,14 +20,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             // Verificar si se encontraron imágenes
             if ($imagenes) {
+                // URL base de tu dominio
+                $base_url = "http://localhost:4200/"; // Cambia esto por la URL base de tu servidor
+
                 // Añadir la URL completa a las imágenes y eliminar saltos de línea o espacios en blanco innecesarios
                 foreach ($imagenes as &$imagen) {
-                  // Eliminar cualquier salto de línea o espacio en blanco adicional
-                  $imagen['img_url'] = trim($base_url . $imagen['img_url']);
+                    // Eliminar cualquier salto de línea o espacio en blanco adicional
+                    $imagen['img_url'] = trim($base_url . $imagen['img_url']);
+                }
 
-              }
-
-                // Responder con las imágenes encontradas
                 echo json_encode(['status' => 'success', 'data' => $imagenes]);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'No se encontraron imágenes para esta habitación']);
