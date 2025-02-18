@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             // Verificar si se encontraron imágenes
             if ($imagenes) {
                 // URL base de tu dominio
-                $base_url = "http://localhost:4200/"; // Cambia esto por la URL base de tu servidor
+                $base_url = "http://192.168.1.102/";// Cambia esto por la URL base de tu servidor
 
                 // Añadir la URL completa a las imágenes y eliminar saltos de línea o espacios en blanco innecesarios
                 foreach ($imagenes as &$imagen) {
