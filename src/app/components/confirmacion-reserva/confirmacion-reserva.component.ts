@@ -7,11 +7,18 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
 import { AuthService } from '../../services/auth.service';
 import { take } from 'rxjs/operators';
+import { OpenpayComponent } from '../openpay/openpay.component';
 
 @Component({
   selector: 'app-confirmacion-reserva',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NavbarComponent,
+    FooterComponent,
+    OpenpayComponent,
+  ],
   templateUrl: './confirmacion-reserva.component.html',
   styleUrls: ['./confirmacion-reserva.component.css'],
 })
@@ -46,7 +53,8 @@ export class ConfirmarReservaComponent implements OnInit {
 
       const token = this.authService.getToken();
       if (token) {
-        this.authService.obtenerUsuarioLogueado(token)
+        this.authService
+          .obtenerUsuarioLogueado(token)
           .pipe(take(1)) // Evita fugas de memoria
           .subscribe({
             next: (response) => {
@@ -59,7 +67,7 @@ export class ConfirmarReservaComponent implements OnInit {
             },
             error: (error) => {
               console.error('Error al obtener los datos del usuario:', error);
-            }
+            },
           });
       } else {
         this.router.navigate(['/login']);
@@ -82,7 +90,6 @@ export class ConfirmarReservaComponent implements OnInit {
       this.renderizarBotonPago();
       return;
     }
-    
 
     const scriptUrl =
       'https://www.paypal.com/sdk/js?client-id=AWIzDf7xorUxwwhL-i8PFdB4g4rO7r6y9quBVumXa8bllB86EiqsIXKtiPcCq8JqItGU1mWF0Xinoigs&components=buttons&currency=MXN';
@@ -93,7 +100,7 @@ export class ConfirmarReservaComponent implements OnInit {
       this.paypal = (window as any).paypal;
       this.renderizarBotonPago();
     };
-    
+
     document.body.appendChild(scriptElement);
   }
 
@@ -137,8 +144,9 @@ export class ConfirmarReservaComponent implements OnInit {
         email: this.cliente.correo,
       };
 
-      this.reservaService.realizarReserva(datosReserva)
-        .pipe(take(1)) 
+      this.reservaService
+        .realizarReserva(datosReserva)
+        .pipe(take(1))
         .subscribe({
           next: (res) => {
             if (res.status === 'success') {
@@ -151,10 +159,12 @@ export class ConfirmarReservaComponent implements OnInit {
           },
           error: (error) => {
             console.error('Error en la reserva:', error);
-          }
+          },
         });
     } else {
-      alert('Por favor, completa todos los campos y realiza el pago antes de confirmar.');
+      alert(
+        'Por favor, completa todos los campos y realiza el pago antes de confirmar.'
+      );
     }
   }
 }
