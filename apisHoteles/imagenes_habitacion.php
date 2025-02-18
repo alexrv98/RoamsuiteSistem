@@ -21,15 +21,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             // Verificar si se encontraron imágenes
             if ($imagenes) {
                 // URL base de tu dominio
-                $base_url = "http://192.168.1.102/";// Cambia esto por la URL base de tu servidor
+                $base_url = "http://192.168.1.102/HOTELSAAJ/public/";// Cambia esto por la URL base de tu servidor
 
                 // Añadir la URL completa a las imágenes y eliminar saltos de línea o espacios en blanco innecesarios
                 foreach ($imagenes as &$imagen) {
-                    // Eliminar cualquier salto de línea o espacio en blanco adicional
-                    $imagen['img_url'] = trim($base_url . $imagen['img_url']);
-                }
+                  // Eliminar cualquier salto de línea o espacio en blanco adicional
+                  $imagen['img_url'] = trim($base_url . $imagen['img_url']);
+              }
 
-                echo json_encode(['status' => 'success', 'data' => $imagenes]);
+              echo json_encode(['status' => 'success', 'data' => $imagenes]);
+
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'No se encontraron imágenes para esta habitación']);
             }
