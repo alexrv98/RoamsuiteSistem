@@ -1,6 +1,10 @@
 <div class="card shadow-sm border-0 rounded-4 p-4">
   <h4 class="mb-4 text-primary">Deja tu comentario</h4>
 
+  <div *ngIf="!estaAutenticado" class="alert alert-danger">
+    Debes iniciar sesión para dejar un comentario.
+  </div>
+
   <input type="hidden" [(ngModel)]="nuevoComentario.usuarioId" />
 
   <div class="mb-3" *ngIf="estaAutenticado">
@@ -13,8 +17,6 @@
     >
     <input type="text" class="form-control" [value]="usuarioNombre" disabled />
   </div>
-
- 
 
   <!-- Selección de hotel basado en reservas -->
   <div class="mb-3" *ngIf="estaAutenticado && hotelesReservados.length > 0">

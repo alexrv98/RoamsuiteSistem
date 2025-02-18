@@ -2,13 +2,10 @@
   <div class="card-body">
     <h4 class="text-center text-primary mb-4">Comentarios y Calificaciones</h4>
 
-    <div *ngFor="let comentario of comentarios" class="mb-3">
+    <div *ngFor="let comentario of comentarios.slice(0, mostrarTodos ? comentarios.length : 2); let i = index" class="mb-3">
       <div class="card border-0 shadow-sm p-3">
         <div class="d-flex align-items-center mb-2">
-          <i
-            class="fa-solid fa-user-circle text-primary me-2"
-            style="font-size: 1.5rem"
-          ></i>
+          <i class="fa-solid fa-user-circle text-primary me-2" style="font-size: 1.5rem"></i>
           <h5 class="text-primary mb-0">{{ comentario.usuario }}</h5>
         </div>
 
@@ -17,12 +14,10 @@
         <div class="d-flex align-items-center">
           <span class="me-2 text-muted">Calificación:</span>
           <span class="star-rating">
-            <i
-              *ngFor="let star of [1, 2, 3, 4, 5]"
-              class="fa-solid fa-star"
+            <i *ngFor="let star of [1, 2, 3, 4, 5]" class="fa-solid fa-star"
               [class.text-warning]="star <= comentario.calificacion"
-              [class.text-secondary]="star > comentario.calificacion"
-            ></i>
+              [class.text-secondary]="star > comentario.calificacion">
+            </i>
           </span>
         </div>
 
@@ -31,6 +26,12 @@
           {{ comentario.fecha | date : "dd/MM/yyyy" }}
         </p>
       </div>
+    </div>
+
+    <div class="text-center mt-3" *ngIf="comentarios.length > 2">
+      <button class="btn btn-primary" (click)="mostrarTodos = !mostrarTodos">
+        {{ mostrarTodos ? 'Ver menos' : 'Ver más' }}
+      </button>
     </div>
   </div>
 </div>

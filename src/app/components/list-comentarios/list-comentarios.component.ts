@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -11,11 +11,12 @@ import { ComentariosService } from '../../services/comentarios.service';
   templateUrl: './list-comentarios.component.html',
   styleUrl: './list-comentarios.component.css',
 })
-export class ListComentariosComponent {
+export class ListComentariosComponent implements OnInit {
   comentarios: any[] = [];
   hotelId: number | null = null;
   calificacion: number = 5;
   comentario: string = '';
+  mostrarTodos: boolean = false;
 
   constructor(
     private comentarioService: ComentariosService,
@@ -24,14 +25,14 @@ export class ListComentariosComponent {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      const id = params.get('hotelId'); 
+      const id = params.get('hotelId');
       if (id) {
         this.hotelId = Number(id);
         this.cargarComentarios();
       }
     });
   }
-  
+
   cargarComentarios(): void {
     if (this.hotelId) {
       this.comentarioService.getComentarios(this.hotelId).subscribe({
@@ -48,5 +49,9 @@ export class ListComentariosComponent {
         },
       });
     }
+  }
+
+  toggleMostrarTodos(): void {
+    this.mostrarTodos = !this.mostrarTodos;
   }
 }

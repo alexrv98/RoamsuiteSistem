@@ -34,7 +34,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     document.body.classList.remove('modal-open');
     document.querySelector('.modal-backdrop')?.remove();
     document.body.style.overflow = 'auto';
+
+    // Si el usuario ya está autenticado, redirigirlo fuera del login
+    if (this.authService.estaAutenticado()) {
+      this.router.navigate(['/']); // Cambia la ruta si es necesario
+    }
   }
+
 
   onLogin(): void {
     this.authService.login(this.correo, this.password)
@@ -46,11 +52,11 @@ export class LoginComponent implements OnInit, OnDestroy {
             const state = history.state;
 
             if (state.reserva) {
-              this.router.navigate(['/confirmar-reserva'], {
-                state: { reserva: state.reserva },
-              });
+              this.router.navigate(['/confirmar-reserva'], { state: { reserva: state.reserva } });
             } else {
-              this.router.navigate([userRole === 'admin' ? '/admin' : '/']);
+              this.router.navigate([userRole === 'admin' ? '/admin' : '/']).then(() => {
+                window.history.replaceState(null, '', '/'); // Limpia el historial
+              });
             }
           } else {
             this.errorMessage = response.message;
@@ -62,8 +68,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       });
   }
 
+
   ngOnDestroy(): void {
-    this.unsubscribe$.next(); 
+    this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
 }
