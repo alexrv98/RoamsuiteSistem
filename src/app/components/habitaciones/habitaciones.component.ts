@@ -29,6 +29,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class HabitacionesComponent implements OnInit, OnDestroy {
   hotelId!: number;
+  hotelNombre: string = ''; // Agregamos una variable para el nombre del hotel
   filtros: any = {};
   habitaciones: any = { mejorOpcion: [], otrasHabitaciones: [] };
   mensajeBusqueda: string | null = null;
@@ -46,10 +47,13 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-  
+
     const state = history.state;
     if (state.hotelId) {
-      this.hotelId = state.hotelId; 
+      this.hotelId = state.hotelId;
+    }
+    if (state.hotelNombre) {
+      this.hotelNombre = state.hotelNombre; // Guardamos el nombre del hotel
     }
       if (state.filtros) {
       this.filtros = state.filtros;
@@ -57,10 +61,10 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
     } else {
       console.warn('No hay filtros en el estado de navegación.');
     }
-  
+
     this.obtenerHabitaciones();
   }
-  
+
   obtenerHabitaciones() {
     const filtros = {
       hotelId: this.hotelId,
@@ -70,32 +74,32 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
       ninos: this.filtros.huespedesNinos,
       camas: this.filtros.numCamas,
     };
-  
+
     this.habitacionesService
       .obtenerHabitaciones(filtros)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
         console.log('Respuesta de la API:', res);
-  
+
         if (res.status === 'success') {
           this.mensajeBusqueda = res.mensaje_busqueda || null;
-          
+
           this.habitaciones = {
             mejorOpcion: res.habitacionesExactas, // Habitaciones con el número exacto de camas
             otrasHabitaciones: res.otrasHabitaciones, // Habitaciones con diferente número de camas
           };
-  
+
           console.log('Habitaciones exactas:', this.habitaciones.mejorOpcion);
           console.log('Otras habitaciones:', this.habitaciones.otrasHabitaciones);
         } else {
           console.error('Error al obtener habitaciones:', res.message);
           this.habitaciones = { mejorOpcion: [], otrasHabitaciones: [] };
         }
-  
+
         this.isLoading = false;
       });
   }
-  
+
 
   filtrarPorPrecio() {
     const min = this.filtroPrecioMin ?? 0;

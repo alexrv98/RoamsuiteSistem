@@ -1,6 +1,12 @@
 <app-navbar></app-navbar>
 <app-filtro-hoteles [filtros]="filtros"></app-filtro-hoteles>
 
+<div class="container text-center mt-4">
+  <h2 class="fw-bold text-primary">
+    <i class="fa-solid fa-hotel"></i> {{ hotelNombre }}
+  </h2>
+</div>
+
 <div class="container">
   <div class="row">
     <ng-container *ngIf="isLoading; else mostrarHabitaciones">
@@ -76,12 +82,12 @@
                 {{ habitacion.extras }}
               </p>
 
-              
+
               <p class="card-text fw-bold text-success">
                 <strong><i class="fa-solid fa-dollar-sign"></i> Precio Total:</strong>
                 MXN ${{ habitacion.precio_calculado }}
               </p>
-              
+
 
               <button
                 type="button"
@@ -134,7 +140,7 @@
                     <strong><i class="fa-solid fa-dollar-sign"></i> Precio por noche:</strong>
                     MXN ${{ habitacion.precio_base }}
                   </p>
-                  
+
                   <p class="card-text text-warning">
                     <strong>Mensaje:</strong> {{ habitacion.mensaje }}
                   </p>

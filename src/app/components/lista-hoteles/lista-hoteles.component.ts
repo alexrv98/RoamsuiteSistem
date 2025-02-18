@@ -23,7 +23,7 @@ import { takeUntil } from 'rxjs/operators';
 export class ListaHotelesComponent implements OnInit, OnDestroy {
   hoteles: any[] = [];
   filtros: any = {};
-  isLoading: boolean = true; 
+  isLoading: boolean = true;
 
   private unsubscribe$ = new Subject<void>();
 
@@ -42,7 +42,7 @@ export class ListaHotelesComponent implements OnInit, OnDestroy {
   cargarHoteles() {
     this.hotelService
       .obtenerHotelesDisponibles(this.filtros)
-      .pipe(takeUntil(this.unsubscribe$))  
+      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
         if (res.status === 'success') {
           this.hoteles = res.data;
@@ -53,17 +53,17 @@ export class ListaHotelesComponent implements OnInit, OnDestroy {
       });
   }
 
-  verHabitaciones(hotelId: number) {
+  verHabitaciones(hotelId: number, hotelNombre: string) {
     this.router.navigate(['/habitaciones'], {
-      state: { hotelId: hotelId, filtros: this.filtros },
+      state: { hotelId: hotelId, hotelNombre: hotelNombre, filtros: this.filtros },
     });
   }
-  
-  
+
+
 
   ngOnDestroy() {
-    this.unsubscribe$.next(); 
-    this.unsubscribe$.complete();  
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
 
