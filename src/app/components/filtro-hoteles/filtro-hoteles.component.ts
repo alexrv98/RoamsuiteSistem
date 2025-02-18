@@ -6,7 +6,6 @@ import { LugarService } from '../../services/lugar.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-
 @Component({
   selector: 'app-filtro-hoteles',
   templateUrl: './filtro-hoteles.component.html',
@@ -23,9 +22,8 @@ export class FiltroHotelesComponent implements OnInit {
     fechaFin: '',
     huespedesAdultos: 1,
     huespedesNinos: 0,
-    numCamas: 1
+    numCamas: 1,
   };
-  
 
   private unsubscribe$ = new Subject<void>();
 
@@ -37,16 +35,19 @@ export class FiltroHotelesComponent implements OnInit {
   }
 
   cargarDestinos() {
-    this.lugarService.obtenerLugares().pipe(takeUntil(this.unsubscribe$)).subscribe({
-      next: (response) => {
-        if (response.status === 'success') {
-          this.destinos = response.data;
-        } else {
-          console.error('Error al obtener destinos:', response.message);
-        }
-      },
-      error: (error) => console.error('Error en la API:', error),
-    });
+    this.lugarService
+      .obtenerLugares()
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe({
+        next: (response) => {
+          if (response.status === 'success') {
+            this.destinos = response.data;
+          } else {
+            console.error('Error al obtener destinos:', response.message);
+          }
+        },
+        error: (error) => console.error('Error en la API:', error),
+      });
   }
 
   ngOnDestroy() {
@@ -54,10 +55,16 @@ export class FiltroHotelesComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
-
   buscarHoteles() {
-    const { destino, fechaInicio, fechaFin, huespedesAdultos, huespedesNinos, numCamas } = this.filtros;
-  
+    const {
+      destino,
+      fechaInicio,
+      fechaFin,
+      huespedesAdultos,
+      huespedesNinos,
+      numCamas,
+    } = this.filtros;
+
     if (!destino || !fechaInicio || !fechaFin || huespedesAdultos < 1) {
       alert('Por favor, completa todos los campos.');
       return;
@@ -65,11 +72,10 @@ export class FiltroHotelesComponent implements OnInit {
     if (!this.validarFechas()) {
       return;
     }
-  
+
     // Pasar filtros usando el state en lugar de queryParams
     this.router.navigate(['/buscar'], { state: { filtros: this.filtros } });
   }
-  
 
   establecerFechasMinMax() {
     const hoy = new Date();
@@ -80,39 +86,75 @@ export class FiltroHotelesComponent implements OnInit {
     this.fechaMaxima = maxFecha.toISOString().split('T')[0];
   }
 
-
   validarFechas(): boolean {
     const fechaInicio = new Date(this.filtros.fechaInicio);
     const fechaFin = new Date(this.filtros.fechaFin);
     const hoy = new Date();
     const maxFecha = new Date();
     maxFecha.setFullYear(hoy.getFullYear() + 1);
-  
-    const hoyString = hoy.toISOString().split('T')[0]; 
+
+    const hoyString = hoy.toISOString().split('T')[0];
     const fechaInicioString = fechaInicio.toISOString().split('T')[0];
-    const fechaFinString = fechaFin.toISOString().split('T')[0]; 
-  
+    const fechaFinString = fechaFin.toISOString().split('T')[0];
+
     // Validar fecha de inicio no anterior a hoy
     if (fechaInicioString < hoyString) {
       alert('La fecha de inicio no puede ser anterior a hoy.');
       this.filtros.fechaInicio = hoyString;
       return false;
     }
-  
+
     if (fechaFinString < fechaInicioString) {
       alert('La fecha de fin no puede ser anterior a la fecha de inicio.');
-      this.filtros.fechaFin = fechaInicioString; 
+      this.filtros.fechaFin = fechaInicioString;
       return false;
     }
-  
+
     if (fechaFinString > maxFecha.toISOString().split('T')[0]) {
       alert('El rango máximo permitido es de 1 año.');
       this.filtros.fechaFin = maxFecha.toISOString().split('T')[0];
       return false;
     }
-  
-    return true; 
+
+    return true;
   }
-  
-  
+
+  // ----------------------------------------------------------
+  mostrarInputs: boolean = false;
+
+  get totalPersonas(): number {
+    return this.filtros.huespedesAdultos + this.filtros.huespedesNinos;
+  }
+
+  mostrarOpciones() {
+    this.mostrarInputs = true;
+  }
+
+  ocultarOpciones(event: Event) {
+    const clickedElement = event.target as HTMLElement;
+    if (!clickedElement.closest('.grupo-huespedes')) {
+      this.mostrarInputs = false;
+    }
+  }
+
+  cambiarCantidad(
+    tipo: 'adultos' | 'ninos' | 'camas',
+    operacion: 'sumar' | 'restar'
+  ) {
+    if (tipo === 'adultos') {
+      if (operacion === 'sumar') this.filtros.huespedesAdultos++;
+      else if (this.filtros.huespedesAdultos > 1)
+        this.filtros.huespedesAdultos--;
+    }
+
+    if (tipo === 'ninos') {
+      if (operacion === 'sumar') this.filtros.huespedesNinos++;
+      else if (this.filtros.huespedesNinos > 0) this.filtros.huespedesNinos--;
+    }
+
+    if (tipo === 'camas') {
+      if (operacion === 'sumar') this.filtros.numCamas++;
+      else if (this.filtros.numCamas > 1) this.filtros.numCamas--;
+    }
+  }
 }

@@ -1,7 +1,8 @@
 .form-floating label i {
   margin-right: 5px;
 }
-.form-select, .form-control {
+.form-select,
+.form-control {
   border-radius: 10px;
   border: 1px solid #ddd;
 }
@@ -16,7 +17,6 @@
 .card {
   border-radius: 15px;
 }
-
 
 #map {
   width: 100%;
