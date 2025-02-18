@@ -1,24 +1,25 @@
-<form #pagoForm="ngForm" (ngSubmit)="procesarPago()">
+<form id="form-pago">
   <input
     type="text"
     placeholder="Número de tarjeta"
-    [(ngModel)]="tarjeta.numero"
-    name="numero"
-    required
+    [(ngModel)]="tarjeta.card_number"
   />
   <input
     type="text"
-    placeholder="MM/AA"
-    [(ngModel)]="tarjeta.expiracion"
-    name="expiracion"
-    required
+    placeholder="Nombre en tarjeta"
+    [(ngModel)]="tarjeta.holder_name"
   />
   <input
     type="text"
-    placeholder="CVV"
-    [(ngModel)]="tarjeta.cvv"
-    name="cvv"
-    required
+    placeholder="Mes Exp."
+    [(ngModel)]="tarjeta.expiration_month"
   />
-  <button type="submit">Pagar</button>
+  <input
+    type="text"
+    placeholder="Año Exp."
+    [(ngModel)]="tarjeta.expiration_year"
+  />
+  <input type="text" placeholder="CVV" [(ngModel)]="tarjeta.cvv2" />
+  <button type="button" (click)="pagar()">Pagar</button>
 </form>
+<p>{{ mensaje }}</p>
