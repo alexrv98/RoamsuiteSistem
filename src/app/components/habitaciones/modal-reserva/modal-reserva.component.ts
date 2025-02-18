@@ -19,35 +19,33 @@ export class ModalReservaComponent {
   constructor(private router: Router, private lugarService: LugarService,
     private authService: AuthService
   ) {}
- 
+
 
 
   continuarReserva() {
-    const reserva = {
-      habitacion: this.habitacion,
-      filtros: this.filtros,
-      destino: '',      
-    };
-  
-    this.lugarService.obtenerDestinoPorId(this.filtros?.destino)
-      .pipe(take(1)) 
-      .subscribe((response) => {
-  
-        if (response.status === 'success') {
-          // Si todo es correcto, asigna el destino al objeto reserva
-          reserva.destino = response.data.nombre;
-  
-          const usuarioAutenticado = this.authService.estaAutenticado();
-          const ruta = usuarioAutenticado ? '/confirmar-reserva' : '/login';
-  
-          // Aquí pasas el objeto completo 'reserva' a la siguiente vista
-          this.router.navigate([ruta], { state: { reserva }, replaceUrl: usuarioAutenticado });
-        } else {
-          alert('Error al obtener el destino');
-        }
-      });
-  }
-  
+  const reserva = {
+    habitacion: this.habitacion, 
+    filtros: this.filtros,
+    destino: '',
+  };
+
+  this.lugarService.obtenerDestinoPorId(this.filtros?.destino)
+    .pipe(take(1))
+    .subscribe((response) => {
+      if (response.status === 'success') {
+        reserva.destino = response.data.nombre;
+
+        const usuarioAutenticado = this.authService.estaAutenticado();
+        const ruta = usuarioAutenticado ? '/confirmar-reserva' : '/login';
+
+        // Navegamos a la siguiente página pasando el objeto reserva completo
+        this.router.navigate([ruta], { state: { reserva }, replaceUrl: usuarioAutenticado });
+      } else {
+        alert('Error al obtener el destino');
+      }
+    });
+}
+
   
   
 }
