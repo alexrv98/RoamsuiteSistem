@@ -7,7 +7,7 @@
         </h4>
         <div class="row g-3">
           <!-- Destino -->
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="form-floating">
               <select class="form-select" [(ngModel)]="filtros.destino">
                 <option *ngFor="let destino of destinos" [value]="destino.id">
@@ -49,30 +49,109 @@
               </label>
             </div>
           </div>
+          <!-- Contenedor del input principal -->
 
-          <!-- Huéspedes Adultos -->
-<div class="col-md-2">
-  <div class="form-floating">
-    <input class="form-control" type="number" min="1" [(ngModel)]="filtros.huespedesAdultos" />
-    <label><i class="fa-solid fa-user text-primary"></i> Adultos</label>
-  </div>
-</div>
+          <div class="col-md-3 position-relative">
+            <div class="form-floating">
+              <input
+                class="form-control"
+                type="text"
+                readonly
+                [value]="
+                  totalPersonas + ' personas, ' + filtros.numCamas + ' cama(s)'
+                "
+                (click)="mostrarOpciones()"
+              />
+              <label
+                ><i class="fa-solid fa-user text-primary"></i> Huéspedes</label
+              >
+            </div>
 
-<!-- Huéspedes Niños -->
-<div class="col-md-2">
-  <div class="form-floating">
-    <input class="form-control" type="number" min="0" [(ngModel)]="filtros.huespedesNinos" />
-    <label><i class="fa-solid fa-child text-primary"></i> Niños</label>
-  </div>
-</div>
+            <!-- Contenedor flotante para los inputs -->
+            <div
+              *ngIf="mostrarInputs"
+              class="grupo-huespedes position-absolute bg-white shadow p-3 rounded"
+              style="top: 50px; left: 0; z-index: 1000; width: 250px"
+            >
+              <h6>Habitación 1</h6>
 
-<!-- Número de Camas -->
-<div class="col-md-2">
-  <div class="form-floating">
-    <input class="form-control" type="number" min="1" [(ngModel)]="filtros.numCamas" />
-    <label><i class="fa-solid fa-bed text-primary"></i> Camas</label>
-  </div>
-</div>
+              <!-- Adultos -->
+              <div
+                class="d-flex justify-content-between align-items-center mt-2"
+              >
+                <span>Adultos</span>
+                <div>
+                  <button
+                    class="btn btn-outline-secondary btn-sm"
+                    (click)="cambiarCantidad('adultos', 'restar')"
+                  >
+                    -
+                  </button>
+                  <span class="mx-2">{{ filtros.huespedesAdultos }}</span>
+                  <button
+                    class="btn btn-outline-primary btn-sm"
+                    (click)="cambiarCantidad('adultos', 'sumar')"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <!-- Niños -->
+              <div
+                class="d-flex justify-content-between align-items-center mt-2"
+              >
+                <span>Niños</span>
+                <div>
+                  <button
+                    class="btn btn-outline-secondary btn-sm"
+                    (click)="cambiarCantidad('ninos', 'restar')"
+                  >
+                    -
+                  </button>
+                  <span class="mx-2">{{ filtros.huespedesNinos }}</span>
+                  <button
+                    class="btn btn-outline-primary btn-sm"
+                    (click)="cambiarCantidad('ninos', 'sumar')"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <!-- Camas -->
+              <div
+                class="d-flex justify-content-between align-items-center mt-2"
+              >
+                <span>Camas</span>
+                <div>
+                  <button
+                    class="btn btn-outline-secondary btn-sm"
+                    (click)="cambiarCantidad('camas', 'restar')"
+                  >
+                    -
+                  </button>
+                  <span class="mx-2">{{ filtros.numCamas }}</span>
+                  <button
+                    class="btn btn-outline-primary btn-sm"
+                    (click)="cambiarCantidad('camas', 'sumar')"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              <!-- Botón para cerrar -->
+              <div class="text-end mt-3">
+                <button
+                  class="btn btn-primary btn-sm"
+                  (click)="mostrarInputs = false"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
 
           <!-- Botón de búsqueda -->
           <div class="col-md-2 d-flex align-items-center">

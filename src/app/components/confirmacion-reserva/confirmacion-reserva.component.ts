@@ -110,7 +110,7 @@ export class ConfirmarReservaComponent implements OnInit {
             return actions.order.create({
               purchase_units: [
                 {
-                  amount: { value: this.reserva.totalReserva.toString() },
+                  amount: { value: this.reserva.habitacion.precio_calculado.toString() },
                 },
               ],
             });
@@ -138,7 +138,7 @@ export class ConfirmarReservaComponent implements OnInit {
         fechaInicio: this.reserva.habitacion.fechaInicio,
         fechaFin: this.reserva.habitacion.fechaFin,
         totalReserva: this.reserva.habitacion.totalReserva,
-        num_dultos: this.reserva.habitacion.adultosExtras,
+        num_adultos: this.reserva.habitacion.adultosExtras,
         num_ninos: this.reserva.habitacion.ninosExtras,
         nombre: this.cliente.nombre,
         email: this.cliente.correo,
