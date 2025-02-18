@@ -3,11 +3,12 @@ import { Router } from '@angular/router';
 import { LugarService } from '../../../services/lugar.service';
 import { AuthService } from '../../../services/auth.service';
 import { take } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-modal-reserva',
   templateUrl: './modal-reserva.component.html',
-  imports: [],
+  imports: [CommonModule],
   styleUrls: ['./modal-reserva.component.css'],
 })
 export class ModalReservaComponent implements OnChanges {
