@@ -58,6 +58,7 @@ export class ListaHotelesComponent implements OnInit, OnDestroy {
       state: { filtros: this.filtros }, 
     });
   }
+  
 
   ngOnDestroy() {
     this.unsubscribe$.next(); 

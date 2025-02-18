@@ -9,10 +9,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $hotelId = $data['hotelId'];
     $fechaInicio = $data['fechaInicio'];
     $fechaFin = $data['fechaFin'];
-    $huespedes = $data['huespedes'];
+    $numAdultos = $data['adultos'];
+    $numNinos = $data['ninos'];
+    $totalHuespedes = $numAdultos + $numNinos;
+    $camasSolicitadas = $data['camas'];
 
     try {
-        // Primero, buscamos habitaciones con la mejor capacidad para los huéspedes
+        // Consulta todas las habitaciones disponibles ordenadas por cercanía en número de camas
         $stmt = $conn->prepare("
             SELECT 
                 ha.id AS habitacion_id,
@@ -24,42 +27,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             FROM habitaciones ha
             JOIN tipos_habitacion th ON ha.tipo_habitacion_id = th.id
             WHERE ha.hotel_id = :hotelId
-            AND th.capacidad >= :huespedes
             AND ha.id NOT IN (
                 SELECT r.habitacion_id 
                 FROM reservaciones r
                 WHERE (r.fecha_inicio <= :fechaFin AND r.fecha_fin >= :fechaInicio)
             )
-            ORDER BY th.capacidad DESC  -- Preferir las habitaciones más adecuadas a la cantidad de huéspedes
+            ORDER BY ABS(th.camas - :camasSolicitadas), ha.precio ASC
         ");
 
         $stmt->bindParam(':hotelId', $hotelId, PDO::PARAM_INT);
         $stmt->bindParam(':fechaInicio', $fechaInicio, PDO::PARAM_STR);
         $stmt->bindParam(':fechaFin', $fechaFin, PDO::PARAM_STR);
-        $stmt->bindParam(':huespedes', $huespedes, PDO::PARAM_INT);
-
+        $stmt->bindParam(':camasSolicitadas', $camasSolicitadas, PDO::PARAM_INT);
         $stmt->execute();
 
         $habitacionesDisponibles = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        $mejorOpcion = [];
+        $habitacionesExactas = [];
         $otrasHabitaciones = [];
 
         foreach ($habitacionesDisponibles as $habitacion) {
-            if ($habitacion['capacidad'] == $huespedes) {
-                $mejorOpcion[] = $habitacion;  // La habitación que tiene la capacidad exacta
-            } else {
-                $otrasHabitaciones[] = $habitacion;  // Las otras habitaciones disponibles
+            $capacidadMaxima = $habitacion['capacidad'];
+            $precioBase = $habitacion['precio'];
+            $precioFinal = $precioBase;
+            $mensaje = null;
+
+            // Si el número de huéspedes supera la capacidad de la habitación
+            if ($totalHuespedes > $capacidadMaxima) {
+                $huespedesExtra = $totalHuespedes - $capacidadMaxima;
+                $mensaje = "Capacidad máxima excedida. Se aplicará un cargo extra por huésped adicional.";
+
+                $costoExtraAdulto = round($precioBase * 0.30, 2);
+                $costoExtraNino = round($precioBase * 0.15, 2);   
+
+                $ninosExtras = min($huespedesExtra, $numNinos);
+                $adultosExtras = max(0, $huespedesExtra - $ninosExtras);
+
+                $extras = $ninosExtras . " niños y " . $adultosExtras . " adultos";
+
+                $precioFinal = round($precioBase + ($costoExtraAdulto * $adultosExtras) + ($costoExtraNino * $ninosExtras), 2);
             }
+
+            $habitacionData = [
+                'habitacion_id' => $habitacion['habitacion_id'],
+                'numero_habitacion' => $habitacion['numero_habitacion'],
+                'tipo_habitacion' => $habitacion['tipo_habitacion'],
+                'capacidad' => $habitacion['capacidad'],
+                'camas' => $habitacion['camas'],
+                'precio_base' => round($precioBase, 2),
+                'precio_calculado' => round($precioFinal, 2),
+                'mensaje' => $mensaje,
+                'extras' => $extras
+            ];
+
+            if ($habitacion['camas'] == $camasSolicitadas) {
+                $habitacionesExactas[] = $habitacionData;
+            } else {
+                $otrasHabitaciones[] = $habitacionData;
+            }
+        }
+
+        // Si no hay habitaciones con el número exacto de camas, enviar mensaje de aviso
+        $mensajeBusqueda = null;
+        if (empty($habitacionesExactas)) {
+            $mensajeBusqueda = "No hay habitaciones con exactamente $camasSolicitadas camas, pero estas opciones pueden interesarle.";
         }
 
         echo json_encode([
             "status" => "success",
-            "data" => [
-                "mejorOpcion" => $mejorOpcion,
-                "otrasHabitaciones" => $otrasHabitaciones
-            ]
-        ]);
+            "mensaje_busqueda" => $mensajeBusqueda,
+            "habitacionesExactas" => $habitacionesExactas,
+            "otrasHabitaciones" => $otrasHabitaciones
+        ], JSON_PRETTY_PRINT);
+        exit;
+
     } catch (PDOException $e) {
         echo json_encode([
             "status" => "error",
@@ -67,4 +107,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
     }
 }
-?>

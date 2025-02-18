@@ -50,21 +50,29 @@
             </div>
           </div>
 
-          <!-- Huéspedes -->
-          <div class="col-md-2">
-            <div class="form-floating">
-              <input
-                class="form-control"
-                type="number"
-                min="1"
-                [(ngModel)]="filtros.huespedes"
-                placeholder="Huéspedes"
-              />
-              <label>
-                <i class="fa-solid fa-user-group text-primary"></i> Huéspedes
-              </label>
-            </div>
-          </div>
+          <!-- Huéspedes Adultos -->
+<div class="col-md-2">
+  <div class="form-floating">
+    <input class="form-control" type="number" min="1" [(ngModel)]="filtros.huespedesAdultos" />
+    <label><i class="fa-solid fa-user text-primary"></i> Adultos</label>
+  </div>
+</div>
+
+<!-- Huéspedes Niños -->
+<div class="col-md-2">
+  <div class="form-floating">
+    <input class="form-control" type="number" min="0" [(ngModel)]="filtros.huespedesNinos" />
+    <label><i class="fa-solid fa-child text-primary"></i> Niños</label>
+  </div>
+</div>
+
+<!-- Número de Camas -->
+<div class="col-md-2">
+  <div class="form-floating">
+    <input class="form-control" type="number" min="1" [(ngModel)]="filtros.numCamas" />
+    <label><i class="fa-solid fa-bed text-primary"></i> Camas</label>
+  </div>
+</div>
 
           <!-- Botón de búsqueda -->
           <div class="col-md-2 d-flex align-items-center">

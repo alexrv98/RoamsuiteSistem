@@ -4,95 +4,22 @@
 <div class="container">
   <div class="row">
     <ng-container *ngIf="isLoading; else mostrarHabitaciones">
-      <div class="col-md-3 d-none d-md-block col-12">
-        <div class="card shadow-lg">
-          <div class="card-body">
-            <p
-              class="text-primary placeholder placeholder-wave col-10 mb-4"
-            ></p>
-            <!-- Placeholder para varios comentarios -->
-            <div *ngFor="let i of [1, 2, 3]" class="mb-3">
-              <div class="card border-0 shadow-sm p-3">
-                <div class="d-flex align-items-center mb-2">
-                  <!-- Placeholder de avatar -->
-                  <span
-                    class="text-primary placeholder placeholder-wave rounded-circle me-2"
-                    style="width: 40px; height: 40px"
-                  ></span>
-                  <!-- Placeholder de nombre -->
-                  <p class="placeholder placeholder-wave col-4 mb-0"></p>
-                </div>
-
-                <!-- Placeholder para comentario -->
-                <p class="placeholder placeholder-wave col-10 mb-1"></p>
-                <p class="placeholder placeholder-wave col-8"></p>
-
-                <!-- Placeholder para calificación -->
-                <div class="d-flex align-items-center">
-                  <span class="d-flex gap-1">
-                    <span
-                      *ngFor="let star of [1, 2, 3, 4, 5]"
-                      class="placeholder placeholder-wave"
-                      style="width: 15px; height: 15px"
-                    ></span>
-                  </span>
-                </div>
-
-                <!-- Placeholder para fecha -->
-                <p class="card-text text-muted mt-2">
-                  <span class="placeholder placeholder-wave col-3"></span>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-md-6">
-        <div *ngFor="let i of [1, 2, 3]" class="card shadow-sm mb-3">
-          <div class="card-body d-flex align-items-center">
-            <!-- Placeholder de imagen -->
-            <span
-              class="placeholder placeholder-wave rounded-3 shadow-sm me-3"
-              style="width: 250px; height: 150px"
-            ></span>
-
-            <div class="flex-grow-1">
-              <!-- Placeholder de título -->
-              <h5 class="placeholder placeholder-wave col-6"></h5>
-              <p class="placeholder placeholder-wave col-8 mb-1"></p>
-              <p class="placeholder placeholder-wave col-6 mb-1"></p>
-              <p class="placeholder placeholder-wave col-4 mb-1"></p>
-              <p class="placeholder placeholder-wave col-5 fw-bold"></p>
-              <!-- Placeholder de botón -->
-              <span
-                class="placeholder placeholder-wave btn btn-primary bg-primary w-100 rounded-pill"
-              ></span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-md-3">
-        <div class="card p-3">
-          <span
-            class="placeholder placeholder-wave col-12"
-            style="height: 400px; display: block"
-          ></span>
-        </div>
-      </div>
+      <!-- Aquí van los placeholders de carga -->
     </ng-container>
 
     <ng-template #mostrarHabitaciones>
-      <!-- Columna vacía para margen en pantallas grandes -->
+      <div *ngIf="mensajeBusqueda" class="alert alert-warning text-center">
+        <i class="fa-solid fa-circle-info"></i> {{ mensajeBusqueda }}
+      </div>
+
+      <!-- Sección de comentarios -->
       <div class="col-md-3 d-none d-md-block col-12">
         <app-list-comentarios></app-list-comentarios>
       </div>
 
-      <!-- Columna principal -->
+      <!-- Lista de habitaciones -->
       <div class="col-12 col-md-6">
         <div class="row align-items-center mb-3">
-          <!-- Sección de títulos -->
           <div class="col-12 col-md-auto">
             <h5 class="text-secondary m-0">Habitaciones disponibles</h5>
             <h5 class="fw-bold text-primary m-0 mt-1">
@@ -100,7 +27,6 @@
             </h5>
           </div>
 
-          <!-- Filtros de precio, alineados responsivamente -->
           <div class="col-12 col-md-auto ms-auto d-flex gap-2 mt-2 mt-md-0">
             <div class="form-floating">
               <input
@@ -110,7 +36,7 @@
                 [(ngModel)]="filtroPrecioMin"
                 (input)="filtrarPorPrecio()"
               />
-              <label for="precioMin" class="form-label">Precio mínimo:</label>
+              <label for="precioMin">Precio mínimo:</label>
             </div>
             <div class="form-floating">
               <input
@@ -120,12 +46,11 @@
                 [(ngModel)]="filtroPrecioMax"
                 (input)="filtrarPorPrecio()"
               />
-              <label for="precioMax" class="form-label">Precio máximo:</label>
+              <label for="precioMax">Precio máximo:</label>
             </div>
           </div>
         </div>
 
-        <!-- Lista de habitaciones -->
         <div
           class="card shadow-sm mb-3"
           *ngFor="let habitacion of habitaciones.mejorOpcion"
@@ -161,13 +86,30 @@
                 >
                 {{ habitacion.camas }}
               </p>
+
               <p class="card-text fw-bold text-success">
                 <strong
                   ><i class="fa-solid fa-dollar-sign"></i> Precio por
                   noche:</strong
                 >
-                MXN ${{ habitacion.precio }}
+                MXN ${{ habitacion.precio_base }}
               </p>
+
+              <p class="card-text text-warning">
+                {{ habitacion.mensaje }}
+              </p>
+
+              <p class="card-text text-warning">
+                {{ habitacion.extras }}
+              </p>
+
+              <p class="card-text fw-bold text-success">
+                <strong
+                  ><i class="fa-solid fa-dollar-sign"></i> Precio Total:</strong
+                >
+                MXN ${{ habitacion.precio_calculado }}
+              </p>
+
               <button
                 type="button"
                 class="btn btn-primary btn-lg mt-2 w-100 rounded-pill shadow-sm"
@@ -195,7 +137,7 @@
         <!-- ------------------------------------- -->
       </div>
 
-      <!-- Columna derecha: Comentarios -->
+      <!-- Comentarios -->
       <div class="col-12 col-md-3">
         <app-comentarios></app-comentarios>
       </div>
@@ -211,7 +153,6 @@
           <i class="fa-solid fa-bed"></i> Otras Habitaciones Disponibles
         </h4>
         <div class="position-relative">
-          <!-- Contenedor deslizable -->
           <div class="d-flex overflow-auto gap-3 p-2" id="scrollContainer">
             <div
               class="col-md-4 mb-3 d-flex flex-shrink-0"
@@ -242,11 +183,23 @@
                   <p class="card-text fw-bold">
                     <strong>Número de camas:</strong> {{ habitacion.camas }}
                   </p>
-                  <p class="card-text fw-bold text-primary">
-                    <strong>Precio por noche:</strong> MXN ${{
-                      habitacion.precio
-                    }}
+                  <p class="card-text fw-bold text-success">
+                    <strong
+                      ><i class="fa-solid fa-dollar-sign"></i> Precio por
+                      noche:</strong
+                    >
+                    MXN ${{ habitacion.precio_base }}
                   </p>
+
+                  <p class="card-text text-warning">
+                    <strong>Mensaje:</strong> {{ habitacion.mensaje }}
+                  </p>
+
+                  <p class="card-text fw-bold text-success">
+                    <strong>Precio calculado:</strong> MXN
+                    {{ habitacion.precio_calculado }}
+                  </p>
+
                   <div class="mt-auto">
                     <button
                       type="button"
@@ -263,7 +216,6 @@
             </div>
           </div>
 
-          <!-- Botones de desplazamiento -->
           <button
             class="btn btn-primary btn-lg p-3 shadow position-absolute start-0 top-50 translate-middle-y"
             (click)="scrollLeft()"
@@ -283,7 +235,6 @@
   </div>
 </div>
 
-<!-- Modal de reserva -->
 <app-modal-reserva
   [habitacion]="habitacionSeleccionada"
   [filtros]="filtros"
