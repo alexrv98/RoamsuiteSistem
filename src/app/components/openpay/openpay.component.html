@@ -1,0 +1,24 @@
+<form #pagoForm="ngForm" (ngSubmit)="procesarPago()">
+  <input
+    type="text"
+    placeholder="Número de tarjeta"
+    [(ngModel)]="tarjeta.numero"
+    name="numero"
+    required
+  />
+  <input
+    type="text"
+    placeholder="MM/AA"
+    [(ngModel)]="tarjeta.expiracion"
+    name="expiracion"
+    required
+  />
+  <input
+    type="text"
+    placeholder="CVV"
+    [(ngModel)]="tarjeta.cvv"
+    name="cvv"
+    required
+  />
+  <button type="submit">Pagar</button>
+</form>

@@ -52,6 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $precioFinal = $precioBase;
             $mensaje = null;
             $extras = null;
+            $ninosExtras = null;
+            $adultosExtras = null;
+            $costoFinalAdultos = null;
+            $costoFinalNinos = null;
+
+
 
             // Si el número de huéspedes supera la capacidad de la habitación
             if ($totalHuespedes > $capacidadMaxima) {
@@ -65,8 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $adultosExtras = max(0, $huespedesExtra - $ninosExtras);
 
                 $extras = $ninosExtras . " niños y " . $adultosExtras . " adultos";
-
+              
                 $precioFinal = round($precioBase + ($costoExtraAdulto * $adultosExtras) + ($costoExtraNino * $ninosExtras), 2);
+
+                $costoFinalAdultos = round($costoExtraAdulto * $adultosExtras, 2);
+                $costoFinalNinos = round($costoExtraNino * $ninosExtras, 2);
             }
 
             $habitacionData = [
@@ -78,7 +87,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'precio_base' => round($precioBase, 2),
                 'precio_calculado' => round($precioFinal, 2),
                 'mensaje' => $mensaje,
-                'extras' => $extras
+                'extras' => $extras,
+                'ninosExtras' => $ninosExtras,
+                'adultosExtras' => $adultosExtras,
+                'costoFinalAdultos' => $costoFinalAdultos,
+                'costoFinalNinos' => $costoFinalNinos
+          
             ];
 
             if ($habitacion['camas'] == $camasSolicitadas) {

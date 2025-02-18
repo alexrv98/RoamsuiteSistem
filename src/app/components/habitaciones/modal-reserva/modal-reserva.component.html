@@ -23,21 +23,55 @@
           <img src="assets/habitacion2.jpg" alt="lugar" height="200" />
         </div>
         <h5 class="card-title text-secondary">Resumen de la reserva</h5>
-        <p class="card-text mb-1">
-          <strong>No. Habitación:</strong> {{ habitacion?.numero_habitacion }}
-        </p>
-        <p class="card-text mb-1">
-          <strong>Capacidad:</strong> {{ habitacion?.capacidad }} persona(s)
-        </p>
-        <p class="card-text fw-bold">
-          <strong>Número de camas:</strong> {{ habitacion?.camas }}
-        </p>
-        <p class="card-text fw-bold">
-          <strong>Precio por noche:</strong> MXN ${{ habitacion?.precio }}
-        </p>
-        <p class="card-text fw-bold text-success">
-          <strong>Total a pagar:</strong> MXN ${{ precioTotal }}
-        </p>
+
+        <!-- Resumen de habitación -->
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <td><strong>No. Habitación:</strong></td>
+              <td>{{ habitacion?.numero_habitacion }}</td>
+            </tr>
+            <tr>
+              <td><strong>Capacidad:</strong></td>
+              <td>{{ habitacion?.capacidad }} persona(s)</td>
+            </tr>
+            <tr>
+              <td><strong>Número de camas:</strong></td>
+              <td>{{ habitacion?.camas }}</td>
+            </tr>
+            <tr>
+              <td><strong>Precio por noche:</strong></td>
+              <td>MXN ${{ habitacion?.precio_base }}</td>
+            </tr>
+
+            <!-- Mostrar Adultos Extra solo si hay -->
+            <tr *ngIf="habitacion.adultosExtras && habitacion.adultosExtras > 0">
+              <td><strong>Adultos extra:</strong></td>
+              <td>{{ habitacion.adultosExtras }}</td>
+            </tr>
+            <tr *ngIf="habitacion.costoFinalAdultos && habitacion.costoFinalAdultos > 0">
+              <td><strong>Costo Extra (30% por adulto):</strong></td>
+              <td>MXN ${{ habitacion.costoFinalAdultos }}</td>
+            </tr>
+
+            <!-- Mostrar Niños Extra solo si hay -->
+            <tr *ngIf="habitacion.ninosExtras && habitacion.ninosExtras > 0">
+              <td><strong>Niños extra:</strong></td>
+              <td>{{ habitacion.ninosExtras }}</td>
+            </tr>
+            <tr *ngIf="habitacion.costoFinalNinos && habitacion.costoFinalNinos > 0">
+              <td><strong>Costo Extra (15% por niño):</strong></td>
+              <td>MXN ${{ habitacion.costoFinalNinos }}</td>
+            </tr>
+
+            <!-- Precio Total -->
+            <tr>
+              <td><strong>Precio Total:</strong></td>
+              <td class="text-success">MXN ${{ habitacion?.precio_calculado }}</td>
+            </tr>
+          </tbody>
+        </table>
+
       </div>
 
       <div class="modal-footer">
