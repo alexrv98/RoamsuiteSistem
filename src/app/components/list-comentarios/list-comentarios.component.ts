@@ -26,12 +26,10 @@ export class ListComentariosComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Verifica si el hotelId se pasa desde el estado de navegación o parámetros
     const state = history.state;
     if (state.hotelId) {
       this.hotelId = state.hotelId;
     } else {
-      // Si no se pasa por estado, toma de la URL
       this.route.paramMap.subscribe((params) => {
         const id = params.get('hotelId');
         if (id) {
@@ -40,7 +38,6 @@ export class ListComentariosComponent implements OnInit {
       });
     }
 
-    // Cargar los comentarios si hotelId está presente
     if (this.hotelId) {
       this.cargarComentarios();
     } else {

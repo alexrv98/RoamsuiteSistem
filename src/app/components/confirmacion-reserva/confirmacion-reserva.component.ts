@@ -23,7 +23,6 @@ import { OpenpayComponent } from '../openpay/openpay.component';
   styleUrls: ['./confirmacion-reserva.component.css'],
 })
 export class ConfirmarReservaComponent implements OnInit {
-  @Input() filtros: any = null;
 
   reserva: any;
   paypal: any;
@@ -135,10 +134,12 @@ export class ConfirmarReservaComponent implements OnInit {
     if (this.pagoRealizado && this.cliente.nombre && this.cliente.correo) {
       const datosReserva = {
         usuario_id: this.cliente.id,
-        habitacion_id: this.reserva.habitacion_id,
-        fechaInicio: this.reserva.fechaInicio,
-        fechaFin: this.reserva.fechaFin,
-        totalReserva: this.reserva.totalReserva,
+        habitacion_id: this.reserva.habitacion.habitacion_id,
+        fechaInicio: this.reserva.habitacion.fechaInicio,
+        fechaFin: this.reserva.habitacion.fechaFin,
+        totalReserva: this.reserva.habitacion.totalReserva,
+        num_dultos: this.reserva.habitacion.adultosExtras,
+        num_ninos: this.reserva.habitacion.ninosExtras,
         nombre: this.cliente.nombre,
         email: this.cliente.correo,
       };
@@ -150,7 +151,6 @@ export class ConfirmarReservaComponent implements OnInit {
           next: (res) => {
             if (res.status === 'success') {
               alert('Reserva confirmada con éxito');
-              sessionStorage.removeItem('reservaValida');
               this.router.navigate(['/'], { replaceUrl: true });
             } else {
               alert('Error al realizar la reserva');

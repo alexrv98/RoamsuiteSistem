@@ -41,7 +41,6 @@ export class ComentariosComponent implements OnInit {
 
   ngOnInit(): void {
     this.verificarUsuario();
-    this.cargarDatosDesdeRuta();
     this.cargarHotelesReservados();
   }
 
@@ -49,7 +48,6 @@ export class ComentariosComponent implements OnInit {
     const token = this.authService.getToken();
     if (!token) {
       this.estaAutenticado = false;
-      console.log('Usuario no autenticado: no hay token');
       return;
     }
 
@@ -59,7 +57,6 @@ export class ComentariosComponent implements OnInit {
           this.estaAutenticado = true;
           this.nuevoComentario.usuarioId = response.usuario.id;
           this.usuarioNombre = response.usuario.nombre;
-          console.log('Usuario autenticado:', response.usuario);
 
           this.cargarHotelesReservados();
         } else {
@@ -73,22 +70,9 @@ export class ComentariosComponent implements OnInit {
     });
   }
 
-  cargarDatosDesdeRuta(): void {
-    const queryParams = this.router.routerState.snapshot.root.queryParams;
-    if (queryParams['hotelId'] && queryParams['nombreHotel']) {
-      this.nuevoComentario.hotelId = queryParams['hotelId'];
-      this.nuevoComentario.nombreHotel = queryParams['nombreHotel'];
-      console.log('Datos cargados desde la ruta:', queryParams);
-    } else {
-      console.log('Parámetros de la ruta faltantes o incorrectos.');
-    }
-  }
+
 
   cargarHotelesReservados(): void {
-    if (!this.estaAutenticado) {
-      console.log('Usuario no autenticado. No se pueden cargar las reservas.');
-      return;
-    }
 
     this.comentariosService.getReservaciones().subscribe({
       next: (response) => {
@@ -99,7 +83,7 @@ export class ComentariosComponent implements OnInit {
           Array.isArray(response.data)
         ) {
           this.hotelesReservados = response.data.map((reserva: any) => ({
-            id: reserva.hotel_id, // Asegurar que este es el ID correcto del hotel
+            id: reserva.hotel_id, 
             nombre: reserva.hotel_nombre,
           }));
         } else {
@@ -111,6 +95,8 @@ export class ComentariosComponent implements OnInit {
       },
     });
   }
+
+  
   agregarComentario(): void {
     if (
       !this.nuevoComentario.texto ||

@@ -11,28 +11,40 @@ import { FormsModule } from '@angular/forms';
 })
 export class OpenpayComponent {
   tarjeta = {
-    numero: '',
-    expiracion: '',
-    cvv: '',
+    card_number: '',
+    holder_name: '',
+    expiration_month: '',
+    expiration_year: '',
+    cvv2: '',
   };
+  usuario = {
+    nombre: 'Juan',
+    apellido: 'Pérez',
+    email: 'juan@example.com',
+  };
+  monto = 100;
+  mensaje = '';
 
   constructor(private openpayService: OpenpayService) {}
 
-  async procesarPago() {
-    const tarjetaData = {
-      card_number: this.tarjeta.numero,
-      holder_name: 'Nombre del titular',
-      expiration_month: this.tarjeta.expiracion.split('/')[0],
-      expiration_year: `20${this.tarjeta.expiracion.split('/')[1]}`,
-      cvv2: this.tarjeta.cvv,
-    };
-
+  async pagar() {
     try {
-      const token = await this.openpayService.generarToken(tarjetaData);
-      console.log('Token generado:', token);
-      // Aquí puedes enviar el token a tu backend para procesar el pago
+      let deviceSessionId = (window as any).OpenPay.deviceData.setup(
+        'form-pago',
+        'device_session_id'
+      );
+      const token = await this.openpayService.generarToken(this.tarjeta);
+      this.openpayService
+        .realizarPago(token, this.monto, deviceSessionId, this.usuario)
+        .subscribe((res: any) => {
+          if (res.status === 'success') {
+            this.mensaje = 'Pago realizado con éxito';
+          } else {
+            this.mensaje = 'Error en el pago';
+          }
+        });
     } catch (error) {
-      console.error('Error al generar el token:', error);
+      this.mensaje = 'Error generando token de tarjeta';
     }
   }
 }

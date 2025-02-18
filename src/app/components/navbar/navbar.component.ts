@@ -37,7 +37,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
               this.nombreUsuario = response.usuario.nombre;
               this.rolUsuario = response.usuario.rol;
               this.hotelId = response.usuario.hotel_id;
-              console.log('Usuario autenticado:', response.usuario);
             } else {
               console.error('Error al obtener el usuario');
             }
