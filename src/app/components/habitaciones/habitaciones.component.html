@@ -8,7 +8,7 @@
         <div class="card shadow-lg">
           <div class="card-body">
             <p
-              class="text-primary placeholder placeholder-wave col-10 mb-1"
+              class="text-primary placeholder placeholder-wave col-10 mb-4"
             ></p>
             <!-- Placeholder para varios comentarios -->
             <div *ngFor="let i of [1, 2, 3]" class="mb-3">
@@ -20,7 +20,7 @@
                     style="width: 40px; height: 40px"
                   ></span>
                   <!-- Placeholder de nombre -->
-                  <h5 class="placeholder col-4 mb-0"></h5>
+                  <p class="placeholder placeholder-wave col-4 mb-0"></p>
                 </div>
 
                 <!-- Placeholder para comentario -->
@@ -63,13 +63,10 @@
               <p class="placeholder placeholder-wave col-8 mb-1"></p>
               <p class="placeholder placeholder-wave col-6 mb-1"></p>
               <p class="placeholder placeholder-wave col-4 mb-1"></p>
-              <p
-                class="placeholder placeholder-wave col-5 fw-bold text-success"
-              ></p>
-
+              <p class="placeholder placeholder-wave col-5 fw-bold"></p>
               <!-- Placeholder de botón -->
               <span
-                class="placeholder placeholder-wave btn btn-primary w-100 rounded-pill"
+                class="placeholder placeholder-wave btn btn-primary bg-primary w-100 rounded-pill"
               ></span>
             </div>
           </div>
@@ -183,6 +180,19 @@
             </div>
           </div>
         </div>
+        <!-- Alerta si no hay habitaciones disponibles -->
+        <div
+          *ngIf="habitaciones.mejorOpcion.length === 0"
+          class="alert alert-warning text-center"
+          role="alert"
+        >
+          <div class="alert alert-danger" role="alert">
+            No hay habitaciones disponibles.
+            <a href="#" class="alert-link">an example link</a>. Give it a click
+            if you like.
+          </div>
+        </div>
+        <!-- ------------------------------------- -->
       </div>
 
       <!-- Columna derecha: Comentarios -->
