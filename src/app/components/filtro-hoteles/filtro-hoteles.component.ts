@@ -21,8 +21,11 @@ export class FiltroHotelesComponent implements OnInit {
     destino: '',
     fechaInicio: '',
     fechaFin: '',
-    huespedes: 1,
+    huespedesAdultos: 1,
+    huespedesNinos: 0,
+    numCamas: 1
   };
+  
 
   private unsubscribe$ = new Subject<void>();
 
@@ -53,18 +56,20 @@ export class FiltroHotelesComponent implements OnInit {
 
 
   buscarHoteles() {
-    const { destino, fechaInicio, fechaFin, huespedes } = this.filtros;
-    
-    if (!destino || !fechaInicio || !fechaFin || huespedes < 1) {
+    const { destino, fechaInicio, fechaFin, huespedesAdultos, huespedesNinos, numCamas } = this.filtros;
+  
+    if (!destino || !fechaInicio || !fechaFin || huespedesAdultos < 1) {
       alert('Por favor, completa todos los campos.');
       return;
     }
     if (!this.validarFechas()) {
       return;
     }
-
+  
+    // Pasar filtros usando el state en lugar de queryParams
     this.router.navigate(['/buscar'], { state: { filtros: this.filtros } });
   }
+  
 
   establecerFechasMinMax() {
     const hoy = new Date();

@@ -9,7 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $destino = $data['destino']; 
     $fechaInicio = $data['fechaInicio'];  
     $fechaFin = $data['fechaFin'];  
-    $huespedes = $data['huespedes'];  
+    $numHuespedes = $data['numHuespedes'] ?? null;  // Recibido pero no utilizado
+    $numCamas = $data['numCamas'] ?? null;  // Recibido pero no utilizado
 
     try {
         $stmt = $conn->prepare("
@@ -31,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 FROM habitaciones ha
                 JOIN tipos_habitacion th ON ha.tipo_habitacion_id = th.id
                 WHERE ha.hotel_id = h.id
-                AND th.capacidad >= :huespedes
                 AND ha.id NOT IN (
                     SELECT r.habitacion_id 
                     FROM reservaciones r
@@ -44,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':destino', $destino, PDO::PARAM_INT);
         $stmt->bindParam(':fechaInicio', $fechaInicio, PDO::PARAM_STR);
         $stmt->bindParam(':fechaFin', $fechaFin, PDO::PARAM_STR);
-        $stmt->bindParam(':huespedes', $huespedes, PDO::PARAM_INT);
 
         // Ejecutar la consulta
         $stmt->execute();

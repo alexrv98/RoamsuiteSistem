@@ -29,11 +29,10 @@ import { FormsModule } from '@angular/forms';
 })
 export class HabitacionesComponent implements OnInit, OnDestroy {
   hotelId!: number;
-
   filtros: any = {};
   habitaciones: any = { mejorOpcion: [], otrasHabitaciones: [] };
+  mensajeBusqueda: string | null = null;
   isLoading: boolean = true;
-
   habitacionSeleccionada: any = null;
   habitacionesOriginales: any = { mejorOpcion: [], otrasHabitaciones: [] };
   filtroPrecioMin: number | null = null;
@@ -41,52 +40,58 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject<void>();
 
-  seleccionarHabitacion(habitacion: any) {
-    this.habitacionSeleccionada = habitacion;
-  }
-
   constructor(
     private route: ActivatedRoute,
     private habitacionesService: HabitacionesClienteService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.hotelId = Number(this.route.snapshot.paramMap.get('hotelId'));
-
     const state = history.state;
     if (state.filtros) {
       this.filtros = state.filtros;
+      console.log('Filtros cargados desde el estado de navegación:', this.filtros); // Imprime los filtros
     } else {
       console.warn('No hay filtros en el estado de navegación.');
     }
 
     this.obtenerHabitaciones();
   }
-
   obtenerHabitaciones() {
     const filtros = {
       hotelId: this.hotelId,
       fechaInicio: this.filtros.fechaInicio,
       fechaFin: this.filtros.fechaFin,
-      huespedes: this.filtros.huespedes,
+      adultos: this.filtros.huespedesAdultos,
+      ninos: this.filtros.huespedesNinos,
+      camas: this.filtros.numCamas,
     };
-
+  
     this.habitacionesService
       .obtenerHabitaciones(filtros)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
+        console.log('Respuesta de la API:', res);
+  
         if (res.status === 'success') {
-          this.habitacionesOriginales = res.data;
-          this.habitaciones = { ...res.data };
-          this.filtrarPorPrecio();
+          this.mensajeBusqueda = res.mensaje_busqueda || null;
+          
+          this.habitaciones = {
+            mejorOpcion: res.habitacionesExactas, // Habitaciones con el número exacto de camas
+            otrasHabitaciones: res.otrasHabitaciones, // Habitaciones con diferente número de camas
+          };
+  
+          console.log('Habitaciones exactas:', this.habitaciones.mejorOpcion);
+          console.log('Otras habitaciones:', this.habitaciones.otrasHabitaciones);
         } else {
           console.error('Error al obtener habitaciones:', res.message);
+          this.habitaciones = { mejorOpcion: [], otrasHabitaciones: [] };
         }
+  
         this.isLoading = false;
       });
-
-
   }
+  
 
   filtrarPorPrecio() {
     const min = this.filtroPrecioMin ?? 0;
@@ -104,13 +109,16 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
           habitacion.precio >= min && habitacion.precio <= max
       );
   }
-  
-
 
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }
+
+  seleccionarHabitacion(habitacion: any) {
+    this.habitacionSeleccionada = habitacion;
+  }
+
 
   // Botones para scroll horizontal
   scrollLeft() {
