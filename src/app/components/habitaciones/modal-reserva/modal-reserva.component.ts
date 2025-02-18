@@ -52,6 +52,8 @@ export class ModalReservaComponent implements OnChanges {
       fechaFin: this.filtros?.fechaFin,
       totalReserva: this.calcularPrecioTotal(),
       habitacion_id: this.habitacion?.numero_habitacion,
+
+      adultosExtras: this.habitacion?.adultosExtras,
       destino_id: this.filtros?.destino,
       destino: '',
     };

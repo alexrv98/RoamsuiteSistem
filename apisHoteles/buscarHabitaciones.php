@@ -52,10 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $precioFinal = $precioBase;
             $mensaje = null;
             $extras = null;
-            $ninosExtras = null;
-            $adultosExtras = null;
-            $costoFinalAdultos = null;
-            $costoFinalNinos = null;
+            $ninosExtras = 0;
+            $adultosExtras = 0;
+            $costoFinalAdultos = 0;
+            $costoFinalNinos = 0;
 
 
 
