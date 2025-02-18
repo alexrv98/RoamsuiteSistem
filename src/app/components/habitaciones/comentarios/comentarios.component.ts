@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
@@ -8,14 +8,10 @@ import { ReservaService } from '../../../services/reserva.service';
 
 @Component({
   selector: 'app-comentarios',
-  imports: [
-    FormsModule,
-    CommonModule,
-  ],
+  imports: [FormsModule, CommonModule],
   templateUrl: './comentarios.component.html',
   styleUrls: ['./comentarios.component.css'],
 })
-
 export class ComentariosComponent implements OnInit {
   comentarios: any[] = [];
   nuevoComentario = {
@@ -29,6 +25,7 @@ export class ComentariosComponent implements OnInit {
   comentariosMostrados = 2;
   estaAutenticado: boolean = false;
   hotelesReservados: any[] = [];
+  @Input() isLoading: boolean = false;
 
   usuarioNombre: string = '';
 
@@ -70,10 +67,7 @@ export class ComentariosComponent implements OnInit {
     });
   }
 
-
-
   cargarHotelesReservados(): void {
-
     this.comentariosService.getReservaciones().subscribe({
       next: (response) => {
         if (
@@ -83,7 +77,7 @@ export class ComentariosComponent implements OnInit {
           Array.isArray(response.data)
         ) {
           this.hotelesReservados = response.data.map((reserva: any) => ({
-            id: reserva.hotel_id, 
+            id: reserva.hotel_id,
             nombre: reserva.hotel_nombre,
           }));
         } else {
@@ -96,7 +90,6 @@ export class ComentariosComponent implements OnInit {
     });
   }
 
-  
   agregarComentario(): void {
     if (
       !this.nuevoComentario.texto ||
@@ -107,7 +100,7 @@ export class ComentariosComponent implements OnInit {
       alert('Por favor, completa todos los campos.');
       return;
     }
-  
+
     this.comentariosService
       .agregarComentario(
         this.nuevoComentario.hotelId,
@@ -127,10 +120,10 @@ export class ComentariosComponent implements OnInit {
               usuarioId: this.nuevoComentario.usuarioId,
               nombreHotel: '',
             };
-  
+
             // Mostrar mensaje de éxito
             alert('Comentario agregado exitosamente.');
-  
+
             // Recargar la página para actualizar la lista de comentarios
             window.location.reload();
           } else {
@@ -142,7 +135,7 @@ export class ComentariosComponent implements OnInit {
         },
       });
   }
-  
+
   seleccionarCalificacion(valor: number): void {
     this.nuevoComentario.calificacion = valor;
   }

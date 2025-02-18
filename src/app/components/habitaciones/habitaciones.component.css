@@ -46,3 +46,22 @@
 h4 {
   color: #ffff;
 }
+.scroll-container {
+  max-height: 500px; /* Ajusta la altura máxima según lo necesario */
+  overflow-y: auto;
+  padding-right: 10px; /* Espacio para evitar que se solape el scroll */
+}
+
+/* Personalización opcional del scroll */
+.scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background-color: #007bff; /* Azul Bootstrap */
+  border-radius: 4px;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
