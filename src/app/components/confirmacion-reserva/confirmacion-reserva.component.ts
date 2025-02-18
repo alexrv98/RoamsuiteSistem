@@ -50,7 +50,6 @@ export class ConfirmarReservaComponent implements OnInit {
           .pipe(take(1)) 
           .subscribe({
             next: (response) => {
-              console.log('Respuesta de la API:', response);
               if (response.status === 'success') {
                 this.cliente = response.usuario;
               } else {

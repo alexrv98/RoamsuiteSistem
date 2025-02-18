@@ -53,7 +53,6 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
     }
       if (state.filtros) {
       this.filtros = state.filtros;
-      console.log('Filtros cargados desde el estado de navegación:', this.filtros);
     } else {
       console.warn('No hay filtros en el estado de navegación.');
     }
@@ -75,7 +74,6 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
       .obtenerHabitaciones(filtros)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
-        console.log('Respuesta de la API:', res);
   
         if (res.status === 'success') {
           this.mensajeBusqueda = res.mensaje_busqueda || null;
@@ -85,8 +83,6 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
             otrasHabitaciones: res.otrasHabitaciones, // Habitaciones con diferente número de camas
           };
   
-          console.log('Habitaciones exactas:', this.habitaciones.mejorOpcion);
-          console.log('Otras habitaciones:', this.habitaciones.otrasHabitaciones);
         } else {
           console.error('Error al obtener habitaciones:', res.message);
           this.habitaciones = { mejorOpcion: [], otrasHabitaciones: [] };

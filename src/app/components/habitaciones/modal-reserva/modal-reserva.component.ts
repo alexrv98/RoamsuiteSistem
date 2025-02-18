@@ -21,7 +21,6 @@ export class ModalReservaComponent implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('Cambios detectados en el modal:', changes);
     if (changes['habitacion'] || changes['filtros']) {
       this.precioTotal = this.calcularPrecioTotal();
     }
@@ -45,7 +44,6 @@ export class ModalReservaComponent implements OnChanges {
     }
     return 0;
   }
-
   continuarReserva() {
     const reserva = {
       tipo_habitacion: this.habitacion?.tipo_habitacion,
@@ -57,13 +55,15 @@ export class ModalReservaComponent implements OnChanges {
       destino_id: this.filtros?.destino,
       destino: '',
     };
-
+  
     this.lugarService.obtenerDestinoPorId(this.filtros?.destino)
       .pipe(take(1)) 
       .subscribe((response) => {
+        console.log('Respuesta de obtenerDestinoPorId:', response);  // Aquí se imprime la respuesta
+  
         if (response.status === 'success') {
           reserva.destino = response.nombre;
-
+  
           const usuarioAutenticado = this.authService.estaAutenticado();
           const ruta = usuarioAutenticado ? '/confirmar-reserva' : '/login';
           
@@ -73,5 +73,6 @@ export class ModalReservaComponent implements OnChanges {
         }
       });
   }
+  
   
 }
