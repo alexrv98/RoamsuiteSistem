@@ -23,7 +23,8 @@ if ($usuario) {
         !isset($data['habitacion_id']) ||
         !isset($data['fechaInicio']) ||
         !isset($data['fechaFin']) ||
-
+        !isset($data['num_adultos']) ||
+        !isset($data['num_ninos']) ||
         !isset($data['totalReserva'])
     ) {
         echo json_encode(['status' => 'error', 'message' => 'Datos incompletos']);
@@ -36,16 +37,21 @@ if ($usuario) {
     $fechaInicio = $data['fechaInicio'];
     $fechaFin = $data['fechaFin'];
     $totalReserva = $data['totalReserva'];
+    $num_adultos = $data['num_adultos'];
+    $num_ninos = $data['num_ninos'];
 
     try {
         // Insertar la reserva en la base de datos
-        $stmt = $conn->prepare("INSERT INTO reservaciones (usuario_id, habitacion_id, fecha_inicio, fecha_fin, total_a_pagar, estado) VALUES (:usuario_id, :habitacion_id, :fechaInicio, :fechaFin, :totalReserva, 'pendiente')");
+        $stmt = $conn->prepare("INSERT INTO reservaciones (usuario_id, habitacion_id, fecha_inicio, fecha_fin, total_a_pagar, num_adultos, num_ninos, estado) VALUES (:usuario_id, :habitacion_id, :fechaInicio, :fechaFin, :totalReserva, :num_adultos, :num_ninos 'pendiente')");
         $stmt->execute([
             ':usuario_id' => $usuario_id,
             ':habitacion_id' => $habitacion_id,
             ':fechaInicio' => $fechaInicio,
             ':fechaFin' => $fechaFin,
-            ':totalReserva' => $totalReserva
+            ':totalReserva' => $totalReserva,
+            ':num_adultos' => $num_adultos,
+            ':num_ninos' => $num_ninos
+
         ]);
 
         echo json_encode(['status' => 'success', 'message' => 'Reserva realizada con éxito']);
