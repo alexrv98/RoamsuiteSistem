@@ -3,7 +3,7 @@ require_once 'cors.php';
 require_once 'db.php';
 
 // URL base configurable: Cambia esto según tu entorno
-$base_url = "http://192.168.1.102/HOTELSAAJ/public/assets/"; // Cambia esta URL base según corresponda
+$base_url = "http://localhost:4200/assets/";
 
 // Verificar el método de la solicitud
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -27,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 foreach ($imagenes as &$imagen) {
                   // Eliminar cualquier salto de línea o espacio en blanco adicional
                   $imagen['img_url'] = trim($base_url . $imagen['img_url']);
+
               }
 
                 // Responder con las imágenes encontradas
