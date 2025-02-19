@@ -7,7 +7,7 @@ import { API_CONFIG } from '../api.config';
   providedIn: 'root',
 })
 export class HabitacionesClienteService {
-  private apiUrl = "http://localhost/HoTELSAAJ/apisHoteles";
+  private apiUrl = API_CONFIG.baseUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -16,8 +16,11 @@ export class HabitacionesClienteService {
   }
 
   // En HabitacionesClienteService
-  getImagenesHabitacion(habitacionId: number): Observable<any> { // ✅ Este es el nombre correcto
-    return this.http.get(`${this.apiUrl}/imagenes_habitacion.php?habitacion_id=${habitacionId}`);
+  getImagenesHabitacion(habitacionId: number): Observable<any> {
+    // ✅ Este es el nombre correcto
+    return this.http.get(
+      `${this.apiUrl}/imagenes_habitacion.php?habitacion_id=${habitacionId}`
+    );
   }
   // obtenerHotelbyId(hotelId: number): Observable
   // <any> {
