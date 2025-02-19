@@ -96,11 +96,57 @@
         </div>
       </div>
 
-      <div class="text-center mt-3" *ngIf="comentarios.length > 2">
-        <button class="btn btn-primary" (click)="toggleMostrarTodos()">
-          {{ mostrarTodos ? "Ver menos" : "Ver más" }}
+<!-- Botón para abrir el modal -->
+<div class="text-center mt-3" *ngIf="comentarios.length > 2">
+  <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#comentariosModal">
+    Ver más
+  </button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="comentariosModal" tabindex="-1" aria-labelledby="comentariosModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-small modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title text-white" id="comentariosModalLabel">
+          <i class="fa-solid text-white fa-comments me-2"></i>Todos los Comentarios
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+        <div *ngFor="let comentario of comentarios" class="mb-3">
+          <div class="card border-0 shadow-sm p-3 rounded-4">
+            <div class="d-flex align-items-center mb-2">
+              <i class="fa-solid fa-user-circle text-primary me-2" style="font-size: 2rem"></i>
+              <h5 class="text-primary mb-0">{{ comentario.usuario }}</h5>
+            </div>
+            <p class="card-text fst-italic text-muted">"{{ comentario.comentario }}"</p>
+            <div class="d-flex align-items-center">
+              <span class="me-2 text-muted fw-semibold">Calificación:</span>
+              <span class="star-rating">
+                <i *ngFor="let star of [1, 2, 3, 4, 5]"
+                   class="fa-solid fa-star"
+                   [class.text-warning]="star <= comentario.calificacion"
+                   [class.text-secondary]="star > comentario.calificacion">
+                </i>
+              </span>
+            </div>
+            <p class="card-text text-muted mt-2">
+              <i class="fa-regular fa-calendar me-1"></i>
+              {{ comentario.fecha | date : "dd/MM/yyyy" }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer bg-light">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          <i class="fa-solid fa-xmark me-1"></i> Cerrar
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
     </div>
   </div>
 </ng-template>
