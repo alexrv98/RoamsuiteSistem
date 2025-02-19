@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FiltroHotelesComponent } from './../filtro-hoteles/filtro-hoteles.component';
@@ -23,6 +29,7 @@ import { FormsModule } from '@angular/forms';
     FooterComponent,
     FormsModule,
     ListComentariosComponent,
+    RouterLink,
   ],
   templateUrl: './habitaciones.component.html',
   styleUrls: ['./habitaciones.component.css'],
@@ -41,13 +48,14 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
 
   private unsubscribe$ = new Subject<void>();
 
+  @ViewChild('otrasopciones') otrasOpcionesRef!: ElementRef;
+
   constructor(
     private route: ActivatedRoute,
     private habitacionesService: HabitacionesClienteService
-  ) { }
+  ) {}
 
   ngOnInit() {
-
     const state = history.state;
     if (state.hotelId) {
       this.hotelId = state.hotelId;
@@ -55,7 +63,7 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
     if (state.hotelNombre) {
       this.hotelNombre = state.hotelNombre; // Guardamos el nombre del hotel
     }
-      if (state.filtros) {
+    if (state.filtros) {
       this.filtros = state.filtros;
     } else {
       console.warn('No hay filtros en el estado de navegación.');
@@ -78,7 +86,6 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
       .obtenerHabitaciones(filtros)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((res) => {
-
         if (res.status === 'success') {
           this.mensajeBusqueda = res.mensaje_busqueda || null;
 
@@ -86,7 +93,6 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
             mejorOpcion: res.habitacionesExactas, // Habitaciones con el número exacto de camas
             otrasHabitaciones: res.otrasHabitaciones, // Habitaciones con diferente número de camas
           };
-
         } else {
           console.error('Error al obtener habitaciones:', res.message);
           this.habitaciones = { mejorOpcion: [], otrasHabitaciones: [] };
@@ -95,7 +101,6 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       });
   }
-
 
   filtrarPorPrecio() {
     const min = this.filtroPrecioMin ?? 0;
@@ -123,7 +128,6 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
     this.habitacionSeleccionada = habitacion;
   }
 
-
   // Botones para scroll horizontal
   scrollLeft() {
     document
@@ -135,5 +139,23 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
     document
       .getElementById('scrollContainer')!
       .scrollBy({ left: 300, behavior: 'smooth' });
+  }
+
+  ngAfterViewInit() {
+    this.route.fragment.subscribe((fragment) => {
+      if (fragment === 'otrasopciones') {
+        this.scrollToSection();
+      }
+    });
+  }
+
+  scrollToSection() {
+    if (this.otrasOpcionesRef) {
+      setTimeout(() => {
+        this.otrasOpcionesRef.nativeElement.scrollIntoView({
+          behavior: 'smooth',
+        });
+      }, 300);
+    }
   }
 }
