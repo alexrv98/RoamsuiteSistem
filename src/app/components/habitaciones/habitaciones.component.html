@@ -81,72 +81,122 @@
       <ng-template #mostrarHabitaciones>
         <div class="scroll-container">
           <div
-            class="card shadow-sm mb-3"
+            class="card shadow-sm mb-3 d-flex flex-row"
             *ngFor="let habitacion of habitaciones.mejorOpcion"
+            style="height: 220px"
           >
-            <div class="card-body d-flex align-items-center">
-              <img
-                *ngIf="
-                  imagenesHabitaciones[habitacion.habitacion_id] &&
-                  imagenesHabitaciones[habitacion.habitacion_id].length > 0
-                "
-                [src]="imagenesHabitaciones[habitacion.habitacion_id][0]"
-                alt="Imagen de la habitación"
-                class="room-image me-3 rounded-3 shadow-sm"
-                width="100%"
-                height="auto"
-                style="max-width: 250px"
-              />
-              <div class="flex-grow-1">
-                <h5 class="card-title text-secondary">
+            <!-- Carrusel a la izquierda, más ancho y ocupando todo el alto -->
+            <div
+              *ngIf="
+                imagenesHabitaciones[habitacion.habitacion_id] &&
+                imagenesHabitaciones[habitacion.habitacion_id].length > 0
+              "
+              [id]="'carousel-' + habitacion.habitacion_id"
+              class="carousel slide shadow-sm rounded-start"
+              style="width: 250px; height: 100%"
+              data-bs-ride="carousel"
+            >
+              <div class="carousel-inner" style="height: 100%">
+                <div
+                  *ngFor="
+                    let imagen of imagenesHabitaciones[
+                      habitacion.habitacion_id
+                    ];
+                    let i = index
+                  "
+                  class="carousel-item"
+                  [class.active]="i === 0"
+                  style="height: 100%"
+                >
+                  <img
+                    [src]="imagen"
+                    class="d-block w-100 h-100 rounded-start"
+                    alt="Imagen de la habitación"
+                    style="object-fit: cover"
+                  />
+                </div>
+              </div>
+
+              <button
+                class="carousel-control-prev"
+                type="button"
+                [attr.data-bs-target]="'#carousel-' + habitacion.habitacion_id"
+                data-bs-slide="prev"
+                style="width: 20px"
+              >
+                <span
+                  class="carousel-control-prev-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Anterior</span>
+              </button>
+              <button
+                class="carousel-control-next"
+                type="button"
+                [attr.data-bs-target]="'#carousel-' + habitacion.habitacion_id"
+                data-bs-slide="next"
+                style="width: 20px"
+              >
+                <span
+                  class="carousel-control-next-icon"
+                  aria-hidden="true"
+                ></span>
+                <span class="visually-hidden">Siguiente</span>
+              </button>
+            </div>
+
+            <!-- Contenido a la derecha -->
+            <div class="card-body d-flex flex-column justify-content-between">
+              <div>
+                <h6 class="card-title text-secondary mb-1">
                   <i class="fa-solid fa-bed"></i>
                   {{ habitacion.tipo_habitacion }}
-                </h5>
-                <p class="card-text mb-1">
+                </h6>
+                <p class="card-text mb-0">
                   <strong
                     ><i class="fa-solid fa-hashtag"></i> No. Habitación:</strong
                   >
                   {{ habitacion.numero_habitacion }}
                 </p>
-                <p class="card-text mb-1">
+                <p class="card-text mb-0">
                   <strong
                     ><i class="fa-solid fa-user-group"></i> Capacidad:</strong
                   >
                   {{ habitacion.capacidad }} persona(s)
                 </p>
-                <p class="card-text fw-bold">
+                <p class="card-text mb-0">
                   <strong
                     ><i class="fa-solid fa-bed"></i> Número de camas:</strong
                   >
                   {{ habitacion.camas }}
                 </p>
-                <p class="card-text fw-bold text-success">
-                  <strong
-                    ><i class="fa-solid fa-dollar-sign"></i> Precio por
-                    noche:</strong
-                  >
-                  MXN ${{ habitacion.precio_base }}
+                <p class="card-text fw-bold text-success mb-0">
+                  <strong>Precio por noche:</strong> MXN ${{
+                    habitacion.precio_base
+                  }}
                 </p>
-                <p class="card-text text-warning">{{ habitacion.mensaje }}</p>
-                <p class="card-text text-warning">{{ habitacion.extras }}</p>
-                <p class="card-text fw-bold text-success">
-                  <strong
-                    ><i class="fa-solid fa-dollar-sign"></i> Precio
-                    Total:</strong
-                  >
-                  MXN ${{ habitacion.precio_calculado }}
+                <p class="card-text text-warning mb-0">
+                  {{ habitacion.mensaje }}
                 </p>
-
-                <button
-                  type="button"
-                  class="btn btn-primary btn-lg mt-2 w-100 rounded-pill shadow-sm"
-                  data-bs-toggle="modal"
-                  data-bs-target="#reserva"
-                  (click)="seleccionarHabitacion(habitacion)"
-                >
-                  <i class="fa-solid fa-calendar-check"></i> Reservar
-                </button>
+                <p class="card-text text-warning mb-0">
+                  {{ habitacion.extras }}
+                </p>
+                <p class="card-text fw-bold text-success mb-0">
+                  <strong>Precio Total:</strong> MXN ${{
+                    habitacion.precio_calculado
+                  }}
+                </p>
               </div>
+
+              <button
+                type="button"
+                class="btn btn-primary btn-sm w-100 rounded-pill shadow-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#reserva"
+                (click)="seleccionarHabitacion(habitacion)"
+              >
+                <i class="fa-solid fa-calendar-check"></i> Reservar
+              </button>
             </div>
           </div>
         </div>
