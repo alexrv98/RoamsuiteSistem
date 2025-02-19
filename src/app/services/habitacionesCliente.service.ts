@@ -15,7 +15,15 @@ export class HabitacionesClienteService {
     return this.http.post(`${this.apiUrl}/buscarHabitaciones.php`, filtros);
   }
 
-  // obtenerHotelbyId(hotelId: number): Observable<any> {
+  // En HabitacionesClienteService
+  getImagenesHabitacion(habitacionId: number): Observable<any> {
+    // ✅ Este es el nombre correcto
+    return this.http.get(
+      `${this.apiUrl}/imagenes_habitacion.php?habitacion_id=${habitacionId}`
+    );
+  }
+  // obtenerHotelbyId(hotelId: number): Observable
+  // <any> {
   //   return this.http.get(`${this.apiUrl}/getHotelById.php?id=${hotelId}`);
   // }
 }

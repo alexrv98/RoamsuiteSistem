@@ -1,47 +1,49 @@
 <?php
 require_once 'cors.php';
 require_once 'db.php';
+require_once 'jwt_verify.php';
 
-// Verificar el método de la solicitud
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Verificar si se ha proporcionado el ID de la habitación
-    if (isset($_GET['habitacion_id'])) {
-        $habitacion_id = $_GET['habitacion_id'];
 
-        try {
-            // Consultar las imágenes asociadas a la habitación
-            $query = "SELECT i.id, i.img_url
-                      FROM imagenes_habitacion i
-                      WHERE i.habitacion_id = :habitacion_id";
+    // Obtener el habitacion_id de los parámetros de la URL
+    $habitacion_id = isset($_GET['habitacion_id']) ? intval($_GET['habitacion_id']) : null;
 
-            $stmt = $conn->prepare($query);
-            $stmt->execute([':habitacion_id' => $habitacion_id]);
-            $imagenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            // Verificar si se encontraron imágenes
-            if ($imagenes) {
-                // URL base de tu dominio
-                $base_url = "http://192.168.1.102/HOTELSAAJ/public/";// Cambia esto por la URL base de tu servidor
-
-                // Añadir la URL completa a las imágenes y eliminar saltos de línea o espacios en blanco innecesarios
-                foreach ($imagenes as &$imagen) {
-                  // Eliminar cualquier salto de línea o espacio en blanco adicional
-                  $imagen['img_url'] = trim($base_url . $imagen['img_url']);
-              }
-
-              echo json_encode(['status' => 'success', 'data' => $imagenes]);
-
-            } else {
-                echo json_encode(['status' => 'error', 'message' => 'No se encontraron imágenes para esta habitación']);
-            }
-
-        } catch (PDOException $e) {
-            echo json_encode(['status' => 'error', 'message' => 'Error al obtener las imágenes: ' . $e->getMessage()]);
-        }
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'ID de habitación no proporcionado']);
+    if ($habitacion_id === null) {
+        echo json_encode([
+            "status" => "error",
+            "message" => "El parámetro habitacion_id es obligatorio"
+        ]);
+        exit;
     }
-} else {
-    echo json_encode(['status' => 'error', 'message' => 'Método no permitido. Solo GET es válido.']);
+
+    try {
+        // Consulta para obtener las imágenes asociadas al habitacion_id
+        $query = "SELECT i.id AS imagen_id, i.img_url
+                  FROM imagenes_habitacion i
+                  WHERE i.habitacion_id = :habitacion_id";
+
+        $stmt = $conn->prepare($query);
+        $stmt->bindParam(':habitacion_id', $habitacion_id, PDO::PARAM_INT);
+        $stmt->execute();
+        $imagenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Verificar si se encontraron imágenes
+        if (count($imagenes) > 0) {
+            echo json_encode([
+                "status" => "success",
+                "data" => $imagenes
+            ]);
+        } else {
+            echo json_encode([
+                "status" => "error",
+                "message" => "No se encontraron imágenes para la habitación solicitada"
+            ]);
+        }
+    } catch (PDOException $e) {
+        echo json_encode([
+            "status" => "error",
+            "message" => "Error al obtener imágenes: " . $e->getMessage()
+        ]);
+    }
 }
 ?>

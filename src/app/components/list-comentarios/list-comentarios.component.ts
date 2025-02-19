@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,6 +18,7 @@ export class ListComentariosComponent implements OnInit {
   calificacion: number = 5;
   comentario: string = '';
   mostrarTodos: boolean = false;
+  @Input() isLoading: boolean = false;
 
   constructor(
     private comentarioService: ComentariosService,
