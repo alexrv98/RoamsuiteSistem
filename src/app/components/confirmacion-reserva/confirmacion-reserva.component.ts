@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReservaService } from '../../services/reserva.service';
 import { CommonModule, Location } from '@angular/common';
@@ -24,7 +24,6 @@ import { OpenpayComponent } from '../openpay/openpay.component';
 })
 export class ConfirmarReservaComponent implements OnInit {
   reserva: any;
-  paypal: any;
   cliente = { id: '', nombre: '', correo: '' };
   pagoRealizado: boolean = false;
 
@@ -44,10 +43,6 @@ export class ConfirmarReservaComponent implements OnInit {
     if (state.reserva) {
       this.reserva = state.reserva;
       this.location.replaceState('/confirmar-reserva', '');
-
-      if (!this.paypal) {
-        this.cargarPaypalScript();
-      }
 
       const token = this.authService.getToken();
       if (token) {
@@ -74,60 +69,15 @@ export class ConfirmarReservaComponent implements OnInit {
     }
   }
 
-  @HostListener('window:beforeunload', ['$event'])
-  unloadNotification($event: any): void {
-    if (!this.pagoRealizado || !this.cliente.nombre || !this.cliente.correo) {
-      $event.returnValue = true;
+  actualizarEstadoPago(transactionId: string) {
+    if (transactionId) {
+      this.pagoRealizado = true;
+      this.reserva.id_transaccion = transactionId; 
+    } else {
+      console.error('Error: No se recibió un ID de transacción válido.');
     }
   }
-
-  cargarPaypalScript() {
-    if ((window as any).paypal) {
-      this.paypal = (window as any).paypal;
-      this.renderizarBotonPago();
-      return;
-    }
-
-    const scriptUrl =
-      'https://www.paypal.com/sdk/js?client-id=AWIzDf7xorUxwwhL-i8PFdB4g4rO7r6y9quBVumXa8bllB86EiqsIXKtiPcCq8JqItGU1mWF0Xinoigs&components=buttons&currency=MXN';
-
-    const scriptElement = document.createElement('script');
-    scriptElement.src = scriptUrl;
-    scriptElement.onload = () => {
-      this.paypal = (window as any).paypal;
-      this.renderizarBotonPago();
-    };
-
-    document.body.appendChild(scriptElement);
-  }
-
-  renderizarBotonPago() {
-    if (!document.getElementById('paypal-button-container')?.hasChildNodes()) {
-      this.paypal
-        .Buttons({
-          createOrder: (data: any, actions: any) => {
-            return actions.order.create({
-              purchase_units: [
-                {
-                  amount: { value: this.reserva.habitacion.precio_calculado.toString() },
-                },
-              ],
-            });
-          },
-          onApprove: (data: any, actions: any) => {
-            return actions.order.capture().then(() => {
-              alert('Pago realizado con éxito');
-              this.pagoRealizado = true;
-            });
-          },
-          onError: (error: any) => {
-            console.error('Error en el proceso de pago:', error);
-            alert('Error al realizar el pago, intenta de nuevo.');
-          },
-        })
-        .render('#paypal-button-container');
-    }
-  }
+  
   confirmarReserva(): void {
     if (this.pagoRealizado && this.cliente.nombre && this.cliente.correo) {
       const datosReserva = {
@@ -138,28 +88,28 @@ export class ConfirmarReservaComponent implements OnInit {
         totalReserva: this.reserva.habitacion?.precio_calculado || 0,
         num_adultos: this.reserva.habitacion?.adultosExtras || 0,
         num_ninos: this.reserva.habitacion?.ninosExtras || 0,
+        id_transaccion: this.reserva.id_transaccion || 'No asignado'
       };
   
   
-      this.reservaService
-        .realizarReserva(datosReserva)
-        .pipe(take(1))
-        .subscribe({
-          next: (res) => {
-            if (res.status === 'success') {
-              alert('Reserva confirmada con éxito');
-              this.router.navigate(['/'], { replaceUrl: true });
-            } else {
-              alert('Error al realizar la reserva');
-            }
-          },
-          error: (error) => {
-            console.error('Error en la reserva:', error);
-          },
-        });
+      this.reservaService.realizarReserva(datosReserva).pipe(take(1)).subscribe({
+        next: (res) => {
+  
+          if (res.status === 'success') {
+            alert('Reserva confirmada con éxito');
+            this.router.navigate(['/'], { replaceUrl: true });
+          } else {
+            alert('Error al realizar la reserva');
+          }
+        },
+        error: (error) => {
+          console.error('Error en la reserva:', error);
+        },
+      });
     } else {
       alert('Por favor, completa todos los campos y realiza el pago antes de confirmar.');
     }
   }
+  
   
 }

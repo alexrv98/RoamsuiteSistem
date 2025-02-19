@@ -27,6 +27,7 @@
                 id="fechaInicio"
                 class="form-control"
                 type="date"
+                [min]="fechaMinima"
                 [(ngModel)]="filtros.fechaInicio"
               />
               <label>
@@ -42,6 +43,7 @@
                 id="fechaFin"
                 class="form-control"
                 type="date"
+                [min]="filtros.fechaInicio"
                 [(ngModel)]="filtros.fechaFin"
               />
               <label>

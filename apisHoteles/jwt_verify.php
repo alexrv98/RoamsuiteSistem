@@ -1,5 +1,5 @@
 <?php
-define('JWT_SECRET_KEY', 'DTIConsultores88RAVa#21');
+define('JWT_SECRET_KEY', 'DTIConsultores88RAVa$21');
 
 function verificarToken() {
     $headers = getallheaders();
