@@ -35,9 +35,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     document.querySelector('.modal-backdrop')?.remove();
     document.body.style.overflow = 'auto';
 
-    // Si el usuario ya está autenticado, redirigirlo fuera del login
     if (this.authService.estaAutenticado()) {
-      this.router.navigate(['/']); // Cambia la ruta si es necesario
+      this.router.navigate(['/']);
     }
   }
 

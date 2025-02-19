@@ -58,8 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $costoFinalAdultos = 0;
             $costoFinalNinos = 0;
 
-
-
             // Si el número de huéspedes supera la capacidad de la habitación
             if ($totalHuespedes > $capacidadMaxima) {
                 $huespedesExtra = $totalHuespedes - $capacidadMaxima;
@@ -94,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'adultosExtras' => $adultosExtras,
                 'costoFinalAdultos' => $costoFinalAdultos,
                 'costoFinalNinos' => $costoFinalNinos,
-                'extrasTotal' => $extrasTotal
+                'extrasTotal' => $extrasTotal,
           
             ];
 

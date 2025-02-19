@@ -30,8 +30,12 @@
           />
         </div>
 
-        <div id="paypal-button-container"></div>
-
+        <!-- Componente de OpePay -->
+        <app-openpay 
+        [totalReserva]="reserva.habitacion?.precio_calculado" 
+        (pagoExitoso)="actualizarEstadoPago($event)">
+      </app-openpay>
+      
         <button
           type="submit"
           class="btn btn-success"

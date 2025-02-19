@@ -73,7 +73,6 @@ export class FiltroHotelesComponent implements OnInit {
       return;
     }
 
-    // Pasar filtros usando el state en lugar de queryParams
     this.router.navigate(['/buscar'], { state: { filtros: this.filtros } });
   }
 
@@ -142,19 +141,28 @@ export class FiltroHotelesComponent implements OnInit {
     operacion: 'sumar' | 'restar'
   ) {
     if (tipo === 'adultos') {
-      if (operacion === 'sumar') this.filtros.huespedesAdultos++;
-      else if (this.filtros.huespedesAdultos > 1)
+      if (operacion === 'sumar' && this.filtros.huespedesAdultos < 6) {
+        this.filtros.huespedesAdultos++;
+      } else if (operacion === 'restar' && this.filtros.huespedesAdultos > 1) {
         this.filtros.huespedesAdultos--;
+      }
     }
-
+  
     if (tipo === 'ninos') {
-      if (operacion === 'sumar') this.filtros.huespedesNinos++;
-      else if (this.filtros.huespedesNinos > 0) this.filtros.huespedesNinos--;
+      if (operacion === 'sumar' && this.filtros.huespedesNinos < 4) {
+        this.filtros.huespedesNinos++;
+      } else if (operacion === 'restar' && this.filtros.huespedesNinos > 0) {
+        this.filtros.huespedesNinos--;
+      }
     }
-
+  
     if (tipo === 'camas') {
-      if (operacion === 'sumar') this.filtros.numCamas++;
-      else if (this.filtros.numCamas > 1) this.filtros.numCamas--;
+      if (operacion === 'sumar') {
+        this.filtros.numCamas++;
+      } else if (operacion === 'restar' && this.filtros.numCamas > 1) {
+        this.filtros.numCamas--;
+      }
     }
   }
+  
 }
