@@ -4,6 +4,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { LugaresHomeComponent } from './lugares-home/lugares-home.component';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from '../footer/footer.component';
+import { HabiComponent } from '../../habi/habi.component';
 @Component({
   selector: 'app-home',
   imports: [
@@ -12,6 +13,7 @@ import { FooterComponent } from '../footer/footer.component';
     NavbarComponent,
     LugaresHomeComponent,
     CommonModule,
+    HabiComponent
 ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],

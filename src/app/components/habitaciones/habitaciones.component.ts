@@ -45,6 +45,8 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
   habitacionesOriginales: any = { mejorOpcion: [], otrasHabitaciones: [] };
   filtroPrecioMin: number | null = null;
   filtroPrecioMax: number | null = null;
+  imagenesHabitaciones: { [key: number]: string[] } = {}; // Almacena imágenes por habitacion_id
+
 
   private unsubscribe$ = new Subject<void>();
 
@@ -90,9 +92,18 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
           this.mensajeBusqueda = res.mensaje_busqueda || null;
 
           this.habitaciones = {
-            mejorOpcion: res.habitacionesExactas, // Habitaciones con el número exacto de camas
-            otrasHabitaciones: res.otrasHabitaciones, // Habitaciones con diferente número de camas
+            mejorOpcion: res.habitacionesExactas,
+            otrasHabitaciones: res.otrasHabitaciones,
           };
+
+          // Obtener imágenes de cada habitación
+          [...this.habitaciones.mejorOpcion, ...this.habitaciones.otrasHabitaciones].forEach(
+            (habitacion: any) => {
+              this.cargarImagenes(habitacion.habitacion_id);
+            }
+          );
+
+          console.log(this.habitaciones);
         } else {
           console.error('Error al obtener habitaciones:', res.message);
           this.habitaciones = { mejorOpcion: [], otrasHabitaciones: [] };
@@ -101,6 +112,25 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       });
   }
+
+
+  cargarImagenes(habitacionId: number) {
+    this.habitacionesService.getImagenesHabitacion(habitacionId).subscribe(
+      (res: any) => {
+        console.log(`Imágenes de la habitación ${habitacionId}:`, res); // 👈 Verifica respuesta
+
+        if (res.status === 'success' && res.data.length > 0) {
+          this.imagenesHabitaciones[habitacionId] = res.data.map((img: any) => img.img_url);
+        } else {
+          console.warn(`No se encontraron imágenes para la habitación ${habitacionId}`);
+        }
+      },
+      (err) => {
+        console.error('Error al obtener imágenes:', err);
+      }
+    );
+  }
+
 
   filtrarPorPrecio() {
     const min = this.filtroPrecioMin ?? 0;

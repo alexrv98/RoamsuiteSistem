@@ -4,8 +4,6 @@ require_once 'db.php';
 require_once 'jwt_verify.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Verificar si el token JWT es válido
-
 
     // Obtener el habitacion_id de los parámetros de la URL
     $habitacion_id = isset($_GET['habitacion_id']) ? intval($_GET['habitacion_id']) : null;

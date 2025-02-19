@@ -78,14 +78,14 @@
         </div>
       </ng-container>
       <ng-template #mostrarHabitaciones>
-        <div class="scroll-container">
-          <div
-            class="card shadow-sm mb-3"
-            *ngFor="let habitacion of habitaciones.mejorOpcion"
-          >
-            <div class="card-body d-flex align-items-center">
+        <div class="card shadow-sm mb-3">
+
+
+          <div *ngFor="let habitacion of habitaciones.mejorOpcion">
+            <div class="card">
               <img
-                src="assets/habitacion.jpg"
+                *ngIf="imagenesHabitaciones[habitacion.habitacion_id] && imagenesHabitaciones[habitacion.habitacion_id].length > 0"
+                [src]="imagenesHabitaciones[habitacion.habitacion_id][0]"
                 alt="Imagen de la habitación"
                 class="room-image me-3 rounded-3 shadow-sm"
                 width="100%"
@@ -186,7 +186,9 @@
                 style="width: 25rem"
               >
                 <img
-                  src="assets/habitacion2.jpg"
+                *ngIf="imagenesHabitaciones[habitacion.habitacion_id] && imagenesHabitaciones[habitacion.habitacion_id].length > 0"
+                [src]="imagenesHabitaciones[habitacion.habitacion_id][0]"
+
                   alt="Habitación"
                   height="200"
                   class="w-100 rounded-top"
@@ -257,6 +259,8 @@
     </div>
   </div>
 </div>
+
+
 
 <app-modal-reserva
   [habitacion]="habitacionSeleccionada"
