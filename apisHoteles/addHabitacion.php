@@ -16,15 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tipo_habitacion_id = $data['tipo_habitacion_id'] ?? null;
     $numero_habitacion = $data['numero_habitacion'] ?? null;
     $precio = $data['precio'] ?? null;
+    $img_url = $data['img_url'] ?? null;  // URL de la imagen
 
-    if (!$hotel_id || !$tipo_habitacion_id || !$numero_habitacion || !$precio) {
+    if (!$hotel_id || !$tipo_habitacion_id || !$numero_habitacion || !$precio || !$img_url) {
         echo json_encode(["status" => "error", "message" => "Todos los campos son obligatorios"]);
         exit;
     }
 
     try {
         // Obtener la capacidad total actual del hotel
-        $queryCapacidad = "SELECT SUM(t.capacidad) AS capacidad_ocupada 
+        $queryCapacidad = "SELECT SUM(t.capacidad) AS capacidad_ocupada
                            FROM habitaciones h
                            INNER JOIN tipos_habitacion t ON h.tipo_habitacion_id = t.id
                            WHERE h.hotel_id = :hotel_id";
@@ -53,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Insertar la nueva habitación
-        $queryInsert = "INSERT INTO habitaciones (hotel_id, tipo_habitacion_id, numero_habitacion, precio) 
+        $queryInsert = "INSERT INTO habitaciones (hotel_id, tipo_habitacion_id, numero_habitacion, precio)
                         VALUES (:hotel_id, :tipo_habitacion_id, :numero_habitacion, :precio)";
         $stmtInsert = $conn->prepare($queryInsert);
         $stmtInsert->bindParam(':hotel_id', $hotel_id, PDO::PARAM_INT);
@@ -61,6 +62,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtInsert->bindParam(':numero_habitacion', $numero_habitacion, PDO::PARAM_STR);
         $stmtInsert->bindParam(':precio', $precio, PDO::PARAM_STR);
         $stmtInsert->execute();
+
+        // Obtener el ID de la habitación recién insertada
+        $habitacion_id = $conn->lastInsertId();
+
+        // Insertar la imagen de la habitación
+        $queryImagen = "INSERT INTO imagenes_habitacion (habitacion_id, img_url)
+                        VALUES (:habitacion_id, :img_url)";
+        $stmtImagen = $conn->prepare($queryImagen);
+        $stmtImagen->bindParam(':habitacion_id', $habitacion_id, PDO::PARAM_INT);
+        $stmtImagen->bindParam(':img_url', $img_url, PDO::PARAM_STR);
+        $stmtImagen->execute();
 
         echo json_encode(["status" => "success", "message" => "Habitación agregada exitosamente."]);
     } catch (PDOException $e) {

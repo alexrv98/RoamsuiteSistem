@@ -21,7 +21,7 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
   tiposHabitacion: any[] = [];
   mensaje: string = '';
   tipoMensaje: 'success' | 'error' | '' = '';
-  private destroy$ = new Subject<void>(); 
+  private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
@@ -32,7 +32,8 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
     this.habitacionForm = this.fb.group({
       numero_habitacion: ['', Validators.required],
       tipo_habitacion_id: ['', Validators.required],
-      precio: ['', [Validators.required, Validators.min(1)]]
+      precio: ['', [Validators.required, Validators.min(1)]],
+      img_url: ['', Validators.required]  // Campo para la URL de la imagen
     });
 
     this.cargarTiposHabitacion();
@@ -63,7 +64,7 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
     };
 
     this.habitacionService.agregarHabitacion(nuevaHabitacion)
-      .pipe(takeUntil(this.destroy$)) 
+      .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
           if (response.status === 'success') {
@@ -90,7 +91,7 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.destroy$.next(); 
-    this.destroy$.complete(); 
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
