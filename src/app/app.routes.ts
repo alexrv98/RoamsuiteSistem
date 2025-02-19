@@ -12,17 +12,28 @@ import { ReservacionesAdminComponent } from './components/administrador/reservac
 import { ComentariosComponent } from './components/habitaciones/comentarios/comentarios.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent  },
+  { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'admin', component: AdministradorComponent, canActivate: [AuthGuard] },
+  {
+    path: 'admin',
+    component: AdministradorComponent,
+    canActivate: [AuthGuard],
+  },
   { path: 'buscar', component: ListaHotelesComponent },
   { path: 'habitaciones', component: HabitacionesComponent },
-  { path: 'confirmar-reserva', component: ConfirmarReservaComponent, canActivate: [AuthGuard] },
+  {
+    path: 'confirmar-reserva',
+    component: ConfirmarReservaComponent,
+    canActivate: [AuthGuard],
+  },
   { path: 'register', component: RegisterComponent },
   { path: 'comentarios/:hotelId', component: ComentariosComponent },
-  { path: 'reservaciones-admin', component: ReservacionesAdminComponent, canActivate: [AuthGuard] },
-  { path: 'comentarios', component: ComentariosComponent ,
+  {
+    path: 'reservaciones-admin',
+    component: ReservacionesAdminComponent,
+    canActivate: [AuthGuard],
   },
+  { path: 'comentarios', component: ComentariosComponent },
   {
     path: 'mis-reservaciones',
     component: MisReservasComponent,

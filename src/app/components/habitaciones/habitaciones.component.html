@@ -146,13 +146,15 @@
           </div>
         </div>
         <!-- Alerta si no hay habitaciones disponibles -->
-        <div
-          *ngIf="habitaciones.mejorOpcion.length === 0"
-          class="alert alert-warning text-center"
-          role="alert"
-        >
-          <div class="alert alert-danger" role="alert">
+        <div *ngIf="habitaciones.mejorOpcion.length === 0">
+          <div class="alert alert-danger text-center" role="alert">
             No hay habitaciones disponibles.
+            <a
+              routerLink="/habitaciones"
+              fragment="otrasopciones"
+              class="alert-link fw-bold"
+              >Ver otras opciones</a
+            >
           </div>
         </div>
         <!-- ------------------------------------- -->
@@ -166,7 +168,7 @@
   </div>
 </div>
 
-<div class="container mt-5">
+<div class="container mt-5" #otrasopciones id="otrasopciones">
   <div class="row">
     <div class="col-12 col-mf-8">
       <div class="card p-4 shadow-lg border-0 rounded-4">
