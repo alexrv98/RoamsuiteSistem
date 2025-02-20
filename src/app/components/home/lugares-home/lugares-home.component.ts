@@ -56,6 +56,13 @@ export class LugaresHomeComponent implements OnInit {
     setTimeout(() => {
       this.inicializarMapa();
     }, 500);
+
+    L.Marker.prototype.options.icon = L.icon({
+      iconUrl: 'assets/marker-icon.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+    });
   }
 
   obtenerCategorias(): void {

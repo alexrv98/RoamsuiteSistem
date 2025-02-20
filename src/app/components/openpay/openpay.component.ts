@@ -86,8 +86,6 @@ export class OpenpayComponent {
     });
   }
 
-
-
   enviarPagoAlServidor(token: string, deviceSessionId: string) {
     const datosPago = {
       token,
@@ -95,7 +93,6 @@ export class OpenpayComponent {
       device_session_id: deviceSessionId,
       cliente: { ...this.cliente }
     };
-
 
     this.reservaService.realizarPago(datosPago).subscribe((res) => {
       if (res.status === 'success') {
@@ -108,9 +105,6 @@ export class OpenpayComponent {
       }
     });
   }
-
-
-
 
 
   

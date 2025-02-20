@@ -15,6 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $camasSolicitadas = $data['camas'];
 
     try {
+        // Calcular la cantidad de noches
+        $fechaInicioObj = new DateTime($fechaInicio);
+        $fechaFinObj = new DateTime($fechaFin);
+        $diferencia = $fechaInicioObj->diff($fechaFinObj);
+        $numeroNoches = $diferencia->days;
+
         // Consulta todas las habitaciones disponibles
         $stmt = $conn->prepare("
             SELECT 
@@ -73,10 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $extrasTotal = $ninosExtras + $adultosExtras;
 
                 $precioFinal = round($precioBase + ($costoExtraAdulto * $adultosExtras) + ($costoExtraNino * $ninosExtras), 2);
-
                 $costoFinalAdultos = round($costoExtraAdulto * $adultosExtras, 2);
                 $costoFinalNinos = round($costoExtraNino * $ninosExtras, 2);
             }
+
+            $precioTotal = round($precioFinal * $numeroNoches, 2);
 
             $habitacionData = [
                 'habitacion_id' => $habitacion['habitacion_id'],
@@ -86,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'camas' => $habitacion['camas'],
                 'precio_base' => round($precioBase, 2),
                 'precio_calculado' => round($precioFinal, 2),
+                'precio_total' => $precioTotal,
                 'mensaje' => $mensaje,
                 'extras' => $extras,
                 'ninosExtras' => $ninosExtras,
@@ -93,7 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'costoFinalAdultos' => $costoFinalAdultos,
                 'costoFinalNinos' => $costoFinalNinos,
                 'extrasTotal' => $extrasTotal,
-          
             ];
 
             if ($habitacion['camas'] == $camasSolicitadas) {

@@ -8,7 +8,6 @@ import { ReservaService } from '../../../services/reserva.service';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { MigajaComponent } from "./migaja/migaja.component";
 
 @Component({
   selector: 'app-misreservas',
@@ -16,12 +15,13 @@ import { MigajaComponent } from "./migaja/migaja.component";
     CommonModule,
     FormsModule,
     NavbarComponent,
-    FooterComponent,
-    MigajaComponent
-],
+    FooterComponent
+  ],
   templateUrl: './mis-reservas.component.html',
   styleUrl: './mis-reservas.component.css',
 })
+
+
 export class MisReservasComponent implements OnInit, OnDestroy {
   estaAutenticado: boolean = false;
   reservaciones: any[] = [];
