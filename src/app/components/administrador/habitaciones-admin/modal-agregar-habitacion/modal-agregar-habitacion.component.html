@@ -55,18 +55,23 @@
             </div>
           </div>
 
-          <div class="mb-3">
-            <label class="form-label fw-bold"><i class="fas fa-images me-2" aria-hidden="true"></i>Imágenes de la habitación</label>
-            <!-- Input para seleccionar múltiples imágenes -->
-            <input type="file" class="form-control" (change)="onImageSelect($event)" multiple>
+ <!-- Sección para imágenes -->
+<div class="mb-3">
+  <label class="form-label fw-bold">
+    <i class="fas fa-images me-2" aria-hidden="true"></i>Imágenes de la habitación
+  </label>
 
-            <!-- Mostrar las imágenes seleccionadas (vista previa) -->
-            <div *ngIf="imagenesSeleccionadas.length > 0">
-              <div *ngFor="let imagen of imagenesSeleccionadas">
-                <img [src]="getImagePreview(imagen)" alt="Vista previa" class="mt-2" style="max-width: 100%; height: auto;">
-              </div>
-            </div>
-          </div>
+  <!-- Input para seleccionar una imagen -->
+  <input type="file" class="form-control" (change)="onImageSelect($event)" accept="image/*">
+
+  <!-- Mostrar las imágenes seleccionadas -->
+  <div *ngIf="imagenesSeleccionadas.length > 0">
+    <div *ngFor="let imagen of imagenesSeleccionadas">
+      <img [src]="getImagePreview(imagen.url)" alt="Vista previa" class="mt-2" style="max-width: 100px; height: auto;">
+    </div>
+  </div>
+</div>
+
 </form>
       <div class="modal-footer">
         <button type="button" class="btn btn-success" (click)="agregarHabitacion()">

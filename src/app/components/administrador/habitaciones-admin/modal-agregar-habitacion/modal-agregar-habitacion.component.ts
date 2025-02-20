@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HabitacionesAdminService } from '../../../../services/habitacionesAdmin.service';
@@ -21,12 +21,13 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
   tiposHabitacion: any[] = [];
   mensaje: string = '';
   tipoMensaje: 'success' | 'error' | '' = '';
-  imagenesSeleccionadas: File[] = [];  // Arreglo para almacenar los archivos de imagen seleccionados
+  imagenesSeleccionadas: { file: File, url: string }[] = []; // Guardamos archivo + URL de vista previa
   private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
-    private habitacionService: HabitacionesAdminService
+    private habitacionService: HabitacionesAdminService,
+    private cdr: ChangeDetectorRef  // Inyectamos ChangeDetectorRef para forzar la detección de cambios
   ) {}
 
   ngOnInit(): void {
@@ -52,14 +53,22 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
       });
   }
 
-  // Manejar la selección de múltiples imágenes
+  // Manejar la selección de imágenes una por una
   onImageSelect(event: any): void {
-    const archivos = event.target.files;  // Obtener todos los archivos seleccionados
-    if (archivos) {
-      // Recorrer los archivos y almacenarlos en el arreglo
-      for (let i = 0; i < archivos.length; i++) {
-        this.imagenesSeleccionadas.push(archivos[i]);
-      }
+    const archivo = event.target.files[0];  // Obtener solo un archivo
+    if (archivo) {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        setTimeout(() => {
+          if (typeof reader.result === 'string') {
+            this.imagenesSeleccionadas.push({ file: archivo, url: reader.result });
+            this.cdr.detectChanges(); // Forzar la detección de cambios
+          }
+        });
+      };
+
+      reader.readAsDataURL(archivo);  // Leer la imagen seleccionada
     }
   }
 
@@ -82,8 +91,8 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
     formData.append('precio', nuevaHabitacion.precio.toString());
 
     // Agregar las imágenes seleccionadas al FormData
-    this.imagenesSeleccionadas.forEach((imagen: File) => {
-      formData.append('imagenes[]', imagen, imagen.name);
+    this.imagenesSeleccionadas.forEach((imagen) => {
+      formData.append('imagenes[]', imagen.file, imagen.file.name);
     });
 
     this.habitacionService.agregarHabitacion(formData)
@@ -104,9 +113,8 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
       });
   }
 
-  // Función para mostrar vista previa de las imágenes seleccionadas
-  getImagePreview(imagen: File): string {
-    return URL.createObjectURL(imagen); // Esto generará una URL temporal para la vista previa
+  getImagePreview(imagenUrl: string): string {
+    return imagenUrl;
   }
 
   mostrarMensaje(mensaje: string, tipo: 'success' | 'error'): void {
