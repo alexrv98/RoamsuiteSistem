@@ -21,6 +21,7 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
   tiposHabitacion: any[] = [];
   mensaje: string = '';
   tipoMensaje: 'success' | 'error' | '' = '';
+  imagenSeleccionada: string | ArrayBuffer | null = null; // Variable para almacenar la imagen seleccionada
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -33,7 +34,7 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
       numero_habitacion: ['', Validators.required],
       tipo_habitacion_id: ['', Validators.required],
       precio: ['', [Validators.required, Validators.min(1)]],
-      img_url: ['', Validators.required]  // Campo para la URL de la imagen
+      img_url: ['assets/', Validators.required]  // Inicializamos con 'assets/'
     });
 
     this.cargarTiposHabitacion();
@@ -50,6 +51,25 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
         },
         error: () => this.mostrarMensaje('Error al obtener tipos de habitación.', 'error')
       });
+  }
+
+  // Manejar la selección de imagen
+  onImageSelect(event: any): void {
+    const file = event.target.files[0]; // Obtener el archivo seleccionado
+    if (file) {
+      const reader = new FileReader();
+
+      // Leer la imagen como URL de datos
+      reader.onload = () => {
+        this.imagenSeleccionada = reader.result; // Asignar la URL de la imagen seleccionada
+        this.habitacionForm.patchValue({
+          img_url: 'assets/' + file.name // Aquí añadimos 'assets/' al nombre del archivo
+        });
+      };
+
+      // Leer el archivo
+      reader.readAsDataURL(file);
+    }
   }
 
   agregarHabitacion(): void {

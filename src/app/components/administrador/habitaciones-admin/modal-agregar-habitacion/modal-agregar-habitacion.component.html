@@ -47,13 +47,20 @@
           </div>
 
           <!-- Sección para imágenes -->
-          <div class="mb-3">
-            <label class="form-label fw-bold"><i class="fas fa-images me-2" aria-hidden="true"></i>Imágenes de la habitación</label>
+<!-- Sección para imágenes -->
+<!-- Sección para imágenes -->
+<div class="mb-3">
+  <label class="form-label fw-bold"><i class="fas fa-images me-2" aria-hidden="true"></i>Imágenes de la habitación</label>
+  <!-- Input para seleccionar imagen -->
+  <input type="file" class="form-control" (change)="onImageSelect($event)">
 
-                <input formControlName="img_url" type="text" class="form-control" placeholder="Ingrese la URL de la imagen">
+  <!-- Mostrar la imagen seleccionada (vista previa) -->
+  <div *ngIf="imagenSeleccionada">
+    <img [src]="imagenSeleccionada" alt="Vista previa" class="mt-2" style="max-width: 100%; height: auto;">
+  </div>
+</div>
 
 
-            </div>
         </form>
       </div>
 
@@ -63,8 +70,4 @@
         </button>
         <button type="button" class="btn btn-secondary" (click)="cerrarModal.emit()">
           <i class="fas fa-times me-2" aria-hidden="true"></i> Cancelar
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+
