@@ -11,18 +11,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Recibir datos de la habitación
-    $hotel_id = $_POST['hotel_id'] ?? null;
-    $tipo_habitacion_id = $_POST['tipo_habitacion_id'] ?? null;
-    $numero_habitacion = $_POST['numero_habitacion'] ?? null;
-    $precio = $_POST['precio'] ?? null;
+    $data = json_decode(file_get_contents("php://input"), true);
+    $hotel_id = $data['hotel_id'] ?? null;
+    $tipo_habitacion_id = $data['tipo_habitacion_id'] ?? null;
+    $numero_habitacion = $data['numero_habitacion'] ?? null;
+    $precio = $data['precio'] ?? null;
+    $img_url = $data['img_url'] ?? null;  // URL de la imagen
 
-    if (!$hotel_id || !$tipo_habitacion_id || !$numero_habitacion || !$precio) {
-        echo json_encode(["status" => "error", "message" => "Todos los campos de la habitación son obligatorios"]);
+    if (!$hotel_id || !$tipo_habitacion_id || !$numero_habitacion || !$precio || !$img_url) {
+        echo json_encode(["status" => "error", "message" => "Todos los campos son obligatorios"]);
         exit;
     }
 
     try {
+        // Obtener la capacidad total actual del hotel
+        $queryCapacidad = "SELECT SUM(t.capacidad) AS capacidad_ocupada
+                           FROM habitaciones h
+                           INNER JOIN tipos_habitacion t ON h.tipo_habitacion_id = t.id
+                           WHERE h.hotel_id = :hotel_id";
+        $stmtCapacidad = $conn->prepare($queryCapacidad);
+        $stmtCapacidad->bindParam(':hotel_id', $hotel_id, PDO::PARAM_INT);
+        $stmtCapacidad->execute();
+        $capacidadOcupada = $stmtCapacidad->fetch(PDO::FETCH_ASSOC)['capacidad_ocupada'] ?? 0;
+
+        // Obtener la capacidad máxima del hotel
+        $queryHotel = "SELECT capacidad FROM hoteles WHERE id = :hotel_id";
+        $stmtHotel = $conn->prepare($queryHotel);
+        $stmtHotel->bindParam(':hotel_id', $hotel_id, PDO::PARAM_INT);
+        $stmtHotel->execute();
+        $capacidadMaxima = $stmtHotel->fetch(PDO::FETCH_ASSOC)['capacidad'] ?? 0;
+
+        // Obtener la capacidad de la nueva habitación
+        $queryHabitacion = "SELECT capacidad FROM tipos_habitacion WHERE id = :tipo_habitacion_id";
+        $stmtHabitacion = $conn->prepare($queryHabitacion);
+        $stmtHabitacion->bindParam(':tipo_habitacion_id', $tipo_habitacion_id, PDO::PARAM_INT);
+        $stmtHabitacion->execute();
+        $capacidadNueva = $stmtHabitacion->fetch(PDO::FETCH_ASSOC)['capacidad'] ?? 0;
+
+        if (($capacidadOcupada + $capacidadNueva) > $capacidadMaxima) {
+            echo json_encode(["status" => "error", "message" => "No se puede agregar la habitación. Se supera la capacidad máxima del hotel."]);
+            exit;
+        }
+
         // Insertar la nueva habitación
         $queryInsert = "INSERT INTO habitaciones (hotel_id, tipo_habitacion_id, numero_habitacion, precio)
                         VALUES (:hotel_id, :tipo_habitacion_id, :numero_habitacion, :precio)";
@@ -36,44 +66,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Obtener el ID de la habitación recién insertada
         $habitacion_id = $conn->lastInsertId();
 
-        // Manejo de imágenes
-        if (isset($_FILES['imagenes']) && !empty($_FILES['imagenes']['name'][0])) {
-            $uploadDirectory = '../assets/'; // Carpeta donde se guardarán las imágenes
-            $uploadedUrls = [];
+        // Insertar la imagen de la habitación
+   // Después de insertar la habitación, se inserta la URL de la imagen
+$queryImagen = "INSERT INTO imagenes_habitacion (habitacion_id, img_url)
+VALUES (:habitacion_id, :img_url)";
+$stmtImagen = $conn->prepare($queryImagen);
+$stmtImagen->bindParam(':habitacion_id', $habitacion_id, PDO::PARAM_INT);
+$stmtImagen->bindParam(':img_url', $img_url, PDO::PARAM_STR);
+$stmtImagen->execute();
 
-            foreach ($_FILES['imagenes']['tmp_name'] as $index => $tmpName) {
-                $file = $_FILES['imagenes'];
-                $fileExtension = strtolower(pathinfo($file['name'][$index], PATHINFO_EXTENSION));
-                $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-
-                if (!in_array($fileExtension, $allowedExtensions)) {
-                    echo json_encode(["status" => "error", "message" => "Solo se permiten imágenes JPG, PNG o GIF"]);
-                    exit;
-                }
-
-                $fileName = uniqid('img_', true) . '.' . $fileExtension;
-                $filePath = $uploadDirectory . $fileName;
-
-                if (move_uploaded_file($tmpName, $filePath)) {
-                    $imgUrl = 'assets/' . $fileName;
-                    $uploadedUrls[] = $imgUrl;
-
-                    // Guardar la imagen en la base de datos
-                    $queryImagen = "INSERT INTO imagenes_habitacion (habitacion_id, img_url) VALUES (:habitacion_id, :img_url)";
-                    $stmtImagen = $conn->prepare($queryImagen);
-                    $stmtImagen->bindParam(':habitacion_id', $habitacion_id, PDO::PARAM_INT);
-                    $stmtImagen->bindParam(':img_url', $imgUrl, PDO::PARAM_STR);
-                    $stmtImagen->execute();
-                } else {
-                    echo json_encode(["status" => "error", "message" => "Error al subir la imagen"]);
-                    exit;
-                }
-            }
-        }
-
-        echo json_encode(["status" => "success", "message" => "Habitación agregada con imágenes correctamente"]);
+        echo json_encode(["status" => "success", "message" => "Habitación agregada exitosamente."]);
     } catch (PDOException $e) {
-        echo json_encode(["status" => "error", "message" => "Error al agregar la habitación: " . $e->getMessage()]);
+        echo json_encode(["status" => "error", "message" => "Error al agregar habitación: " . $e->getMessage()]);
     }
 }
 ?>
