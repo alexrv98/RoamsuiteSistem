@@ -67,12 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $habitacion_id = $conn->lastInsertId();
 
         // Insertar la imagen de la habitación
-        $queryImagen = "INSERT INTO imagenes_habitacion (habitacion_id, img_url)
-                        VALUES (:habitacion_id, :img_url)";
-        $stmtImagen = $conn->prepare($queryImagen);
-        $stmtImagen->bindParam(':habitacion_id', $habitacion_id, PDO::PARAM_INT);
-        $stmtImagen->bindParam(':img_url', $img_url, PDO::PARAM_STR);
-        $stmtImagen->execute();
+   // Después de insertar la habitación, se inserta la URL de la imagen
+$queryImagen = "INSERT INTO imagenes_habitacion (habitacion_id, img_url)
+VALUES (:habitacion_id, :img_url)";
+$stmtImagen = $conn->prepare($queryImagen);
+$stmtImagen->bindParam(':habitacion_id', $habitacion_id, PDO::PARAM_INT);
+$stmtImagen->bindParam(':img_url', $img_url, PDO::PARAM_STR);
+$stmtImagen->execute();
 
         echo json_encode(["status" => "success", "message" => "Habitación agregada exitosamente."]);
     } catch (PDOException $e) {
