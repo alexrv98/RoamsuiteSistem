@@ -29,10 +29,7 @@ export class ReservaService {
       );
   }
 
-  realizarPago(datosPago: any): Observable<any> {
-    return this.http.post<any>('http://192.168.1.102/sistemaExam/procesar_pago.php', datosPago);
-  }
-  
+ 
 
   obtenerReservacionesUsuario(): Observable<any> {
     const token = this.authService.getToken();
@@ -66,6 +63,18 @@ export class ReservaService {
       })
     );
   }
+
+
+  realizarPago(datosPago: any): Observable<any> {
+    return this.http.post<any>('http://192.168.1.102/sistemaExam/procesar_pago.php', datosPago);
+  }
+  
+  
+
+  cancelarReserva(idReserva: number): Observable<any> {
+    return this.http.post<any>('http://192.168.1.102/sistemaExam/cancelar_reserva.php', { id: idReserva });
+  }
+  
   
   
 }
