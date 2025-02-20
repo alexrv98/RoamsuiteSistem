@@ -53,38 +53,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        // Obtener el último ID utilizado en habitaciones
-        $queryMaxHabitacionId = "SELECT MAX(id) AS max_id FROM habitaciones";
-        $stmtMaxHabitacionId = $conn->prepare($queryMaxHabitacionId);
-        $stmtMaxHabitacionId->execute();
-        $maxHabitacionId = $stmtMaxHabitacionId->fetch(PDO::FETCH_ASSOC)['max_id'] ?? 0;
-
         // Insertar la nueva habitación
-        $queryInsertHabitacion = "INSERT INTO habitaciones (hotel_id, tipo_habitacion_id, numero_habitacion, precio)
-                                  VALUES (:hotel_id, :tipo_habitacion_id, :numero_habitacion, :precio)";
-        $stmtInsertHabitacion = $conn->prepare($queryInsertHabitacion);
-        $stmtInsertHabitacion->bindParam(':hotel_id', $hotel_id, PDO::PARAM_INT);
-        $stmtInsertHabitacion->bindParam(':tipo_habitacion_id', $tipo_habitacion_id, PDO::PARAM_INT);
-        $stmtInsertHabitacion->bindParam(':numero_habitacion', $numero_habitacion, PDO::PARAM_STR);
-        $stmtInsertHabitacion->bindParam(':precio', $precio, PDO::PARAM_STR);
-        $stmtInsertHabitacion->execute();
+        $queryInsert = "INSERT INTO habitaciones (hotel_id, tipo_habitacion_id, numero_habitacion, precio)
+                        VALUES (:hotel_id, :tipo_habitacion_id, :numero_habitacion, :precio)";
+        $stmtInsert = $conn->prepare($queryInsert);
+        $stmtInsert->bindParam(':hotel_id', $hotel_id, PDO::PARAM_INT);
+        $stmtInsert->bindParam(':tipo_habitacion_id', $tipo_habitacion_id, PDO::PARAM_INT);
+        $stmtInsert->bindParam(':numero_habitacion', $numero_habitacion, PDO::PARAM_STR);
+        $stmtInsert->bindParam(':precio', $precio, PDO::PARAM_STR);
+        $stmtInsert->execute();
 
         // Obtener el ID de la habitación recién insertada
         $habitacion_id = $conn->lastInsertId();
 
-        // Obtener el último ID utilizado en imagenes_habitacion
-        $queryMaxImagenId = "SELECT MAX(id) AS max_id FROM imagenes_habitacion";
-        $stmtMaxImagenId = $conn->prepare($queryMaxImagenId);
-        $stmtMaxImagenId->execute();
-        $maxImagenId = $stmtMaxImagenId->fetch(PDO::FETCH_ASSOC)['max_id'] ?? 0;
-
         // Insertar la imagen de la habitación
-        $queryInsertImagen = "INSERT INTO imagenes_habitacion (habitacion_id, img_url)
-                              VALUES (:habitacion_id, :img_url)";
-        $stmtInsertImagen = $conn->prepare($queryInsertImagen);
-        $stmtInsertImagen->bindParam(':habitacion_id', $habitacion_id, PDO::PARAM_INT);
-        $stmtInsertImagen->bindParam(':img_url', $img_url, PDO::PARAM_STR);
-        $stmtInsertImagen->execute();
+   // Después de insertar la habitación, se inserta la URL de la imagen
+$queryImagen = "INSERT INTO imagenes_habitacion (habitacion_id, img_url)
+VALUES (:habitacion_id, :img_url)";
+$stmtImagen = $conn->prepare($queryImagen);
+$stmtImagen->bindParam(':habitacion_id', $habitacion_id, PDO::PARAM_INT);
+$stmtImagen->bindParam(':img_url', $img_url, PDO::PARAM_STR);
+$stmtImagen->execute();
 
         echo json_encode(["status" => "success", "message" => "Habitación agregada exitosamente."]);
     } catch (PDOException $e) {
