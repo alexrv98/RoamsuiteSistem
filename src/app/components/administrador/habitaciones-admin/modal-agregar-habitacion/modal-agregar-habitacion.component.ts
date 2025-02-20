@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HabitacionesAdminService } from '../../../../services/habitacionesAdmin.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -10,7 +10,7 @@ import { takeUntil } from 'rxjs/operators';
   standalone: true,
   templateUrl: './modal-agregar-habitacion.component.html',
   styleUrls: ['./modal-agregar-habitacion.component.css'],
-  imports: [CommonModule, ReactiveFormsModule, FormsModule]
+  imports: [CommonModule, ReactiveFormsModule]
 })
 export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
   @Input() hotelId!: number;
@@ -33,7 +33,7 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
       numero_habitacion: ['', Validators.required],
       tipo_habitacion_id: ['', Validators.required],
       precio: ['', [Validators.required, Validators.min(1)]],
-      imagenes: this.fb.array([this.crearImagen()])  // Iniciar con un campo de imagen vacío
+      img_url: ['', Validators.required]  // Campo para la URL de la imagen
     });
 
     this.cargarTiposHabitacion();
@@ -52,30 +52,11 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
       });
   }
 
-  crearImagen(): FormGroup {
-    return this.fb.group({
-      img_url: ['', Validators.required]  // Cada URL es obligatoria
-    });
-  }
-
-  agregarImagen(): void {
-    (this.habitacionForm.get('imagenes') as FormArray).push(this.crearImagen());  // Agregar un nuevo campo de URL
-  }
-
-  eliminarImagen(index: number): void {
-    (this.habitacionForm.get('imagenes') as FormArray).removeAt(index);  // Eliminar un campo de URL específico
-  }
-
-  get imagenes() {
-    return this.habitacionForm.get('imagenes') as FormArray;
-  }
-
   agregarHabitacion(): void {
     if (this.habitacionForm.invalid) {
       this.mostrarMensaje('Por favor, complete todos los campos correctamente.', 'error');
       return;
     }
-
 
     const nuevaHabitacion = {
       hotel_id: this.hotelId,
