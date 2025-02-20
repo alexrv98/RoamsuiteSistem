@@ -8,40 +8,19 @@
       <form #reservaForm="ngForm" (ngSubmit)="confirmarReserva()" novalidate>
         <div class="mb-3">
           <label for="nombre" class="form-label">Nombre</label>
-          <input
-            type="text"
-            id="nombre"
-            class="form-control"
-            [(ngModel)]="cliente.nombre"
-            name="nombre"
-            readonly
-          />
+          <input type="text" id="nombre" class="form-control" [(ngModel)]="cliente.nombre" name="nombre" readonly />
         </div>
 
         <div class="mb-3">
           <label for="email" class="form-label">Correo</label>
-          <input
-            type="email"
-            id="email"
-            class="form-control"
-            [(ngModel)]="cliente.correo"
-            name="email"
-            readonly
-          />
+          <input type="email" id="email" class="form-control" [(ngModel)]="cliente.correo" name="email" readonly />
         </div>
 
         <!-- Componente de OpePay -->
-        <app-openpay
-          [totalReserva]="reserva.habitacion?.precio_calculado"
-          (pagoExitoso)="actualizarEstadoPago($event)"
-        >
+        <app-openpay [totalReserva]="reserva.habitacion?.precio_calculado" (pagoExitoso)="actualizarEstadoPago($event)">
         </app-openpay>
 
-        <button
-          type="submit"
-          class="btn btn-success"
-          [disabled]="!pagoRealizado"
-        >
+        <button type="submit" class="btn btn-success" [disabled]="!pagoRealizado">
           Confirmar Reserva
         </button>
       </form>
@@ -49,19 +28,12 @@
     <div class="col-md-4">
       <div class="card p-4 ticket-card shadow-lg rounded-4 p-5">
         <div class="text-center mb-3">
-          <img
-            src="/assets/logo.png"
-            alt="logo"
-            height="50"
-            width="200"
-            class="mb-3"
-          />
+          <img src="/assets/logo.png" alt="logo" height="50" width="200" class="mb-3" />
           <h4 class="text-primary fw-bold">Detalles de la Reserva</h4>
           <div class="ticket-line my-3"></div>
         </div>
 
         <div class="ticket-info text-monospace">
-          <!-- <p class="text-end">JUNIO 20, 2012 2:09 AM</p> -->
           <p><strong>HOTEL:</strong> {{ reserva.destino }}</p>
           <p>
             <strong>NUM HABITACIÓN:</strong>
@@ -81,45 +53,49 @@
           </p>
           <p>
             <strong>HUÉSPEDES TOTALES:</strong>
-            {{ reserva?.habitacion?.extrasTotal }} personas
+            {{ (reserva?.filtros?.huespedesNinos || 0) + (reserva?.filtros?.huespedesAdultos || 0) }} personas
           </p>
+          
           <p class="text-muted">{{ reserva?.habitacion?.extras }}</p>
           <p>
-            <strong>PRECIO POR NOCHE:</strong> MXN ${{
-              reserva?.habitacion?.precio_base
+            <strong>PRECIO BASE POR NOCHE:</strong> MXN ${{
+            reserva?.habitacion?.precio_base
             }}
           </p>
 
-          <div
-            *ngIf="
+
+          <p>
+            <strong>PRECIO cON COSTOS EXTRA POR NOCHE:</strong> MXN ${{
+            reserva?.habitacion?.precio_base
+            }}
+          </p>
+
+          <div *ngIf="
               reserva?.habitacion?.adultosExtras &&
               reserva?.habitacion?.adultosExtras > 0
-            "
-          >
+            ">
             <p>
               <strong>ADULTOS EXTRA:</strong>
               {{ reserva?.habitacion?.adultosExtras }}
             </p>
             <p>
               <strong>COSTO EXTRA (30% POR ADULTO):</strong> MXN ${{
-                reserva?.habitacion?.costoFinalAdultos
+              reserva?.habitacion?.costoFinalAdultos
               }}
             </p>
           </div>
 
-          <div
-            *ngIf="
+          <div *ngIf="
               reserva?.habitacion?.ninosExtras &&
               reserva?.habitacion?.ninosExtras > 0
-            "
-          >
+            ">
             <p>
               <strong>NIÑOS EXTRA:</strong>
               {{ reserva?.habitacion?.ninosExtras }}
             </p>
             <p>
               <strong>COSTO EXTRA (15% POR NIÑO):</strong> MXN ${{
-                reserva?.habitacion?.costoFinalNinos
+              reserva?.habitacion?.costoFinalNinos
               }}
             </p>
           </div>
@@ -127,7 +103,7 @@
           <div class="ticket-line my-3"></div>
           <h5 class="text-success fw-bold text-center">
             <i class="fa-solid fa-money-bill-wave"></i> PRECIO TOTAL: MXN ${{
-              reserva?.habitacion?.precio_calculado
+            reserva?.habitacion?.precio_calculado
             }}
           </h5>
         </div>
