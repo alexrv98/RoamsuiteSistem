@@ -42,6 +42,8 @@ export class ConfirmarReservaComponent implements OnInit {
     const state = history.state;
     if (state.reserva) {
       this.reserva = state.reserva;
+      console.log(this.reserva.filtros?.fechaInicio, this.reserva.filtros?.fechaFin);
+
       this.location.replaceState('/confirmar-reserva', '');
 
       const token = this.authService.getToken();

@@ -85,7 +85,6 @@
             *ngFor="let habitacion of habitaciones.mejorOpcion"
             style="height: 220px"
           >
-            <!-- Carrusel a la izquierda, más ancho y ocupando todo el alto -->
             <div
               *ngIf="
                 imagenesHabitaciones[habitacion.habitacion_id] &&
@@ -200,7 +199,7 @@
             </div>
           </div>
         </div>
-        <!-- Alerta si no hay habitaciones disponibles -->
+
         <div *ngIf="habitaciones.mejorOpcion.length === 0">
           <div class="alert alert-danger text-center" role="alert">
             No hay habitaciones disponibles.
@@ -370,8 +369,4 @@
   </div>
 </div>
 
-<app-modal-reserva
-  [habitacion]="habitacionSeleccionada"
-  [filtros]="filtros"
-></app-modal-reserva>
-<app-footer></app-footer>
+<app-modal-reserva [habitacion]="habitacionSeleccionada" [filtrosOriginales]="filtrosOriginales"></app-modal-reserva>

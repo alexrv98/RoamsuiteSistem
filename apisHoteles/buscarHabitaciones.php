@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $camasSolicitadas = $data['camas'];
 
     try {
-        // Calcular la cantidad de noches
+
         $fechaInicioObj = new DateTime($fechaInicio);
         $fechaFinObj = new DateTime($fechaFin);
         $diferencia = $fechaInicioObj->diff($fechaFinObj);
@@ -90,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'numero_habitacion' => $habitacion['numero_habitacion'],
                 'tipo_habitacion' => $habitacion['tipo_habitacion'],
                 'capacidad' => $habitacion['capacidad'],
+                
                 'camas' => $habitacion['camas'],
                 'precio_base' => round($precioBase, 2),
                 'precio_calculado' => round($precioFinal, 2),
@@ -110,7 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // Si no hay habitaciones con el número exacto de camas, enviar mensaje de aviso
         $mensajeBusqueda = null;
         if (empty($habitacionesExactas)) {
             $mensajeBusqueda = "No hay habitaciones con exactamente $camasSolicitadas camas, pero estas opciones pueden interesarle.";
@@ -120,7 +120,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             "status" => "success",
             "mensaje_busqueda" => $mensajeBusqueda,
             "habitacionesExactas" => $habitacionesExactas,
-            "otrasHabitaciones" => $otrasHabitaciones
+            "otrasHabitaciones" => $otrasHabitaciones,
+            "fechaInicio" => $fechaInicio, 
+            "fechaFin" => $fechaFin   
         ], JSON_PRETTY_PRINT);
         exit;
 

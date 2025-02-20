@@ -44,9 +44,9 @@
             {{ reserva?.habitacion?.tipo_habitacion }}
           </p>
           <p>
-            <strong>FECHA INICIO:</strong> {{ reserva?.filtros?.fechaInicio }}
+            <strong>FECHA INICIO:</strong> {{ reserva?.fechaInicio }}
           </p>
-          <p><strong>FECHA FIN:</strong> {{ reserva?.filtros?.fechaFin }}</p>
+          <p><strong>FECHA FIN:</strong> {{ reserva?.fechaFin }}</p>
           <p>
             <strong>CAPACIDAD:</strong>
             {{ reserva?.habitacion?.capacidad }} personas
@@ -63,10 +63,9 @@
             }}
           </p>
 
-
           <p>
-            <strong>PRECIO cON COSTOS EXTRA POR NOCHE:</strong> MXN ${{
-            reserva?.habitacion?.precio_base
+            <strong>PRECIO TOTAL POR NOCHE:</strong> MXN ${{
+            reserva?.habitacion?.precio_calculado
             }}
           </p>
 
@@ -103,7 +102,7 @@
           <div class="ticket-line my-3"></div>
           <h5 class="text-success fw-bold text-center">
             <i class="fa-solid fa-money-bill-wave"></i> PRECIO TOTAL: MXN ${{
-            reserva?.habitacion?.precio_calculado
+            reserva?.habitacion?.precio_total
             }}
           </h5>
         </div>
