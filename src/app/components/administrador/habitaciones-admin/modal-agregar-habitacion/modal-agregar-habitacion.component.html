@@ -1,39 +1,70 @@
-<div class="modal-overlay">
-    <div class="modal-container">
-      <div *ngIf="mensaje" class="alert" [ngClass]="{
-        'alert-success': tipoMensaje === 'success',
-        'alert-danger': tipoMensaje === 'error'
-      }">
-        {{ mensaje }}
+<div class="modal fade show d-block" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="modal-title">Agregar Nueva Habitación</h5>
+        <button type="button" class="btn-close text-white" aria-label="Close" (click)="cerrarModal.emit()"></button>
       </div>
 
-      <form [formGroup]="habitacionForm">
-        <div class="form-group">
-          <label>Número de Habitación</label>
-          <input formControlName="numero_habitacion" class="form-control">
+      <div class="modal-body">
+        <div *ngIf="mensaje" class="alert" [ngClass]="{
+          'alert-success': tipoMensaje === 'success',
+          'alert-danger': tipoMensaje === 'error'
+        }">
+          {{ mensaje }}
         </div>
 
-        <div class="form-group">
-          <label>Tipo de Habitación</label>
-          <select formControlName="tipo_habitacion_id" class="form-control">
-            <option *ngFor="let tipo of tiposHabitacion" [value]="tipo.id">
-              {{ tipo.nombre }} - {{ tipo.capacidad }} personas - {{ tipo.camas }} camas
-            </option>
-          </select>
-        </div>
+        <form [formGroup]="habitacionForm">
+          <div class="row">
+            <!-- Número de Habitación -->
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Número de Habitación</label>
+              <input formControlName="numero_habitacion" class="form-control" placeholder="Ej. 101">
+            </div>
 
-        <div class="form-group">
-          <label>Precio por noche</label>
-          <input type="number" formControlName="precio" class="form-control">
-        </div>
+            <!-- Tipo de Habitación -->
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Tipo de Habitación</label>
+              <select formControlName="tipo_habitacion_id" class="form-select">
+                <option *ngFor="let tipo of tiposHabitacion" [value]="tipo.id">
+                  {{ tipo.nombre }} - {{ tipo.capacidad }} personas - {{ tipo.camas }} camas
+                </option>
+              </select>
+            </div>
 
-        <div class="form-group">
-          <label>URL de la imagen</label>
-          <input formControlName="img_url" type="text" class="form-control" placeholder="Ingrese la URL de la imagen">
-        </div>
-        <button type="button" class="btn btn-success" (click)="agregarHabitacion()">Agregar</button>
-        <button type="button" class="btn btn-secondary" (click)="cerrarModal.emit()">Cancelar</button>
-      </form>
+            <!-- Precio -->
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Precio por noche</label>
+              <input type="number" formControlName="precio" class="form-control" placeholder="Ej. 120">
+            </div>
+          </div>
 
+          <!-- Agregar imágenes -->
+          <div class="mb-3">
+            <label class="form-label fw-bold">Imágenes de la habitación</label>
+            <div formArrayName="imagenes">
+              <div *ngFor="let imagenControl of imagenes.controls; let i = index" class="input-group mb-2">
+                <input formControlName="img_url" type="text" class="form-control" placeholder="Ingrese la URL de la imagen">
+                <button type="button" class="btn btn-outline-danger" (click)="eliminarImagen(i)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+            <button type="button" class="btn btn-outline-info mt-2" (click)="agregarImagen()">
+              <i class="bi bi-plus-lg"></i> Agregar más imágenes
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="agregarHabitacion()">
+          <i class="bi bi-check-lg"></i> Agregar
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="cerrarModal.emit()">
+          <i class="bi bi-x-lg"></i> Cancelar
+        </button>
+      </div>
     </div>
   </div>
+</div>
