@@ -26,61 +26,48 @@
             <!-- Número de Habitación -->
             <div class="col-md-6 mb-3">
               <label class="form-label"><i class="fas fa-door-closed me-2" aria-hidden="true"></i>Número de Habitación</label>
-              <input formControlName="numero_habitacion" class="form-control" placeholder="Ej. 101" [ngClass]="{'is-invalid': habitacionForm.controls['numero_habitacion'].invalid && habitacionForm.controls['numero_habitacion'].touched}">
-              <div *ngIf="habitacionForm.controls['numero_habitacion'].invalid && habitacionForm.controls['numero_habitacion'].touched" class="invalid-feedback">
-                Por favor ingresa un número de habitación válido.
-              </div>
+              <input formControlName="numero_habitacion" class="form-control" placeholder="Ej. 101">
             </div>
 
             <!-- Tipo de Habitación -->
             <div class="col-md-6 mb-3">
               <label class="form-label"><i class="fas fa-bed me-2" aria-hidden="true"></i>Tipo de Habitación</label>
-              <select formControlName="tipo_habitacion_id" class="form-select" [ngClass]="{'is-invalid': habitacionForm.controls['tipo_habitacion_id'].invalid && habitacionForm.controls['tipo_habitacion_id'].touched}">
+              <select formControlName="tipo_habitacion_id" class="form-select">
                 <option *ngFor="let tipo of tiposHabitacion" [value]="tipo.id">
                   {{ tipo.nombre }} - {{ tipo.capacidad }} personas - {{ tipo.camas }} camas
                 </option>
               </select>
-              <div *ngIf="habitacionForm.controls['tipo_habitacion_id'].invalid && habitacionForm.controls['tipo_habitacion_id'].touched" class="invalid-feedback">
-                Por favor selecciona un tipo de habitación.
-              </div>
             </div>
 
             <!-- Precio -->
             <div class="col-md-6 mb-3">
               <label class="form-label"><i class="fas fa-dollar-sign me-2" aria-hidden="true"></i>Precio por noche</label>
-              <input type="number" formControlName="precio" class="form-control" placeholder="Ej. 120" [ngClass]="{'is-invalid': habitacionForm.controls['precio'].invalid && habitacionForm.controls['precio'].touched}">
-              <div *ngIf="habitacionForm.controls['precio'].invalid && habitacionForm.controls['precio'].touched" class="invalid-feedback">
-                Por favor ingresa un precio válido.
-              </div>
+              <input type="number" formControlName="precio" class="form-control" placeholder="Ej. 120">
             </div>
           </div>
 
- <!-- Sección para imágenes -->
+          <!-- Sección para imágenes -->
+<!-- Sección para imágenes -->
+<!-- Sección para imágenes -->
 <div class="mb-3">
-  <label class="form-label fw-bold">
-    <i class="fas fa-images me-2" aria-hidden="true"></i>Imágenes de la habitación
-  </label>
+  <label class="form-label fw-bold"><i class="fas fa-images me-2" aria-hidden="true"></i>Imágenes de la habitación</label>
+  <!-- Input para seleccionar imagen -->
+  <input type="file" class="form-control" (change)="onImageSelect($event)">
 
-  <!-- Input para seleccionar una imagen -->
-  <input type="file" class="form-control" (change)="onImageSelect($event)" accept="image/*">
-
-  <!-- Mostrar las imágenes seleccionadas -->
-  <div *ngIf="imagenesSeleccionadas.length > 0">
-    <div *ngFor="let imagen of imagenesSeleccionadas">
-      <img [src]="getImagePreview(imagen.url)" alt="Vista previa" class="mt-2" style="max-width: 100px; height: auto;">
-    </div>
+  <!-- Mostrar la imagen seleccionada (vista previa) -->
+  <div *ngIf="imagenSeleccionada">
+    <img [src]="imagenSeleccionada" alt="Vista previa" class="mt-2" style="max-width: 100%; height: auto;">
   </div>
 </div>
 
-</form>
+
+        </form>
+      </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-success" (click)="agregarHabitacion()">
           <i class="fas fa-check me-2" aria-hidden="true"></i> Agregar
         </button>
         <button type="button" class="btn btn-secondary" (click)="cerrarModal.emit()">
           <i class="fas fa-times me-2" aria-hidden="true"></i> Cancelar
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+

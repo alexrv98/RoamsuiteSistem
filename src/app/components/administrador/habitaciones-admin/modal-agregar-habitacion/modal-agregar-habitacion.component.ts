@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HabitacionesAdminService } from '../../../../services/habitacionesAdmin.service';
@@ -21,20 +21,20 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
   tiposHabitacion: any[] = [];
   mensaje: string = '';
   tipoMensaje: 'success' | 'error' | '' = '';
-  imagenesSeleccionadas: { file: File, url: string }[] = []; // Guardamos archivo + URL de vista previa
+  imagenSeleccionada: string | ArrayBuffer | null = null; // Variable para almacenar la imagen seleccionada
   private destroy$ = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
-    private habitacionService: HabitacionesAdminService,
-    private cdr: ChangeDetectorRef  // Inyectamos ChangeDetectorRef para forzar la detección de cambios
+    private habitacionService: HabitacionesAdminService
   ) {}
 
   ngOnInit(): void {
     this.habitacionForm = this.fb.group({
       numero_habitacion: ['', Validators.required],
       tipo_habitacion_id: ['', Validators.required],
-      precio: ['', [Validators.required, Validators.min(1)]]
+      precio: ['', [Validators.required, Validators.min(1)]],
+      img_url: ['assets/', Validators.required]  // Inicializamos con 'assets/'
     });
 
     this.cargarTiposHabitacion();
@@ -53,28 +53,28 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
       });
   }
 
-  // Manejar la selección de imágenes una por una
+  // Manejar la selección de imagen
   onImageSelect(event: any): void {
-    const archivo = event.target.files[0];  // Obtener solo un archivo
-    if (archivo) {
+    const file = event.target.files[0]; // Obtener el archivo seleccionado
+    if (file) {
       const reader = new FileReader();
 
+      // Leer la imagen como URL de datos
       reader.onload = () => {
-        setTimeout(() => {
-          if (typeof reader.result === 'string') {
-            this.imagenesSeleccionadas.push({ file: archivo, url: reader.result });
-            this.cdr.detectChanges(); // Forzar la detección de cambios
-          }
+        this.imagenSeleccionada = reader.result; // Asignar la URL de la imagen seleccionada
+        this.habitacionForm.patchValue({
+          img_url: 'assets/' + file.name // Aquí añadimos 'assets/' al nombre del archivo
         });
       };
 
-      reader.readAsDataURL(archivo);  // Leer la imagen seleccionada
+      // Leer el archivo
+      reader.readAsDataURL(file);
     }
   }
 
   agregarHabitacion(): void {
-    if (this.habitacionForm.invalid || this.imagenesSeleccionadas.length === 0) {
-      this.mostrarMensaje('Por favor, complete todos los campos correctamente y seleccione al menos una imagen.', 'error');
+    if (this.habitacionForm.invalid) {
+      this.mostrarMensaje('Por favor, complete todos los campos correctamente.', 'error');
       return;
     }
 
@@ -83,19 +83,7 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
       ...this.habitacionForm.value
     };
 
-    // Crear FormData para enviar la habitación y las imágenes
-    const formData = new FormData();
-    formData.append('hotel_id', nuevaHabitacion.hotel_id.toString());
-    formData.append('numero_habitacion', nuevaHabitacion.numero_habitacion);
-    formData.append('tipo_habitacion_id', nuevaHabitacion.tipo_habitacion_id);
-    formData.append('precio', nuevaHabitacion.precio.toString());
-
-    // Agregar las imágenes seleccionadas al FormData
-    this.imagenesSeleccionadas.forEach((imagen) => {
-      formData.append('imagenes[]', imagen.file, imagen.file.name);
-    });
-
-    this.habitacionService.agregarHabitacion(formData)
+    this.habitacionService.agregarHabitacion(nuevaHabitacion)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
@@ -111,10 +99,6 @@ export class ModalAgregarHabitacionComponent implements OnInit, OnDestroy {
         },
         error: () => this.mostrarMensaje('Error al agregar habitación.', 'error')
       });
-  }
-
-  getImagePreview(imagenUrl: string): string {
-    return imagenUrl;
   }
 
   mostrarMensaje(mensaje: string, tipo: 'success' | 'error'): void {
