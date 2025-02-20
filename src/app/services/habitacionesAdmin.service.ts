@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { API_CONFIG } from '../api.config';
 import { AuthService } from './auth.service';
 
@@ -29,7 +29,6 @@ export class HabitacionesAdminService {
       })
     );
   }
-
   agregarHabitacion(habitacion: any): Observable<any> {
     const token = this.authService.getToken();
     if (!token) {
@@ -37,7 +36,27 @@ export class HabitacionesAdminService {
     }
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.post(`${this.apiUrl}/addHabitacion.php`, habitacion, { headers }).pipe(
+
+    // Paso 1: Crear la habitación
+    return this.http.post(`${this.apiUrl}/cargamagen.php`, habitacion, { headers }).pipe(
+      switchMap((responseHabitacion: any) => {
+        // Verificar si la respuesta tiene la estructura esperada
+        if (responseHabitacion && responseHabitacion.status === 'success' && responseHabitacion.data && responseHabitacion.data.id) {
+          const habitacionId = responseHabitacion.data.id;
+
+          // Paso 2: Agregar las imágenes asociadas con la habitación
+          const imagenes = habitacion.img_urls.map((url: string) => ({
+            habitacion_id: habitacionId,
+            img_url: url
+          }));
+
+          // Agregar las imágenes a la tabla imagenes_habitacion
+          return this.http.post(`${this.apiUrl}/addImagenesHabitacion.php`, imagenes, { headers });
+        } else {
+          // Si no tiene la estructura correcta, generar un error
+          return throwError(() => new Error('Error al crear la habitación. La respuesta del servidor no es válida.'));
+        }
+      }),
       catchError((error) => {
         console.error('Error al agregar habitación:', error);
         return throwError(() => new Error('Error al agregar la habitación.'));
@@ -90,9 +109,4 @@ export class HabitacionesAdminService {
       })
     );
   }
-
-
-
-
-
 }
