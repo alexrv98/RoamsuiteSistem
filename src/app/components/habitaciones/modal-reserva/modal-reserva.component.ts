@@ -13,23 +13,23 @@ import { CommonModule } from '@angular/common';
 })
 export class ModalReservaComponent {
   @Input() habitacion: any = null;
-  @Input() filtros: any = null;
+
+  @Input() filtrosOriginales: any = null;
   precioTotal: number = 0;
 
   constructor(private router: Router, private lugarService: LugarService,
     private authService: AuthService
   ) {}
 
-
-
   continuarReserva() {
   const reserva = {
     habitacion: this.habitacion, 
-    filtros: this.filtros,
-    destino: '',
+    fechaInicio: this.filtrosOriginales.fechaInicio,  // Usamos los filtros originales
+    fechaFin: this.filtrosOriginales.fechaFin,    
+        destino: '',
   };
 
-  this.lugarService.obtenerDestinoPorId(this.filtros?.destino)
+  this.lugarService.obtenerDestinoPorId(this.filtrosOriginales?.destino)
     .pipe(take(1))
     .subscribe((response) => {
       if (response.status === 'success') {
@@ -38,7 +38,6 @@ export class ModalReservaComponent {
         const usuarioAutenticado = this.authService.estaAutenticado();
         const ruta = usuarioAutenticado ? '/confirmar-reserva' : '/login';
 
-        // Navegamos a la siguiente página pasando el objeto reserva completo
         this.router.navigate([ruta], { state: { reserva }, replaceUrl: usuarioAutenticado });
       } else {
         alert('Error al obtener el destino');
@@ -46,6 +45,5 @@ export class ModalReservaComponent {
     });
 }
 
-  
   
 }

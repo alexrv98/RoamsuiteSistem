@@ -36,7 +36,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class HabitacionesComponent implements OnInit, OnDestroy {
   hotelId!: number;
-  hotelNombre: string = ''; // Agregamos una variable para el nombre del hotel
+  hotelNombre: string = ''; 
   filtros: any = {};
   habitaciones: any = { mejorOpcion: [], otrasHabitaciones: [] };
   mensajeBusqueda: string | null = null;
@@ -47,6 +47,7 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
   filtroPrecioMax: number | null = null;
   imagenesHabitaciones: { [key: number]: string[] } = {}; // Almacena imágenes por habitacion_id
 
+  filtrosOriginales: any = {}; // Aquí guardamos los filtros originales (no modificados)
 
   private unsubscribe$ = new Subject<void>();
 
@@ -63,12 +64,23 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
       this.hotelId = state.hotelId;
     }
     if (state.hotelNombre) {
-      this.hotelNombre = state.hotelNombre; // Guardamos el nombre del hotel
+      this.hotelNombre = state.hotelNombre;
     }
+
+    // Solo cargamos los filtros iniciales si no están en el state (es decir, es la primera vez que entramos)
     if (state.filtros) {
-      this.filtros = state.filtros;
+      this.filtrosOriginales = state.filtros; // Guardamos los filtros originales
+      this.filtros = { ...state.filtros };  // Los filtros actuales para modificación
     } else {
-      console.warn('No hay filtros en el estado de navegación.');
+      // Si no existen filtros en el state, asignamos unos valores por defecto
+      this.filtrosOriginales = {
+        fechaInicio: 'fecha_default',
+        fechaFin: 'fecha_default',
+        huespedesAdultos: 1,
+        huespedesNinos: 0,
+        numCamas: 1
+      };
+      this.filtros = { ...this.filtrosOriginales };
     }
 
     this.obtenerHabitaciones();
@@ -77,11 +89,11 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
   obtenerHabitaciones() {
     const filtros = {
       hotelId: this.hotelId,
-      fechaInicio: this.filtros.fechaInicio,
-      fechaFin: this.filtros.fechaFin,
-      adultos: this.filtros.huespedesAdultos,
-      ninos: this.filtros.huespedesNinos,
-      camas: this.filtros.numCamas,
+      fechaInicio: this.filtrosOriginales.fechaInicio,  // Usamos los filtros originales
+      fechaFin: this.filtrosOriginales.fechaFin,        // Usamos los filtros originales
+      adultos: this.filtrosOriginales.huespedesAdultos,
+      ninos: this.filtrosOriginales.huespedesNinos,
+      camas: this.filtrosOriginales.numCamas,
     };
 
     this.habitacionesService
@@ -96,7 +108,6 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
             otrasHabitaciones: res.otrasHabitaciones,
           };
 
-          // Obtener imágenes de cada habitación
           [...this.habitaciones.mejorOpcion, ...this.habitaciones.otrasHabitaciones].forEach(
             (habitacion: any) => {
               this.cargarImagenes(habitacion.habitacion_id);
@@ -117,7 +128,7 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
   cargarImagenes(habitacionId: number) {
     this.habitacionesService.getImagenesHabitacion(habitacionId).subscribe(
       (res: any) => {
-        console.log(`Imágenes de la habitación ${habitacionId}:`, res); // 👈 Verifica respuesta
+        console.log(`Imágenes de la habitación ${habitacionId}:`, res);
 
         if (res.status === 'success' && res.data.length > 0) {
           this.imagenesHabitaciones[habitacionId] = res.data.map((img: any) => img.img_url);
@@ -149,16 +160,12 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
       );
   }
 
-  ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-  }
+
 
   seleccionarHabitacion(habitacion: any) {
     this.habitacionSeleccionada = habitacion;
   }
 
-  // Botones para scroll horizontal
   scrollLeft() {
     document
       .getElementById('scrollContainer')!
@@ -187,5 +194,11 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
         });
       }, 300);
     }
+  }
+
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }
