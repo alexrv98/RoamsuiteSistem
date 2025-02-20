@@ -87,19 +87,21 @@
               }}
             </h4>
           </div>
-          <button class="btn btn-primary mt-3" (click)="irAComentarios(reservacion)">
+
+          <button class="btn btn-primary mt-3" (click)="irAComentarios(reservacion)"
+            *ngIf="reservacion.estado !== 'cancelada'">
             Comentar
           </button>
 
-          <button
-  class="btn btn-danger mt-3"
-  (click)="cancelarReserva(reservacion)"
-  *ngIf="reservacion.estado !== 'cancelado'"
->
-  Cancelar Reserva (ID: {{ reservacion.reservacion_id }})
-</button>
+          <button class="btn mt-3" (click)="cancelarReserva(reservacion)"
+            [ngClass]="{'btn-danger': reservacion.estado !== 'cancelada', 'btn-secondary': reservacion.estado === 'cancelada'}"
+            [disabled]="reservacion.estado === 'cancelada'" *ngIf="reservacion.estado !== 'cancelada'">
+            Cancelar Reserva
+          </button>
 
-
+          <button class="btn btn-secondary mt-3" *ngIf="reservacion.estado === 'cancelada'">
+            Reserva Cancelada
+          </button>
 
 
           <div class="text-center ticket-line"></div>
