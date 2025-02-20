@@ -38,6 +38,8 @@ export class MisReservasComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.verificarUsuario();
   }
+
+
   verificarUsuario(): void {
     const token = this.authService.getToken();
     if (!token) {
@@ -60,6 +62,8 @@ export class MisReservasComponent implements OnInit, OnDestroy {
         console.error('Error al verificar usuario:', error);
       },
     });
+
+    
   }
 
   cargarReservaciones(): void {
@@ -91,9 +95,47 @@ export class MisReservasComponent implements OnInit, OnDestroy {
       },
     });
   }
-
+  
+  
+  cancelarReserva(reservacion: any) {
+    if (!confirm('¿Estás seguro de que deseas cancelar esta reserva?')) {
+      return;
+    }
+  
+    console.log('Intentando cancelar la reserva:', reservacion);
+  
+    // Asegurar que el ID correcto se está enviando
+    const idReserva = reservacion.id || reservacion.reservacion_id;
+  
+    if (!idReserva) {
+      console.error('Error: ID de la reserva es undefined o null');
+      alert('No se pudo obtener el ID de la reserva. Revisa la consola.');
+      return;
+    }
+  
+    this.reservaService.cancelarReserva(idReserva).subscribe({
+      next: (response) => {
+        console.log('Respuesta de la API:', response);
+  
+        if (response.status === 'success') {
+          alert('Reserva cancelada y reembolso en proceso.');
+          this.cargarReservaciones(); 
+        } else {
+          alert('Error al cancelar la reserva: ' + response.message);
+        }
+      },
+      error: (error) => {
+        console.error('Error al cancelar la reserva:', error);
+        alert('Ocurrió un error al procesar la cancelación. Revisa la consola.');
+      }
+    });
+  }
+  
+  
+  
   ngOnDestroy() {
     this.unsubscribe$.next(); 
     this.unsubscribe$.complete();  
   }
+
 }
