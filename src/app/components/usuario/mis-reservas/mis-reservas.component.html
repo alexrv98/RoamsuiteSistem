@@ -7,11 +7,9 @@
     <ng-container *ngIf="isLoading; else mostrarReservaciones">
       <div class="col-md-4 mb-3" *ngFor="let _ of [1, 2, 3]">
         <div class="card p-5 ticket-card text-center">
-          <!-- Placeholder para el logo -->
           <span class="placeholder col-6 mb-4"
             style="height: 50px; background-color: #ddd; display: inline-block"></span>
 
-          <!-- Placeholder para el título -->
           <h4 class="text-center text-primary">
             <span class="placeholder col-8 placeholder-glow"></span>
           </h4>
@@ -19,7 +17,6 @@
           <div class="text-center ticket-line"></div>
 
           <div class="ticket-info">
-            <!-- Placeholders para los detalles -->
             <p>
               <span class="placeholder col-8 placeholder-wave"></span>
             </p>
@@ -44,7 +41,6 @@
               <span class="placeholder col-8 placeholder-glow"></span>
             </p>
 
-            <!-- Placeholder para el total a pagar -->
             <h4 class="text-success fw-bold">
               <span class="placeholder col-3 placeholder-wave"></span>
             </h4>
@@ -55,59 +51,82 @@
       </div>
     </ng-container>
 
-    <!-- Mostrar las reservaciones cuando cargue -->
     <ng-template #mostrarReservaciones>
       <div class="col-md-4 mb-3 d-flex" *ngFor="let reservacion of reservaciones">
-        <div class="card p-5 ticket-card text-center">
-          <img class="mb-4" src="\assets\logo.png" alt="logo" height="50" width="200" />
-          <h4 class="text-center text-primary">Detalles de tu reserva</h4>
-          <div class="text-center ticket-line"></div>
-
-          <div class="ticket-info">
-            <p><strong>id de la reservacion:</strong> {{ reservacion.reservacion_id }}</p>
-
-            <p><strong>Hotel:</strong> {{ reservacion.nombre_hotel }}</p>
-            <p>
-              <strong>Habitación:</strong> {{ reservacion.tipo_habitacion }}
-            </p>
-            <p>
-              <strong>Capacidad:</strong> {{ reservacion.capacidad }} personas
-            </p>
-            <p>
-              <strong>Días de hospedaje:</strong>
-              {{ reservacion.total_dias_hospedaje }}
-            </p>
-            <p><strong>Fecha Inicio:</strong> {{ reservacion.fecha_inicio }}</p>
-            <p><strong>Fecha Fin:</strong> {{ reservacion.fecha_fin }}</p>
-            <p><strong>Id de transacción:</strong> {{ reservacion.id_transaccion }}</p>
-
-            <h4 class="text-success fw-bold">
-              <strong class="text-success">Total de pago:</strong> MXN ${{
-              reservacion.total_a_pagar
-              }}
-            </h4>
+        <div class="reservation-container w-100">
+          <div class="reservation-header">
+            <img src="/assets/logo.png" alt="logo" class="reservation-logo" />
+            <h4 class="text-primary fw-bold">Detalles de tu Reserva</h4>
           </div>
 
-          <button class="btn btn-primary mt-3" (click)="irAComentarios(reservacion)"
-            *ngIf="reservacion.estado !== 'cancelada'">
-            Comentar
-          </button>
+          <div class="reservation-divider"></div>
 
-          <button class="btn mt-3" (click)="cancelarReserva(reservacion)"
-            [ngClass]="{'btn-danger': reservacion.estado !== 'cancelada', 'btn-secondary': reservacion.estado === 'cancelada'}"
-            [disabled]="reservacion.estado === 'cancelada'" *ngIf="reservacion.estado !== 'cancelada'">
-            Cancelar Reserva
-          </button>
+          <table class="reservation-table">
+            <tr>
+              <td><strong>ID Reserva:</strong></td>
+              <td>{{ reservacion.reservacion_id }}</td>
+            </tr>
+            <tr>
+              <td><strong>Hotel:</strong></td>
+              <td>{{ reservacion.nombre_hotel }}</td>
+            </tr>
+            <tr>
+              <td><strong>Habitación:</strong></td>
+              <td>{{ reservacion.numero_habitacion }} {{ reservacion.tipo_habitacion }}</td> 
+            </tr>
+            <tr>
+              <td><strong>Capacidad:</strong></td>
+              <td>{{ reservacion.capacidad }} personas</td>
+            </tr>
+            <tr>
+              <td><strong>Fechas:</strong></td>
+              <td>{{ reservacion.fecha_inicio }} → {{ reservacion.fecha_fin }}</td>
+            </tr>
+            <tr>
+              <td><strong>Días hospedados:</strong></td>
+              <td>{{ reservacion.total_dias_hospedaje }}</td>
+            </tr>
+            <tr>
+              <td><strong>Huéspedes:</strong></td>
+              <td>{{ reservacion.num_adultos }} adultos, {{ reservacion.num_ninos }} niños</td>
+            </tr>
+            <tr>
+              <td><strong>ID Transacción:</strong></td>
+              <td>{{ reservacion.id_transaccion }}</td>
+            </tr>
+          </table>
 
-          <button class="btn btn-secondary mt-3" *ngIf="reservacion.estado === 'cancelada'">
-            Reserva Cancelada
-          </button>
+          <div class="reservation-divider"></div>
 
+          <div class="reservation-footer">
+            <h5 class="text-success fw-bold">
+              <i class="fa-solid fa-money-bill-wave"></i> Total: MXN ${{
+              reservacion.total_a_pagar }}
+            </h5>
+          </div>
 
-          <div class="text-center ticket-line"></div>
+          <div class="reservation-buttons">
+            <button class="btn btn-primary" (click)="irAComentarios(reservacion)"
+              *ngIf="reservacion.estado !== 'cancelada'">
+              Comentar
+            </button>
+
+            <button class="btn" (click)="cancelarReserva(reservacion)"
+              [ngClass]="{'btn-danger': reservacion.estado !== 'cancelada', 'btn-secondary': reservacion.estado === 'cancelada'}"
+              [disabled]="reservacion.estado === 'cancelada'" *ngIf="reservacion.estado !== 'cancelada'">
+              Cancelar Reserva
+            </button>
+
+            <button class="btn btn-secondary" *ngIf="reservacion.estado === 'cancelada'">
+              Reserva Cancelada
+            </button>
+          </div>
         </div>
       </div>
     </ng-template>
+
+
+
   </div>
 </div>
 

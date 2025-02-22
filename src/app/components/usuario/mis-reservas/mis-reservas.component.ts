@@ -104,7 +104,6 @@ export class MisReservasComponent implements OnInit, OnDestroy {
   
     console.log('Intentando cancelar la reserva:', reservacion);
   
-    // Asegurar que el ID correcto se está enviando
     const idReserva = reservacion.id || reservacion.reservacion_id;
   
     if (!idReserva) {

@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $tipo_habitacion_id = $data['tipo_habitacion_id'] ?? null;
     $numero_habitacion = $data['numero_habitacion'] ?? null;
     $precio = $data['precio'] ?? null;
-    $img_url = $data['img_url'] ?? null;  // URL de la imagen
+    $img_url = $data['img_url'] ?? null;  
 
     if (!$hotel_id || !$tipo_habitacion_id || !$numero_habitacion || !$precio || !$img_url) {
         echo json_encode(["status" => "error", "message" => "Todos los campos son obligatorios"]);

@@ -18,6 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 r.estado,
                 r.id_transaccion,
                 r.total_a_pagar,
+                r.num_adultos,
+                r.num_ninos,
                 DATEDIFF(r.fecha_fin, r.fecha_inicio) AS total_dias_hospedaje,
                 ho.id as hotel_id,  
                 ho.nombre as nombre_hotel,

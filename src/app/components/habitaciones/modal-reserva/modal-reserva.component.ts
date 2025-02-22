@@ -13,7 +13,6 @@ import { CommonModule } from '@angular/common';
 })
 export class ModalReservaComponent {
   @Input() habitacion: any = null;
-
   @Input() filtrosOriginales: any = null;
   precioTotal: number = 0;
 
@@ -24,9 +23,11 @@ export class ModalReservaComponent {
   continuarReserva() {
   const reserva = {
     habitacion: this.habitacion, 
-    fechaInicio: this.filtrosOriginales.fechaInicio,  // Usamos los filtros originales
-    fechaFin: this.filtrosOriginales.fechaFin,    
-        destino: '',
+    fechaInicio: this.filtrosOriginales.fechaInicio, 
+    fechaFin: this.filtrosOriginales.fechaFin,
+    huespedesAdultos: this.filtrosOriginales.huespedesAdultos,
+    huespedesNinos: this.filtrosOriginales.huespedesNinos,    
+    destino: '',
   };
 
   this.lugarService.obtenerDestinoPorId(this.filtrosOriginales?.destino)

@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
               this.router.navigate(['/confirmar-reserva'], { state: { reserva: state.reserva } });
             } else {
               this.router.navigate([userRole === 'admin' ? '/admin' : '/']).then(() => {
-                window.history.replaceState(null, '', '/'); // Limpia el historial
+                window.history.replaceState(null, '', '/'); 
               });
             }
           } else {

@@ -11,7 +11,6 @@ import { FiltroHotelesComponent } from './../filtro-hoteles/filtro-hoteles.compo
 import { NavbarComponent } from '../navbar/navbar.component';
 import { ModalReservaComponent } from './modal-reserva/modal-reserva.component';
 import { ComentariosComponent } from './comentarios/comentarios.component';
-import { FooterComponent } from '../footer/footer.component';
 import { HabitacionesClienteService } from '../../services/habitacionesCliente.service';
 import { ListComentariosComponent } from '../list-comentarios/list-comentarios.component';
 import { Subject, takeUntil } from 'rxjs';
@@ -26,7 +25,6 @@ import { FormsModule } from '@angular/forms';
     FiltroHotelesComponent,
     ModalReservaComponent,
     ComentariosComponent,
-    FooterComponent,
     FormsModule,
     ListComentariosComponent,
     RouterLink,
@@ -45,9 +43,9 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
   habitacionesOriginales: any = { mejorOpcion: [], otrasHabitaciones: [] };
   filtroPrecioMin: number | null = null;
   filtroPrecioMax: number | null = null;
-  imagenesHabitaciones: { [key: number]: string[] } = {}; // Almacena imágenes por habitacion_id
+  imagenesHabitaciones: { [key: number]: string[] } = {}; 
 
-  filtrosOriginales: any = {}; // Aquí guardamos los filtros originales (no modificados)
+  filtrosOriginales: any = {}; 
 
   private unsubscribe$ = new Subject<void>();
 
@@ -67,12 +65,11 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
       this.hotelNombre = state.hotelNombre;
     }
 
-    // Solo cargamos los filtros iniciales si no están en el state (es decir, es la primera vez que entramos)
     if (state.filtros) {
-      this.filtrosOriginales = state.filtros; // Guardamos los filtros originales
-      this.filtros = { ...state.filtros };  // Los filtros actuales para modificación
+      this.filtrosOriginales = state.filtros; 
+      this.filtros = { ...state.filtros };  
     } else {
-      // Si no existen filtros en el state, asignamos unos valores por defecto
+
       this.filtrosOriginales = {
         fechaInicio: 'fecha_default',
         fechaFin: 'fecha_default',
@@ -89,8 +86,8 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
   obtenerHabitaciones() {
     const filtros = {
       hotelId: this.hotelId,
-      fechaInicio: this.filtrosOriginales.fechaInicio,  // Usamos los filtros originales
-      fechaFin: this.filtrosOriginales.fechaFin,        // Usamos los filtros originales
+      fechaInicio: this.filtrosOriginales.fechaInicio,  
+      fechaFin: this.filtrosOriginales.fechaFin,      
       adultos: this.filtrosOriginales.huespedesAdultos,
       ninos: this.filtrosOriginales.huespedesNinos,
       camas: this.filtrosOriginales.numCamas,

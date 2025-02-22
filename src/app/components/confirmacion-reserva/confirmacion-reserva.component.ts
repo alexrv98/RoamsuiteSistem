@@ -42,7 +42,6 @@ export class ConfirmarReservaComponent implements OnInit {
     const state = history.state;
     if (state.reserva) {
       this.reserva = state.reserva;
-      console.log(this.reserva.filtros?.fechaInicio, this.reserva.filtros?.fechaFin);
 
       this.location.replaceState('/confirmar-reserva', '');
 
@@ -85,11 +84,11 @@ export class ConfirmarReservaComponent implements OnInit {
       const datosReserva = {
         usuario_id: this.cliente.id,
         habitacion_id: this.reserva.habitacion?.habitacion_id || null,
-        fechaInicio: this.reserva.filtros?.fechaInicio || null,
-        fechaFin: this.reserva.filtros?.fechaFin || null,
-        totalReserva: this.reserva.habitacion?.precio_calculado || 0,
-        num_adultos: this.reserva.habitacion?.adultosExtras || 0,
-        num_ninos: this.reserva.habitacion?.ninosExtras || 0,
+        fechaInicio: this.reserva.fechaInicio || null,
+        fechaFin: this.reserva.fechaFin || null,
+        totalReserva: this.reserva.habitacion.precio_total || 0,
+        num_adultos: this.reserva.huespedesAdultos || 0,
+        num_ninos: this.reserva.huespedesNinos || 0,
         id_transaccion: this.reserva.id_transaccion || 'No asignado'
       };
   
@@ -112,6 +111,16 @@ export class ConfirmarReservaComponent implements OnInit {
       alert('Por favor, completa todos los campos y realiza el pago antes de confirmar.');
     }
   }
+
+  calcularDiasHospedaje(fechaInicio: string, fechaFin: string): number {
+    if (!fechaInicio || !fechaFin) return 0; 
+    const inicio = new Date(fechaInicio);
+    const fin = new Date(fechaFin);
+    const diferenciaMs = fin.getTime() - inicio.getTime();
+    const dias = Math.ceil(diferenciaMs / (1000 * 60 * 60 * 24)); 
+    return dias > 0 ? dias : 1; 
+  }
+  
   
   
 }
