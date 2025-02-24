@@ -12,7 +12,7 @@ export class LugarService {
   constructor(private http: HttpClient) {}
 
   obtenerLugares(categoria_id?: number): Observable<any> {
-    let url = `${this.baseUrl}/listLugaresTuristicos.php`;
+    let url = `${this.baseUrl}/lugares/listLugaresTuristicos.php`;
     if (categoria_id) {
       url += `?categoria_id=${categoria_id}`;
     }
@@ -20,11 +20,11 @@ export class LugarService {
   }
 
   obtenerDestinoPorId(destinoId: number): Observable<any> {
-    const url = `${this.baseUrl}/getDestinoPorId.php?id=${destinoId}`;
+    const url = `${this.baseUrl}/lugares/getDestinoPorId.php?id=${destinoId}`;
     return this.http.get(url);
   }
 
   obtenerCategorias(): Observable<any> {
-    return this.http.get(`${this.baseUrl}/categorias.php`);
+    return this.http.get(`${this.baseUrl}/lugares/categorias.php`);
   }
 }

@@ -21,30 +21,38 @@ export class ModalReservaComponent {
   ) {}
 
   continuarReserva() {
-  const reserva = {
-    habitacion: this.habitacion, 
-    fechaInicio: this.filtrosOriginales.fechaInicio, 
-    fechaFin: this.filtrosOriginales.fechaFin,
-    huespedesAdultos: this.filtrosOriginales.huespedesAdultos,
-    huespedesNinos: this.filtrosOriginales.huespedesNinos,    
-    destino: '',
-  };
-
-  this.lugarService.obtenerDestinoPorId(this.filtrosOriginales?.destino)
-    .pipe(take(1))
-    .subscribe((response) => {
-      if (response.status === 'success') {
-        reserva.destino = response.data.nombre;
-
-        const usuarioAutenticado = this.authService.estaAutenticado();
-        const ruta = usuarioAutenticado ? '/confirmar-reserva' : '/login';
-
-        this.router.navigate([ruta], { state: { reserva }, replaceUrl: usuarioAutenticado });
-      } else {
-        alert('Error al obtener el destino');
-      }
-    });
-}
+    const reserva = {
+      habitacion: this.habitacion, 
+      fechaInicio: this.filtrosOriginales.fechaInicio, 
+      fechaFin: this.filtrosOriginales.fechaFin,
+      huespedesAdultos: this.filtrosOriginales.huespedesAdultos,
+      huespedesNinos: this.filtrosOriginales.huespedesNinos,    
+      destino: '',
+    };
+  
+    this.lugarService.obtenerDestinoPorId(this.filtrosOriginales?.destino)
+      .pipe(take(1))
+      .subscribe((response) => {
+        if (response.status === 'success') {
+          reserva.destino = response.data.nombre;
+  
+          this.authService.obtenerUsuarioLogueado().subscribe({
+            next: (userResponse) => {
+              const usuarioAutenticado = userResponse.status === 'success' && userResponse.usuario;
+              const ruta = usuarioAutenticado ? '/confirmar-reserva' : '/login';
+  
+              this.router.navigate([ruta], { state: { reserva }, replaceUrl: usuarioAutenticado });
+            },
+            error: () => {
+              this.router.navigate(['/login']);
+            }
+          });
+        } else {
+          alert('Error al obtener el destino');
+        }
+      });
+  }
+  
 
   
 }

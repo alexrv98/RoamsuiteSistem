@@ -24,6 +24,7 @@
               <th>Fecha Fin</th>
               <th>Total a Pagar</th>
               <th>Reservado por</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -40,6 +41,7 @@
                 {{ reserva.nombre_usuario }} <br />
                 {{ reserva.correo_usuario }}
               </td>
+              <td>{{ reserva.estado }}</td>
             </tr>
           </tbody>
         </table>

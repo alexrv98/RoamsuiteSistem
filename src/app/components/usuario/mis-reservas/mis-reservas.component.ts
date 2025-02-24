@@ -41,20 +41,14 @@ export class MisReservasComponent implements OnInit, OnDestroy {
 
 
   verificarUsuario(): void {
-    const token = this.authService.getToken();
-    if (!token) {
-      this.estaAutenticado = false;
-      console.log('Usuario no autenticado: no hay token');
-      return;
-    }
-
-    this.authService.obtenerUsuarioLogueado(token).pipe(takeUntil(this.unsubscribe$)).subscribe({
+    this.authService.obtenerUsuarioLogueado().pipe(takeUntil(this.unsubscribe$)).subscribe({
       next: (response) => {
-        if (response.status === 'success' && response.usuario) {
+        if (response.status === 'success' && response.nombre) {
           this.estaAutenticado = true;
           this.cargarReservaciones();
         } else {
           this.estaAutenticado = false;
+          console.warn('Usuario no autenticado: respuesta inválida del servidor');
         }
       },
       error: (error) => {
@@ -62,9 +56,8 @@ export class MisReservasComponent implements OnInit, OnDestroy {
         console.error('Error al verificar usuario:', error);
       },
     });
-
-    
-  }
+  }  
+  
 
   cargarReservaciones(): void {
     this.isLoading = true;
