@@ -31,15 +31,23 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
+    // Limpia cualquier estilo de modal previo
     document.body.classList.remove('modal-open');
     document.querySelector('.modal-backdrop')?.remove();
     document.body.style.overflow = 'auto';
-
-    if (this.authService.estaAutenticado()) {
-      this.router.navigate(['/']);
-    }
+  
+    this.authService.estaAutenticado().subscribe((isAuthenticated) => {
+      
+      if (isAuthenticated) {
+        const state = history.state;
+        if (state.reserva) {
+          this.router.navigate(['/confirmar-reserva'], { state: { reserva: state.reserva } });
+        } else {
+          this.router.navigate(['/']);
+        }
+      }
+    });
   }
-
 
   onLogin(): void {
     this.authService.login(this.correo, this.password)
@@ -66,7 +74,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         },
       });
   }
-
 
   ngOnDestroy(): void {
     this.unsubscribe$.next();

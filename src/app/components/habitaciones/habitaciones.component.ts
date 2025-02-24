@@ -125,7 +125,6 @@ export class HabitacionesComponent implements OnInit, OnDestroy {
   cargarImagenes(habitacionId: number) {
     this.habitacionesService.getImagenesHabitacion(habitacionId).subscribe(
       (res: any) => {
-        console.log(`Imágenes de la habitación ${habitacionId}:`, res);
 
         if (res.status === 'success' && res.data.length > 0) {
           this.imagenesHabitaciones[habitacionId] = res.data.map((img: any) => img.img_url);

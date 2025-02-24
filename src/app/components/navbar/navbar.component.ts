@@ -25,28 +25,27 @@ export class NavbarComponent implements OnInit, OnDestroy {
   hotelId!: number;
 
   ngOnInit(): void {
-    this.isAuthenticated = this.authService.estaAutenticado();
-
-    if (this.isAuthenticated) {
-      const token = this.authService.getToken();
-      this.authService.obtenerUsuarioLogueado(token!)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe({
+    this.authService.estaAutenticado().subscribe((isAuthenticated) => {
+      this.isAuthenticated = isAuthenticated;
+  
+      if (isAuthenticated) {
+        this.authService.obtenerUsuarioLogueado().subscribe({
           next: (response) => {
             if (response.status === 'success') {
-              this.nombreUsuario = response.usuario.nombre;
-              this.rolUsuario = response.usuario.rol;
-              this.hotelId = response.usuario.hotel_id;
+              this.nombreUsuario = response.nombre;  
+              this.rolUsuario = response.rol;
             } else {
-              console.error('Error al obtener el usuario');
+              console.error('Error al obtener usuario');
             }
           },
           error: (error) => {
             console.error('Error al obtener los datos del usuario:', error);
           },
         });
-    }
+      }
+    });
   }
+  
 
   logout(): void {
     this.authService.logout();
@@ -57,7 +56,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
       }
     });
   }
-  
 
 
   verReservaciones(): void {

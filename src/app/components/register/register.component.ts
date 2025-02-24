@@ -46,12 +46,25 @@ export class RegisterComponent implements OnDestroy{
         ...this.registroForm.value,
         rol: 'usuario',
       };
-
+  
       this.authService.register(formData).pipe(takeUntil(this.unsubscribe$)).subscribe({
         next: (response) => {
           if (response.status === 'success') {
             alert('Usuario registrado con éxito');
-            this.router.navigate(['/login']);
+  
+            // 🔹 Intentamos loguear automáticamente al usuario después del registro
+            this.authService.login(formData.correo, formData.password).subscribe({
+              next: (loginResponse) => {
+                if (loginResponse.status === 'success') {
+                  this.router.navigate(['/']);
+                } else {
+                  this.router.navigate(['/login']);
+                }
+              },
+              error: () => {
+                this.router.navigate(['/login']);
+              },
+            });
           } else {
             this.errorMessage = response.message;
           }
@@ -63,6 +76,7 @@ export class RegisterComponent implements OnDestroy{
       });
     }
   }
+  
 
   ngOnDestroy() {
     this.unsubscribe$.next(); 

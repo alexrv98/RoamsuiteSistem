@@ -19,7 +19,6 @@ $input = json_decode(file_get_contents("php://input"), true);
 
 if (
     !isset($input['token']) ||
-    !isset($input['usuario_id']) ||
     !isset($input['totalReserva']) ||
     !isset($input['device_session_id']) ||
     !isset($input['cliente'])

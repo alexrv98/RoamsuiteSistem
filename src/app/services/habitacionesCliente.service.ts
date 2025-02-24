@@ -12,13 +12,13 @@ export class HabitacionesClienteService {
   constructor(private http: HttpClient) {}
 
   obtenerHabitaciones(filtros: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/buscarHabitaciones.php`, filtros);
+    return this.http.post(`${this.apiUrl}/habitCliente/buscarHabitaciones.php`, filtros);
   }
 
 
   getImagenesHabitacion(habitacionId: number): Observable<any> {
     return this.http.get(
-      `${this.apiUrl}/imagenes_habitacion.php?habitacion_id=${habitacionId}`
+      `${this.apiUrl}/habitCliente/imagenes_habitacion.php?habitacion_id=${habitacionId}`
     );
   }
   

@@ -14,75 +14,45 @@ export class HabitacionesAdminService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   obtenerHabitaciones(hotelId: number): Observable<any> {
-    const token = this.authService.getToken();
-
-    if (!token) {
-      return throwError(() => new Error('No hay sesión iniciada. Inicie sesión para ver las habitaciones.'));
-    }
-
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.http.get(`${this.apiUrl}/listHabitaciones.php?hotel_id=${hotelId}`, { headers }).pipe(
+    return this.http.get(`${this.apiUrl}/habitAdmin/listHabitaciones.php?hotel_id=${hotelId}`, { withCredentials: true }).pipe(
       catchError((error) => {
         console.error('Error al obtener habitaciones:', error);
         return throwError(() => new Error('Error al obtener las habitaciones.'));
       })
     );
   }
-
+  
   agregarHabitacion(habitacion: any): Observable<any> {
-    const token = this.authService.getToken();
-    if (!token) {
-      return throwError(() => new Error('No hay sesión iniciada.'));
-    }
-
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.post(`${this.apiUrl}/addHabitacion.php`, habitacion, { headers }).pipe(
+    return this.http.post(`${this.apiUrl}/habitAdmin/addHabitacion.php`, habitacion, { withCredentials: true }).pipe(
       catchError((error) => {
         console.error('Error al agregar habitación:', error);
         return throwError(() => new Error('Error al agregar la habitación.'));
       })
     );
   }
-
-
+  
   obtenerTiposHabitacion(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/listTiposHabitacion.php`).pipe(
+    return this.http.get(`${this.apiUrl}/habitAdmin/listTiposHabitacion.php`).pipe(
       catchError((error) => {
         console.error('Error al obtener tipos de habitación:', error);
         return throwError(() => new Error('Error al obtener los tipos de habitación.'));
       })
     );
   }
-
+  
   editarHabitacion(habitacion: any): Observable<any> {
-    const token = this.authService.getToken();
-    if (!token) {
-      return throwError(() => new Error('No hay sesión iniciada.'));
-    }
-
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.post(`${this.apiUrl}/updateHabitacion.php`, habitacion, { headers }).pipe(
+    return this.http.post(`${this.apiUrl}/habitAdmin/updateHabitacion.php`, habitacion, { withCredentials: true }).pipe(
       catchError((error) => {
         console.error('Error al editar habitación:', error);
         return throwError(() => new Error('Error al editar la habitación.'));
       })
     );
   }
-
+  
   eliminarHabitacion(idHabitacion: number): Observable<any> {
-    const token = this.authService.getToken();
-    if (!token) {
-      return throwError(() => new Error('No hay sesión iniciada.'));
-    }
-
-    const headers = new HttpHeaders()
-      .set('Authorization', `Bearer ${token}`)
-      .set('Content-Type', 'application/json');
-
-    return this.http.request('DELETE', `${this.apiUrl}/delete_habitacion.php`, {
-      headers,
-      body: { id: idHabitacion }, // Enviar el ID en el cuerpo de la solicitud
+    return this.http.request('DELETE', `${this.apiUrl}/habitAdmin/delete_habitacion.php`, {
+      withCredentials: true,
+      body: { id: idHabitacion },
     }).pipe(
       catchError((error) => {
         console.error('Error al eliminar la habitación:', error);
@@ -90,9 +60,6 @@ export class HabitacionesAdminService {
       })
     );
   }
-
-
-
-
+  
 
 }

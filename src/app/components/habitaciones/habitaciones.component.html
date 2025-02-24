@@ -170,7 +170,7 @@
                   {{ habitacion.camas }}
                 </p>
                 <p class="card-text fw-bold text-success mb-0">
-                  <strong>Precio por noche:</strong> MXN ${{
+                  <strong>Precio base:</strong> MXN ${{
                     habitacion.precio_base
                   }}
                 </p>
@@ -181,10 +181,12 @@
                   {{ habitacion.extras }}
                 </p>
                 <p class="card-text fw-bold text-success mb-0">
-                  <strong>Precio Total:</strong> MXN ${{
+                  <strong>Precio por noche:</strong> MXN ${{
                     habitacion.precio_calculado
                   }}
                 </p>
+
+               
               </div>
 
               <button
@@ -319,19 +321,24 @@
                   </p>
                   <p class="card-text fw-bold text-success">
                     <strong
-                      ><i class="fa-solid fa-dollar-sign"></i> Precio por
-                      noche:</strong
+                      ><i class="fa-solid fa-dollar-sign"></i> Precio base:</strong
                     >
                     MXN ${{ habitacion.precio_base }}
                   </p>
 
                   <p class="card-text text-warning">
-                    <strong>Mensaje:</strong> {{ habitacion.mensaje }}
+                     {{ habitacion.mensaje }}
                   </p>
 
                   <p class="card-text fw-bold text-success">
-                    <strong>Precio calculado:</strong> MXN
+                    <strong>Precio por noche:</strong> MXN
                     {{ habitacion.precio_calculado }}
+                  </p>
+                  
+                  <p class="card-text fw-bold text-success ">
+                    <strong>Precio Total:</strong> MXN ${{
+                      habitacion.precio_total
+                    }}
                   </p>
 
                   <div class="mt-auto">

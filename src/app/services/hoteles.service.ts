@@ -14,23 +14,16 @@ export class HotelService {
   constructor(private http: HttpClient, private authService: AuthService) {}
 
   obtenerHotelesDisponibles(filtros: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/buscarHoteles.php`, filtros);  
+    return this.http.post(`${this.apiUrl}/hoteles/buscarHoteles.php`, filtros);  
   }
 
   obtenerHoteles(): Observable<any> {
-    const token = this.authService.getToken();
-
-    if (!token) {
-      return throwError(() => new Error('No hay sesión iniciada. Inicie sesión para ver sus hoteles.'));
-    }
-
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-
-    return this.http.get(`${this.apiUrl}/listHoteles.php`, { headers }).pipe(
+    return this.http.get(`${this.apiUrl}/hoteles/listHoteles.php`, { withCredentials: true }).pipe(
       catchError((error) => {
         console.error('Error al obtener hoteles:', error);
         return throwError(() => new Error('Error al obtener los hoteles.'));
       })
     );
   }
+  
 }

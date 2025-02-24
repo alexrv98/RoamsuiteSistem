@@ -3,8 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { ComentariosService } from '../../../services/comentarios.service';
-import { Router } from '@angular/router';
-import { ReservaService } from '../../../services/reserva.service';
 
 @Component({
   selector: 'app-comentarios',
@@ -28,42 +26,37 @@ export class ComentariosComponent implements OnInit {
   @Input() isLoading: boolean = false;
 
   usuarioNombre: string = '';
+  usuarioRol: string = '';
 
   constructor(
     private authService: AuthService,
-    private comentariosService: ComentariosService,
-    private reservaService: ReservaService,
-    private router: Router
+    private comentariosService: ComentariosService
   ) {}
 
   ngOnInit(): void {
-    this.verificarUsuario();
-    this.cargarHotelesReservados();
-  }
+    this.authService.estaAutenticado().subscribe((isAuthenticated) => {
+      this.estaAutenticado = isAuthenticated;
 
-  verificarUsuario(): void {
-    const token = this.authService.getToken();
-    if (!token) {
-      this.estaAutenticado = false;
-      return;
-    }
-
-    this.authService.obtenerUsuarioLogueado(token).subscribe({
-      next: (response) => {
-        if (response.status === 'success' && response.usuario) {
-          this.estaAutenticado = true;
-          this.nuevoComentario.usuarioId = response.usuario.id;
-          this.usuarioNombre = response.usuario.nombre;
-
-          this.cargarHotelesReservados();
-        } else {
-          this.estaAutenticado = false;
-        }
-      },
-      error: (error) => {
-        this.estaAutenticado = false;
-        console.error('Error al verificar usuario:', error);
-      },
+      if (isAuthenticated) {
+        this.authService.obtenerUsuarioLogueado().subscribe({
+          next: (response) => {
+            if (response.status === 'success' && response.id && response.nombre) {
+              // Asignar los datos del usuario
+              this.usuarioNombre = response.nombre;
+              this.usuarioRol = response.rol;
+              this.nuevoComentario.usuarioId = response.id;
+              this.cargarHotelesReservados();
+            } else {
+              console.error('Error al obtener los datos del usuario');
+            }
+          },
+          error: (error) => {
+            console.error('Error al obtener los datos del usuario:', error);
+          },
+        });
+      } else {
+        console.log('Usuario no autenticado');
+      }
     });
   }
 
