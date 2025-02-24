@@ -83,7 +83,7 @@
           <div
             class="card shadow-sm mb-3 d-flex flex-row"
             *ngFor="let habitacion of habitaciones.mejorOpcion"
-            style="height: 220px"
+            style="height: 250px"
           >
             <div
               *ngIf="
@@ -326,21 +326,22 @@
                   </p>
                   <p class="card-text fw-bold text-success">
                     <strong
-                      ><i class="fa-solid fa-dollar-sign"></i> Precio base:</strong
+                      ><i class="fa-solid fa-dollar-sign"></i> Precio
+                      base:</strong
                     >
                     MXN ${{ habitacion.precio_base }}
                   </p>
 
                   <p class="card-text text-warning">
-                     {{ habitacion.mensaje }}
+                    {{ habitacion.mensaje }}
                   </p>
 
                   <p class="card-text fw-bold text-success">
                     <strong>Precio por noche:</strong> MXN
                     {{ habitacion.precio_calculado }}
                   </p>
-                  
-                  <p class="card-text fw-bold text-success ">
+
+                  <p class="card-text fw-bold text-success">
                     <strong>Precio Total:</strong> MXN ${{
                       habitacion.precio_total
                     }}
@@ -381,4 +382,7 @@
   </div>
 </div>
 
-<app-modal-reserva [habitacion]="habitacionSeleccionada" [filtrosOriginales]="filtrosOriginales"></app-modal-reserva>
+<app-modal-reserva
+  [habitacion]="habitacionSeleccionada"
+  [filtrosOriginales]="filtrosOriginales"
+></app-modal-reserva>
